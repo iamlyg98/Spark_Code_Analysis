@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99996 (MiKTeX 2.9.6210 64-bit) (preloaded format=xelatex 2017.1.15)  13 APR 2017 11:40
+This is XeTeX, Version 3.14159265-2.6-0.99996 (MiKTeX 2.9.6210 64-bit) (preloaded format=xelatex 2017.1.15)  15 APR 2017 20:22
 entering extended mode
 **./spark.analysis.tex
 (spark.analysis.tex
@@ -2162,6 +2162,9 @@ runsystem(if not exist _minted-spark.analysis mkdir _minted-spark.analysis)...e
 xecuted.
 
 
+(C:\Users\wutianxiong\AppData\Roaming\MiKTeX\2.9\tex\latex\cases\cases.sty
+Package: cases 2002/05/02 ver 2.5 
+)
 (template/syntax.sty
 (C:\Users\wutianxiong\AppData\Roaming\MiKTeX\2.9\tex\latex\listings\listings.st
 y
@@ -2645,64 +2648,64 @@ LaTeX Warning: Label `inputPrg:shufflemaptask@cref' multiply defined.
 ) (data/chap08.aux) (data/chap09.aux))
 \openout1 = `spark.analysis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 51.
-LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 51
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 52.
+LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 52
 .
 
 (C:\Users\wutianxiong\AppData\Roaming\MiKTeX\2.9\tex\latex\newtx\omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 51.
-LaTeX Font Info:    Try loading font information for U+ntxexa on input line 51.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 52.
+LaTeX Font Info:    Try loading font information for U+ntxexa on input line 52.
 
 
 (C:\Users\wutianxiong\AppData\Roaming\MiKTeX\2.9\tex\latex\newtx\untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for EU1/lmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 51.
-LaTeX Font Info:    Try loading font information for T3+cmr on input line 51.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for EU1/lmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 52.
+LaTeX Font Info:    Try loading font information for T3+cmr on input line 52.
 
 (C:\Users\wutianxiong\AppData\Roaming\MiKTeX\2.9\tex\latex\tipa\t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 51.
-LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 51
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 52.
+LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 52
 .
 
 (C:\Users\wutianxiong\AppData\Roaming\MiKTeX\2.9\tex\latex\newtx\lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 52.
 LaTeX Font Info:    Try loading font information for LMX+ntxexx on input line 5
-1.
+2.
 
 (C:\Users\wutianxiong\AppData\Roaming\MiKTeX\2.9\tex\latex\newtx\lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
 
 ABD: EverySelectfont initializing macros
-LaTeX Info: Redefining \selectfont on input line 51.
+LaTeX Info: Redefining \selectfont on input line 52.
 \c@mv@tabular=\count377
 \c@mv@boldtabular=\count378
 Package caption Info: Begin \AtBeginDocument code.
@@ -2726,7 +2729,7 @@ Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 Package pdflscape Info: Auto-detected driver: dvipdfm (xetex) on input line 99.
 
 )
-Package hyperref Info: Link coloring OFF on input line 51.
+Package hyperref Info: Link coloring OFF on input line 52.
 
 (G:\MikTEX\tex\latex\hyperref\nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -2736,9 +2739,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count379
 )
-LaTeX Info: Redefining \ref on input line 51.
-LaTeX Info: Redefining \pageref on input line 51.
-LaTeX Info: Redefining \nameref on input line 51.
+LaTeX Info: Redefining \ref on input line 52.
+LaTeX Info: Redefining \pageref on input line 52.
+LaTeX Info: Redefining \nameref on input line 52.
  (spark.analysis.out)
 (spark.analysis.out)
 \@outlinefile=\write10
@@ -2784,7 +2787,7 @@ ABD: EveryShipout initializing macros
 .................................................
 . LaTeX info: "xparse/redefine-command"
 . 
-. Redefining command \Pifont with sig. 'm' on line 51.
+. Redefining command \Pifont with sig. 'm' on line 52.
 .................................................
  (data/cover.tex
 File: figures/csri-name.jpg Graphic file (type QTm)
@@ -2941,13 +2944,13 @@ Underfull \hbox (badness 10000) detected at line 26
 . 
 . Could not resolve font Microsoft YaHei/I (it probably doesn't exist).
 .................................................
-LaTeX Font Info:    Try loading font information for T1+qhv on input line 58.
+LaTeX Font Info:    Try loading font information for T1+qhv on input line 59.
 
 (C:\Users\wutianxiong\AppData\Roaming\MiKTeX\2.9\tex\latex\tex-gyre\t1qhv.fd
 File: t1qhv.fd 2009/09/25 v1.2 font definition file for T1/qhv
 )
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 10.84042pt on input line 58.
+(Font)              scaled to size 10.84042pt on input line 59.
 .................................................
 . fontspec info: "defining-font"
 . 
@@ -2965,7 +2968,7 @@ LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
 . - 'bold italic small caps'  (b/itsc) with NFSS spec.: 
 .................................................
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 14.45389pt on input line 58.
+(Font)              scaled to size 14.45389pt on input line 59.
 
 (spark.analysis.toc
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
@@ -3264,6 +3267,8 @@ File: figures/eventListener.pdf Graphic file (type QTm)
 
  (data/chap05.tex
 第3章
+Package hyperref Info: bookmark level for unknown equation defaults to 0 on inp
+ut line 18.
 [29
 
 
@@ -3278,12 +3283,12 @@ File: figures/wideandnarroewdeps.pdf Graphic file (type QTm)
  <use  "figures/wideandnarroewdeps.pdf" >
 File: figures/dependencyclassl.pdf Graphic file (type QTm)
 
-<use  "figures/dependencyclassl.pdf" >
+<use  "figures/dependencyclassl.pdf" > [31]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/5B0E9CB1029554B05C4E12D9ECF925A70B2177950824385840A1C70
-1CDE7799A.pygtex) [31]
+1CDE7799A.pygtex)
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3291,23 +3296,24 @@ File: figures/dependencyclassl.pdf Graphic file (type QTm)
 1CDE7799A.pygtex)
 File: figures/rangedeps.pdf Graphic file (type QTm)
  <use  "figures/rangedeps.pdf" >
-Underfull \hbox (badness 1881) in paragraph at lines 85--91
+Underfull \hbox (badness 1881) in paragraph at lines 98--104
 \EU1/SimSun(0)/m/n/12.045 中 父 \T1/ntxtlf/m/n/12.045 RDD \EU1/SimSun(0)/m/n/12.0
 45 和 子 \T1/ntxtlf/m/n/12.045 RDD \EU1/SimSun(0)/m/n/12.045 中 的 分 区 \T1/ntxtlf/m
 /n/12.045 ID \EU1/SimSun(0)/m/n/12.045 是 相 同 的，| \T1/ntxtlf/m/n/12.045 RangeDe-
 pen-dency \EU1/SimSun(0)/m/n/12.045 仅 仅 被
  []
 
+[32]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/3758D43E09436FBFA5ACC15B9AFFE5E50B2177950824385840A1C70
-1CDE7799A.pygtex) [32] [33]
+1CDE7799A.pygtex) [33]
 File: figures/SparkCountDetails.pdf Graphic file (type QTm)
  <use  "figures/SparkCountDetails.pdf" > [34]
 File: figures/wordcountdatastream.pdf Graphic file (type QTm)
 
-<use  "figures/wordcountdatastream.pdf" >) [35]
+<use  "figures/wordcountdatastream.pdf" > [35]) [36]
 \openout2 = `data/chap06.aux'.
 
  (data/chap06.tex
@@ -3321,11 +3327,11 @@ File: figures/wordcountdatastream.pdf Graphic file (type QTm)
 
 
 (_minted-spark.analysis/5931BB5973024A8F2BF42FAD0508B7E90B2177950824385840A1C70
-1CDE7799A.pygtex) [36
+1CDE7799A.pygtex) [37
 
 
 
-] [37]
+] [38]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3335,7 +3341,7 @@ File: figures/wordcountdatastream.pdf Graphic file (type QTm)
 
 
 (_minted-spark.analysis/424185D5C60AA7ADF7ADC6AA08D2FB0D0B2177950824385840A1C70
-1CDE7799A.pygtex) [38]
+1CDE7799A.pygtex) [39]
 Overfull \hbox (7.54376pt too wide) in paragraph at lines 99--108
 \T1/ntxtlf/m/n/12.045 MapPartitionRDD[3](List(onoToOneDependency(MapPartitionRD
 D[2])),List(1,2)) 
@@ -3347,17 +3353,17 @@ Overfull \hbox (7.54376pt too wide) in paragraph at lines 99--108
 D[5])),List(3,4)) 
  []
 
-[39]
+[40]
 Overfull \hbox (7.97183pt too wide) in paragraph at lines 125--125
 []|\T1/ntxtlf/m/n/12.045 ShuffleMapStage(3,shuffleDep(3))| 
  []
 
-[40]
+[41]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/EB466A12EA222D2EE070ED9D120DC34B0B2177950824385840A1C70
-1CDE7799A.pygtex) [41]
+1CDE7799A.pygtex) [42]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3369,22 +3375,22 @@ Underfull \hbox (badness 4660) in paragraph at lines 163--187
 \T1/ntxtlf/m/n/12.045 Tasks\EU1/SimSun(0)/m/n/12.045 ，|
  []
 
-[42]
+[43]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/FBC7505AADDC34A35D6D728ABFC96A980B2177950824385840A1C70
-1CDE7799A.pygtex) [43]
+1CDE7799A.pygtex) [44]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/D330CD419D5B2CA90A4689D7325D38370B2177950824385840A1C70
-1CDE7799A.pygtex) [44] [45]
+1CDE7799A.pygtex) [45] [46]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/73E6DFE2215BEDB9CF4E6091556865E80B2177950824385840A1C70
-1CDE7799A.pygtex) [46]) [47]
+1CDE7799A.pygtex) [47]) [48]
 \openout2 = `data/chap07.aux'.
 
  (data/chap07.tex
@@ -3395,7 +3401,7 @@ Underfull \hbox (badness 4660) in paragraph at lines 163--187
 (_minted-spark.analysis/3C068EE8627DB3631B2A78131F1CAB3E0B2177950824385840A1C70
 1CDE7799A.pygtex)
 File: figures/YarnAllocator.pdf Graphic file (type QTm)
- <use  "figures/YarnAllocator.pdf" > [48
+ <use  "figures/YarnAllocator.pdf" > [49
 
 
 
@@ -3415,14 +3421,14 @@ Overfull \hbox (33.8965pt too wide) in paragraph at lines 25--25
 nTokenRenewer[][]([][]driverConf[][])[]|  
  []
 
-) [49] [50]
+) [50] [51]
 Underfull \hbox (badness 6725) in paragraph at lines 100--101
 \T1/ntxtlf/m/n/12.045 Sched-uler-Back-end#receiveAndReply \EU1/SimSun(0)/m/n/12
 .045 中 接 收，|  在 \T1/ntxtlf/m/n/12.045 Driver \EU1/SimSun(0)/m/n/12.045 端 会 通 过 
 \T1/ntxtlf/m/n/12.045 ex-ecu-tor-
  []
 
-[51]
+[52]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3438,7 +3444,7 @@ Overfull \hbox (18.4804pt too wide) in paragraph at lines 133--135
 ithDependencies(serializedTask) 
  []
 
-[52]
+[53]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3448,7 +3454,7 @@ ithDependencies(serializedTask)
 
 
 (_minted-spark.analysis/546B56BFCEF17BEC11D018E18BC4E8280B2177950824385840A1C70
-1CDE7799A.pygtex) [53]
+1CDE7799A.pygtex) [54]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3459,12 +3465,12 @@ Overfull \hbox (51.39565pt too wide) in paragraph at lines 6--6
 Updater[][]([][]context[][].[][]collectInternalAccumulators[][])[]|  
  []
 
-) [54]
+) [55]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/462E51B910552B3B55643653448B110B0B2177950824385840A1C70
-1CDE7799A.pygtex) [55]
+1CDE7799A.pygtex) [56]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3479,12 +3485,12 @@ Updater[][]([][]context[][].[][]collectInternalAccumulators[][])[]|
 
 
 (_minted-spark.analysis/6990060C2B093BB854E77359888EBDFC0B2177950824385840A1C70
-1CDE7799A.pygtex) [56]
+1CDE7799A.pygtex) [57]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/42CD41152D2B179557EFCD9EA62A7DE80B2177950824385840A1C70
-1CDE7799A.pygtex) [57]
+1CDE7799A.pygtex) [58]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3497,7 +3503,7 @@ Underfull \hbox (badness 6032) in paragraph at lines 288--295
  []
 
 File: figures/ExecutorRunTask.pdf Graphic file (type QTm)
-<use  "figures/ExecutorRunTask.pdf" >) [58] [59]
+<use  "figures/ExecutorRunTask.pdf" >) [59] [60]
 \openout2 = `data/chap08.aux'.
 
  (data/chap08.tex
@@ -3511,16 +3517,16 @@ File: figures/ExecutorRunTask.pdf Graphic file (type QTm)
 
 
 (_minted-spark.analysis/9025CF5AA2564855AC1BEA3B1EEE54940B2177950824385840A1C70
-1CDE7799A.pygtex) [60
+1CDE7799A.pygtex) [61
 
 
 
 ]
 File: figures/hashShuffleWriter.pdf Graphic file (type QTm)
- <use  "figures/hashShuffleWriter.pdf" > [61]
+ <use  "figures/hashShuffleWriter.pdf" > [62]
 File: figures/consolidate.pdf Graphic file (type QTm)
 
-<use  "figures/consolidate.pdf" > [62] [63]
+<use  "figures/consolidate.pdf" > [63] [64]
 File: figures/sortshuffle.pdf Graphic file (type QTm)
  <use  "figures/sortshuffle.pdf" >
 \openout8 = `spark.analysis.listing'.
@@ -3533,17 +3539,17 @@ Overfull \hbox (4.98854pt too wide) in paragraph at lines 4--4
 pSizesByExecutorId[][]([][]handle[][].[][]shuffleId[][],[] 
  []
 
-) [64] [65]
+) [65] [66]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/81C1F7A471E91F8C06DD86E4C5D92F4F0B2177950824385840A1C70
-1CDE7799A.pygtex) [66] [67]
+1CDE7799A.pygtex) [67] [68]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/5FD7965864AF14EF2790797E11F538850B2177950824385840A1C70
-1CDE7799A.pygtex) [68]
+1CDE7799A.pygtex) [69]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3559,14 +3565,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 212--226
 为 远 程 数 据 块，| \T1/ntxtlf/m/n/12.045 Shuf-fle-Block-FetcherIt-er-a-
  []
 
-[69]
+[70]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/93C3F2051BACEC7F5E7D52C0ACCF2BF10B2177950824385840A1C70
 1CDE7799A.pygtex)
 File: figures/shuffleRead.pdf Graphic file (type QTm)
- <use  "figures/shuffleRead.pdf" >) [70] [71]
+ <use  "figures/shuffleRead.pdf" >) [71] [72]
 \openout2 = `data/chap09.aux'.
 
  (data/chap09.tex
@@ -3589,7 +3595,7 @@ Underfull \hbox (badness 3930) in paragraph at lines 3--23
 imSun(0)/m/n/12.045 ，|  之 后 再 创 建
  []
 
-[72
+[73
 
 
 
@@ -3597,7 +3603,7 @@ imSun(0)/m/n/12.045 ，|  之 后 再 创 建
 File: figures/storage.pdf Graphic file (type QTm)
  <use  "figures/storage.pdf" >
 File: figures/BlockStore.pdf Graphic file (type QTm)
- <use  "figures/BlockStore.pdf" > [73]
+ <use  "figures/BlockStore.pdf" > [74]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3608,7 +3614,7 @@ Overfull \hbox (16.49384pt too wide) in paragraph at lines 15--15
 tBootstrap[][].[][]toSeq[][].[][]asJava[][])[]|  
  []
 
-) [74]
+) [75]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3627,12 +3633,12 @@ Overfull \hbox (86.10449pt too wide) in paragraph at lines 9--9
 
  []
 
-) [75]
+) [76]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/E5BC903878CA1EA746E9DB7EBB6A3638A35A2B709A86CBF4556EC8C
-1BD42B0B9.pygtex) [76]
+1BD42B0B9.pygtex) [77]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3643,7 +3649,7 @@ Overfull \hbox (10.69295pt too wide) in paragraph at lines 8--8
 heckNotNull[][]([][]clientBootstraps[][]));[]|  
  []
 
-) [77]
+) [78]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3655,12 +3661,12 @@ huf-fle \EU1/SimSun(0)/m/n/12.045 文 件 时 调 用 的 是 \T1/ntxtlf/m/n/12.
 
  []
 
-[78]
+[79]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/5A7B978CDA8A2C3DF2210039CF1547D60B2177950824385840A1C70
-1CDE7799A.pygtex) [79] [80]
+1CDE7799A.pygtex) [80] [81]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3670,24 +3676,24 @@ huf-fle \EU1/SimSun(0)/m/n/12.045 文 件 时 调 用 的 是 \T1/ntxtlf/m/n/12.
 
 
 (_minted-spark.analysis/BAEB7361AADA51E3FA7EDC69BB5488DB0B2177950824385840A1C70
-1CDE7799A.pygtex) [81]
+1CDE7799A.pygtex) [82]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/C1D1F0B3251CCF325D92E5DBCD756E5C0B2177950824385840A1C70
-1CDE7799A.pygtex) [82]
+1CDE7799A.pygtex) [83]
 File: figures/memoryStore.pdf Graphic file (type QTm)
- <use  "figures/memoryStore.pdf" > [83]) [84]
+ <use  "figures/memoryStore.pdf" > [84]) [85]
 \tf@thm=\write12
 \openout12 = `spark.analysis.thm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 104.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 104.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 105.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 105.
 
 (spark.analysis.aux (data/chap03.aux) (data/chap04.aux) (data/chap05.aux)
 (data/chap06.aux) (data/chap07.aux) (data/chap08.aux) (data/chap09.aux))
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 104.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 104.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 105.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 105.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -3697,12 +3703,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 54735 strings out of 428408
- 1090744 string characters out of 3163951
- 1245219 words of memory out of 3000000
- 57091 multiletter control sequences out of 15000+200000
+ 54757 strings out of 428408
+ 1091067 string characters out of 3163951
+ 1244492 words of memory out of 3000000
+ 57111 multiletter control sequences out of 15000+200000
  91499 words of font info for 137 fonts, out of 3000000 for 9000
  1329 hyphenation exceptions out of 8191
  69i,14n,96p,10449b,1918s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on spark.analysis.pdf (88 pages).
+Output written on spark.analysis.pdf (89 pages).

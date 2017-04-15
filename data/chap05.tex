@@ -11,6 +11,19 @@ RDD即为弹性数据集，它可以由存储在物理中的数据来生成，�
 	\item 数据分区列表
 	
 	为数据的基本组成单元，对于RDD来说，一个分区上将会对应一个计算任务，分区的个数会决定Job的并发度。在使用时可以由用户显示的指定分区数，没有指定的情况下，集群会采用默认的分区数，即集群工作节点上一个cpu core对应一个分区。分区的管理为BlockManager。
+	
+	RDD分区的个数如下公式所示
+	\begin{equation}
+		partitions = \max \{ blockSize, defaultMinPartition\}
+	\end{equation}
+    
+    \begin{equation}
+    defaultMinPartition=
+    \begin{cases}
+    textFile &\mbox{if 定义并行度}\\
+    \min\{\max\{totalCores,2\},2\}
+    \end{cases}
+    \end{equation}
 	\item 每个分区上的计算函数
 	
 	Spark中每个RDD都会实现一个computer函数，computer函数会对迭代器进行连接，但不会保存每次连接运算的中间结果。
