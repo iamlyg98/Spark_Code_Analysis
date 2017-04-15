@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//任务运行结果的处理}
+\PYG{k}{val} \PYG{n}{resultSer} \PYG{k}{=} \PYG{n}{env}\PYG{o}{.}\PYG{n}{serializer}\PYG{o}{.}\PYG{n}{newInstance}\PYG{o}{()}
+\PYG{k}{val} \PYG{n}{beforeSerialization} \PYG{k}{=} \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{currentTimeMillis}\PYG{o}{()}
+\PYG{c+c1}{//value中保存Task的计算结果}
+\PYG{k}{val} \PYG{n}{valueBytes} \PYG{k}{=} \PYG{n}{resultSer}\PYG{o}{.}\PYG{n}{serialize}\PYG{o}{(}\PYG{n}{value}\PYG{o}{)}
+\PYG{k}{val} \PYG{n}{afterSerialization} \PYG{k}{=} \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{currentTimeMillis}\PYG{o}{()}
+\PYG{c+c1}{//首先将结果直接放入org.apache.spark.scheduler.DirectTaskResult}
+\PYG{k}{val} \PYG{n}{directResult} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{DirectTaskResult}\PYG{o}{(}\PYG{n}{valueBytes}\PYG{o}{,} \PYG{n}{accumUpdates}\PYG{o}{,} \PYG{n}{task}\PYG{o}{.}\PYG{n}{metrics}\PYG{o}{.}\PYG{n}{orNull}\PYG{o}{)}
+\PYG{k}{val} \PYG{n}{serializedDirectResult} \PYG{k}{=} \PYG{n}{ser}\PYG{o}{.}\PYG{n}{serialize}\PYG{o}{(}\PYG{n}{directResult}\PYG{o}{)}
+\PYG{k}{val} \PYG{n}{resultSize} \PYG{k}{=} \PYG{n}{serializedDirectResult}\PYG{o}{.}\PYG{n}{limit}
+\end{Verbatim}

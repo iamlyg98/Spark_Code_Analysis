@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{n}{allocator} \PYG{k}{=} \PYG{n}{client}\PYG{o}{.}\PYG{n}{register}\PYG{o}{(}\PYG{n}{driverUrl}\PYG{o}{,}
+\PYG{n}{driverRef}\PYG{o}{,}
+\PYG{n}{yarnConf}\PYG{o}{,}
+\PYG{n+nc}{\PYGZus{}sparkConf}\PYG{o}{,}
+\PYG{n}{uiAddress}\PYG{o}{,}
+\PYG{n}{historyAddress}\PYG{o}{,}
+\PYG{n}{securityMgr}\PYG{o}{)}
+\PYG{n}{allocator}\PYG{o}{.}\PYG{n}{allocateResources}\PYG{o}{()}
+\PYG{n}{reporterThread} \PYG{k}{=} \PYG{n}{launchReporterThread}\PYG{o}{()}
+\end{Verbatim}

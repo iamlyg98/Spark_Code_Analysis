@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{for} \PYG{o}{(}\PYG{n}{container} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{containersToUse}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{n}{numExecutorsRunning} \PYG{o}{+=} \PYG{l+m+mi}{1}
+  \PYG{k}{val} \PYG{n}{executorHostname} \PYG{k}{=} \PYG{n}{container}\PYG{o}{.}\PYG{n}{getNodeId}\PYG{o}{.}\PYG{n}{getHost}
+  \PYG{k}{val} \PYG{n}{containerId} \PYG{k}{=} \PYG{n}{container}\PYG{o}{.}\PYG{n}{getId}
+  \PYG{n}{executorIdCounter} \PYG{o}{+=} \PYG{l+m+mi}{1}
+  \PYG{k}{val} \PYG{n}{executorId} \PYG{k}{=} \PYG{n}{executorIdCounter}\PYG{o}{.}\PYG{n}{toString}
+  \PYG{n}{executorIdToContainer}\PYG{o}{(}\PYG{n}{executorId}\PYG{o}{)} \PYG{k}{=} \PYG{n}{container}
+  \PYG{n}{containerIdToExecutorId}\PYG{o}{(}\PYG{n}{container}\PYG{o}{.}\PYG{n}{getId}\PYG{o}{)} \PYG{k}{=} \PYG{n}{executorId}
+  \PYG{k}{val} \PYG{n}{containerSet} \PYG{k}{=} \PYG{n}{allocatedHostToContainersMap}\PYG{o}{.}\PYG{n}{getOrElseUpdate}\PYG{o}{(}\PYG{n}{executorHostname}\PYG{o}{,}
+    \PYG{k}{new} \PYG{n+nc}{HashSet}\PYG{o}{[}\PYG{k+kt}{ContainerId}\PYG{o}{])}
+  \PYG{n}{containerSet} \PYG{o}{+=} \PYG{n}{containerId}
+  \PYG{n}{allocatedContainerToHostMap}\PYG{o}{.}\PYG{n}{put}\PYG{o}{(}\PYG{n}{containerId}\PYG{o}{,} \PYG{n}{executorHostname}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{executorRunnable} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{ExecutorRunnable}\PYG{o}{(}\PYG{n}{container}\PYG{o}{,}\PYG{n}{conf}\PYG{o}{,}\PYG{n}{sparkConf}\PYG{o}{,}\PYG{n}{driverUrl}\PYG{o}{,}\PYG{n}{executorId}\PYG{o}{,}
+  \PYG{n}{executorHostname}\PYG{o}{,}\PYG{n}{executorMemory}\PYG{o}{,}\PYG{n}{executorCores}\PYG{o}{,}
+  \PYG{n}{appAttemptId}\PYG{o}{.}\PYG{n}{getApplicationId}\PYG{o}{.}\PYG{n}{toString}\PYG{o}{,}\PYG{n}{securityMgr}\PYG{o}{)}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{launchContainers}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{launcherPool}\PYG{o}{.}\PYG{n}{execute}\PYG{o}{(}\PYG{n}{executorRunnable}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

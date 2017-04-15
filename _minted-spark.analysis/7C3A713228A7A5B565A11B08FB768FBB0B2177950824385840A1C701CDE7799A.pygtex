@@ -1,0 +1,25 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//设置上下文信息，实际上会调用org.apache.spark.TaskContext\PYGZsh{}setTaskContext}
+\PYG{n+nc}{TaskContext}\PYG{o}{.}\PYG{n}{setTaskContext}\PYG{o}{(}\PYG{n}{context}\PYG{o}{)}
+\PYG{c+c1}{//更新metrics信息}
+\PYG{n}{context}\PYG{o}{.}\PYG{n}{taskMetrics}\PYG{o}{.}\PYG{n}{setHostname}\PYG{o}{(}\PYG{n+nc}{Utils}\PYG{o}{.}\PYG{n}{localHostName}\PYG{o}{())}
+\PYG{n}{context}\PYG{o}{.}\PYG{n}{taskMetrics}\PYG{o}{.}\PYG{n}{setAccumulatorsUpdater}\PYG{o}{(}\PYG{n}{context}\PYG{o}{.}\PYG{n}{collectInternalAccumulators}\PYG{o}{)}
+\PYG{c+c1}{//当前线程，在被打断的时候可以通过它来停止该线程}
+\PYG{n}{taskThread} \PYG{k}{=} \PYG{n+nc}{Thread}\PYG{o}{.}\PYG{n}{currentThread}\PYG{o}{()}
+\PYG{k}{if} \PYG{o}{(}\PYG{n+nc}{\PYGZus{}killed}\PYG{o}{)} \PYG{o}{\PYGZob{}}\PYG{c+c1}{//如果当前Task被杀死，那么需要退出Task的执行}
+  \PYG{n}{kill}\PYG{o}{(}\PYG{n}{interruptThread} \PYG{k}{=} \PYG{k+kc}{false}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\PYG{k}{try} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//执行本次Task，runTask真正执行代码为子类中重写的runTask，对应ShuffleMapTask和ResultTask}
+  \PYG{o}{(}\PYG{n}{runTask}\PYG{o}{(}\PYG{n}{context}\PYG{o}{),} \PYG{n}{context}\PYG{o}{.}\PYG{n}{collectAccumulators}\PYG{o}{())}
+\PYG{o}{\PYGZcb{}} \PYG{k}{catch} \PYG{o}{\PYGZob{}}
+\PYG{o}{\PYGZcb{}} \PYG{k}{finally} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{// Call the task completion callbacks.}
+  \PYG{n}{context}\PYG{o}{.}\PYG{n}{markTaskCompleted}\PYG{o}{()}
+  \PYG{k}{try} \PYG{o}{\PYGZob{}}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{finally} \PYG{o}{\PYGZob{}}
+    \PYG{n+nc}{TaskContext}\PYG{o}{.}\PYG{n}{unset}\PYG{o}{()}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

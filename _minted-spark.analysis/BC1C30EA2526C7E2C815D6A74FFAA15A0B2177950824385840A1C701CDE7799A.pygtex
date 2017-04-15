@@ -1,0 +1,29 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private} \PYG{k}{val} \PYG{n}{listenerThread} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{Thread}\PYG{o}{(}\PYG{n}{name}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{n}{setDaemon}\PYG{o}{(}\PYG{k+kc}{true}\PYG{o}{)}
+  \PYG{k}{override} \PYG{k}{def} \PYG{n}{run}\PYG{o}{()}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{n+nc}{Utils}\PYG{o}{.}\PYG{n}{tryOrStopSparkContext}\PYG{o}{(}\PYG{n}{sparkContext}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n+nc}{AsynchronousListenerBus}\PYG{o}{.}\PYG{n}{withinListenerThread}\PYG{o}{.}\PYG{n}{withValue}\PYG{o}{(}\PYG{k+kc}{true}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{k}{while} \PYG{o}{(}\PYG{k+kc}{true}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{n}{eventLock}\PYG{o}{.}\PYG{n}{acquire}\PYG{o}{()}
+          \PYG{n}{self}\PYG{o}{.}\PYG{n}{synchronized} \PYG{o}{\PYGZob{}}
+            \PYG{n}{processingEvent} \PYG{k}{=} \PYG{k+kc}{true}
+          \PYG{o}{\PYGZcb{}}
+        \PYG{k}{try} \PYG{o}{\PYGZob{}}
+          \PYG{k}{val} \PYG{n}{event} \PYG{k}{=} \PYG{n}{eventQueue}\PYG{o}{.}\PYG{n}{poll}
+          \PYG{k}{if} \PYG{o}{(}\PYG{n}{event} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+            \PYG{k}{if} \PYG{o}{(!}\PYG{n}{stopped}\PYG{o}{.}\PYG{n}{get}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+              \PYG{o}{......}
+            \PYG{o}{\PYGZcb{}}
+            \PYG{k}{return}
+          \PYG{o}{\PYGZcb{}}
+          \PYG{n}{postToAll}\PYG{o}{(}\PYG{n}{event}\PYG{o}{)}
+        \PYG{o}{\PYGZcb{}} \PYG{k}{finally} \PYG{o}{\PYGZob{}}
+          \PYG{n}{self}\PYG{o}{.}\PYG{n}{synchronized} \PYG{o}{\PYGZob{}}
+            \PYG{n}{processingEvent} \PYG{k}{=} \PYG{k+kc}{false}
+          \PYG{o}{\PYGZcb{}}
+        \PYG{o}{\PYGZcb{}}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

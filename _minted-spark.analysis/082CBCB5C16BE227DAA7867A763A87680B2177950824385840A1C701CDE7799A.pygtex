@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{abstract} \PYG{k}{class} \PYG{n+nc}{RDD}\PYG{o}{[}\PYG{k+kt}{T:} \PYG{k+kt}{ClassTag}\PYG{o}{](}
+  \PYG{n+nd}{@transient} \PYG{k}{private} \PYG{k}{var} \PYG{n+nc}{\PYGZus{}sc}\PYG{k}{:} \PYG{k+kt}{SparkContext}\PYG{o}{,}
+  \PYG{n+nd}{@transient} \PYG{k}{private} \PYG{k}{var} \PYG{n}{deps}\PYG{k}{:} \PYG{k+kt}{Seq}\PYG{o}{[}\PYG{k+kt}{Dependency}\PYG{o}{[}\PYG{k}{\PYGZus{}}\PYG{o}{]]}
+  \PYG{o}{)} \PYG{k}{extends} \PYG{n+nc}{Serializable} \PYG{k}{with} \PYG{n+nc}{Logging} \PYG{o}{\PYGZob{}}
+    \PYG{o}{......}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

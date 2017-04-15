@@ -1,0 +1,25 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{n}{taskIdToTaskSetManager}\PYG{o}{.}\PYG{n}{get}\PYG{o}{(}\PYG{n}{tid}\PYG{o}{)} \PYG{k}{match} \PYG{o}{\PYGZob{}}
+  \PYG{k}{case} \PYG{n+nc}{Some}\PYG{o}{(}\PYG{n}{taskSet}\PYG{o}{)} \PYG{k}{=\PYGZgt{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n+nc}{TaskState}\PYG{o}{.}\PYG{n}{isFinished}\PYG{o}{(}\PYG{n}{state}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+    \PYG{n}{taskIdToTaskSetManager}\PYG{o}{.}\PYG{n}{remove}\PYG{o}{(}\PYG{n}{tid}\PYG{o}{)}
+    \PYG{n}{taskIdToExecutorId}\PYG{o}{.}\PYG{n}{remove}\PYG{o}{(}\PYG{n}{tid}\PYG{o}{).}\PYG{n}{foreach} \PYG{o}{\PYGZob{}} \PYG{n}{execId} \PYG{k}{=\PYGZgt{}}
+      \PYG{k}{if} \PYG{o}{(}\PYG{n}{executorIdToTaskCount}\PYG{o}{.}\PYG{n}{contains}\PYG{o}{(}\PYG{n}{execId}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+        \PYG{n}{executorIdToTaskCount}\PYG{o}{(}\PYG{n}{execId}\PYG{o}{)} \PYG{o}{\PYGZhy{}=} \PYG{l+m+mi}{1}
+     \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{state} \PYG{o}{==} \PYG{n+nc}{TaskState}\PYG{o}{.}\PYG{n+nc}{FINISHED}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{taskSet}\PYG{o}{.}\PYG{n}{removeRunningTask}\PYG{o}{(}\PYG{n}{tid}\PYG{o}{)}
+    \PYG{n}{taskResultGetter}\PYG{o}{.}\PYG{n}{enqueueSuccessfulTask}\PYG{o}{(}\PYG{n}{taskSet}\PYG{o}{,} \PYG{n}{tid}\PYG{o}{,} \PYG{n}{serializedData}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n+nc}{Set}\PYG{o}{(}\PYG{n+nc}{TaskState}\PYG{o}{.}\PYG{n+nc}{FAILED}\PYG{o}{,} \PYG{n+nc}{TaskState}\PYG{o}{.}\PYG{n+nc}{KILLED}\PYG{o}{,} \PYG{n+nc}{TaskState}\PYG{o}{.}\PYG{n+nc}{LOST}\PYG{o}{).}\PYG{n}{contains}\PYG{o}{(}\PYG{n}{state}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+    \PYG{n}{taskSet}\PYG{o}{.}\PYG{n}{removeRunningTask}\PYG{o}{(}\PYG{n}{tid}\PYG{o}{)}
+    \PYG{n}{taskResultGetter}\PYG{o}{.}\PYG{n}{enqueueFailedTask}\PYG{o}{(}\PYG{n}{taskSet}\PYG{o}{,} \PYG{n}{tid}\PYG{o}{,} \PYG{n}{state}\PYG{o}{,} \PYG{n}{serializedData}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{k}{case} \PYG{n+nc}{None} \PYG{k}{=\PYGZgt{}}
+    \PYG{n}{logError}\PYG{o}{(}
+    \PYG{o}{(}\PYG{l+s}{\PYGZdq{}Ignoring update with state \PYGZpc{}s for TID \PYGZpc{}s because its task set is gone (this is \PYGZdq{}} \PYG{o}{+}
+    \PYG{l+s}{\PYGZdq{}likely the result of receiving duplicate task finished status updates)\PYGZdq{}}\PYG{o}{)}
+    \PYG{o}{.}\PYG{n}{format}\PYG{o}{(}\PYG{n}{state}\PYG{o}{,} \PYG{n}{tid}\PYG{o}{))}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

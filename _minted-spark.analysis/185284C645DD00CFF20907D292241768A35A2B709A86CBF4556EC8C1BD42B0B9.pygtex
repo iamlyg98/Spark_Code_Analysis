@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kd}{public} \PYG{n+nf}{TransportClientFactory}\PYG{o}{(}
+\PYG{n}{TransportContext} \PYG{n}{context}\PYG{o}{,}
+\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{TransportClientBootstrap}\PYG{o}{\PYGZgt{}} \PYG{n}{clientBootstraps}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{context} \PYG{o}{=} \PYG{n}{Preconditions}\PYG{o}{.}\PYG{n+na}{checkNotNull}\PYG{o}{(}\PYG{n}{context}\PYG{o}{);}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{conf} \PYG{o}{=} \PYG{n}{context}\PYG{o}{.}\PYG{n+na}{getConf}\PYG{o}{();}
+  \PYG{c+c1}{//缓存客户端列表}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{clientBootstraps} \PYG{o}{=} \PYG{n}{Lists}\PYG{o}{.}\PYG{n+na}{newArrayList}\PYG{o}{(}\PYG{n}{Preconditions}\PYG{o}{.}\PYG{n+na}{checkNotNull}\PYG{o}{(}\PYG{n}{clientBootstraps}\PYG{o}{));}
+  \PYG{c+c1}{//缓存客户端连接}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{connectionPool} \PYG{o}{=} \PYG{k}{new} \PYG{n}{ConcurrentHashMap}\PYG{o}{\PYGZlt{}}\PYG{n}{SocketAddress}\PYG{o}{,} \PYG{n}{ClientPool}\PYG{o}{\PYGZgt{}();}
+  \PYG{c+c1}{//节点之间去数据的连接数，可以使用属性spark.shuffle.io.numConnectionsPerPeer来设置，默认为1}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{numConnectionsPerPeer} \PYG{o}{=} \PYG{n}{conf}\PYG{o}{.}\PYG{n+na}{numConnectionsPerPeer}\PYG{o}{();}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{rand} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Random}\PYG{o}{();}
+  \PYG{n}{IOMode} \PYG{n}{ioMode} \PYG{o}{=} \PYG{n}{IOMode}\PYG{o}{.}\PYG{n+na}{valueOf}\PYG{o}{(}\PYG{n}{conf}\PYG{o}{.}\PYG{n+na}{ioMode}\PYG{o}{());}
+  \PYG{c+c1}{//客户端channel被创建时使用的类，spark.shuffle.io.mode来配置，默认为NioSocketChannel}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{socketChannelClass} \PYG{o}{=} \PYG{n}{NettyUtils}\PYG{o}{.}\PYG{n+na}{getClientChannelClass}\PYG{o}{(}\PYG{n}{ioMode}\PYG{o}{);}
+  \PYG{c+c1}{// TODO: Make thread pool name configurable.}
+  \PYG{c+c1}{//根据Netty规范，客户端只有Work组，所以此处创建workerGroup，实际上是NioEventLoopGroup}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{workerGroup} \PYG{o}{=} \PYG{n}{NettyUtils}\PYG{o}{.}\PYG{n+na}{createEventLoop}\PYG{o}{(}\PYG{n}{ioMode}\PYG{o}{,} \PYG{n}{conf}\PYG{o}{.}\PYG{n+na}{clientThreads}\PYG{o}{(),} \PYG{l+s}{\PYGZdq{}shuffle\PYGZhy{}client\PYGZdq{}}\PYG{o}{);}
+  \PYG{c+c1}{//汇集ByteBuf但对本地线程缓存禁用的分配器}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{pooledAllocator} \PYG{o}{=} \PYG{n}{NettyUtils}\PYG{o}{.}\PYG{n+na}{createPooledByteBufAllocator}\PYG{o}{(}
+  \PYG{n}{conf}\PYG{o}{.}\PYG{n+na}{preferDirectBufs}\PYG{o}{(),} \PYG{k+kc}{false} \PYG{c+cm}{/* allowCache */}\PYG{o}{,} \PYG{n}{conf}\PYG{o}{.}\PYG{n+na}{clientThreads}\PYG{o}{());}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{n}{message} \PYG{k}{match} \PYG{o}{\PYGZob{}}
+  \PYG{k}{case} \PYG{n}{openBlocks}\PYG{k}{:} \PYG{k+kt}{OpenBlocks} \PYG{o}{=\PYGZgt{}}
+    \PYG{k}{val} \PYG{n}{blocks}\PYG{k}{:} \PYG{k+kt}{Seq}\PYG{o}{[}\PYG{k+kt}{ManagedBuffer}\PYG{o}{]}\PYG{k}{=}\PYG{n}{openBlocks}\PYG{o}{.}\PYG{n}{blockIds}\PYG{o}{.}\PYG{n}{map}\PYG{o}{(}\PYG{n+nc}{BlockId}\PYG{o}{.}\PYG{n}{apply}\PYG{o}{).}\PYG{n}{map}\PYG{o}{(}\PYG{n}{blockManager}\PYG{o}{.}\PYG{n}{getBlockData}\PYG{o}{)}
+    \PYG{k}{val} \PYG{n}{streamId} \PYG{k}{=} \PYG{n}{streamManager}\PYG{o}{.}\PYG{n}{registerStream}\PYG{o}{(}\PYG{n}{appId}\PYG{o}{,} \PYG{n}{blocks}\PYG{o}{.}\PYG{n}{iterator}\PYG{o}{.}\PYG{n}{asJava}\PYG{o}{)}
+    \PYG{n}{logTrace}\PYG{o}{(}\PYG{l+s}{s\PYGZdq{}Registered streamId }\PYG{l+s+si}{\PYGZdl{}streamId}\PYG{l+s}{ with }\PYG{l+s+si}{\PYGZdl{}\PYGZob{}}\PYG{n}{blocks}\PYG{o}{.}\PYG{n}{size}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s}{ buffers\PYGZdq{}}\PYG{o}{)}
+    \PYG{n}{responseContext}\PYG{o}{.}\PYG{n}{onSuccess}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{StreamHandle}\PYG{o}{(}\PYG{n}{streamId}\PYG{o}{,} \PYG{n}{blocks}\PYG{o}{.}\PYG{n}{size}\PYG{o}{).}\PYG{n}{toByteBuffer}\PYG{o}{)}
+  \PYG{k}{case} \PYG{n}{uploadBlock}\PYG{k}{:} \PYG{k+kt}{UploadBlock} \PYG{o}{=\PYGZgt{}}
+    \PYG{k}{val} \PYG{n}{level}\PYG{k}{:} \PYG{k+kt}{StorageLevel} \PYG{o}{=}\PYG{n}{serializer}\PYG{o}{.}\PYG{n}{newInstance}\PYG{o}{().}\PYG{n}{deserialize}\PYG{o}{(}\PYG{n+nc}{ByteBuffer}\PYG{o}{.}\PYG{n}{wrap}\PYG{o}{(}\PYG{n}{uploadBlock}\PYG{o}{.}\PYG{n}{metadata}\PYG{o}{))}
+    \PYG{k}{val} \PYG{n}{data} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{NioManagedBuffer}\PYG{o}{(}\PYG{n+nc}{ByteBuffer}\PYG{o}{.}\PYG{n}{wrap}\PYG{o}{(}\PYG{n}{uploadBlock}\PYG{o}{.}\PYG{n}{blockData}\PYG{o}{))}
+    \PYG{n}{blockManager}\PYG{o}{.}\PYG{n}{putBlockData}\PYG{o}{(}\PYG{n+nc}{BlockId}\PYG{o}{(}\PYG{n}{uploadBlock}\PYG{o}{.}\PYG{n}{blockId}\PYG{o}{),} \PYG{n}{data}\PYG{o}{,} \PYG{n}{level}\PYG{o}{)}
+    \PYG{n}{responseContext}\PYG{o}{.}\PYG{n}{onSuccess}\PYG{o}{(}\PYG{n+nc}{ByteBuffer}\PYG{o}{.}\PYG{n}{allocate}\PYG{o}{(}\PYG{l+m+mi}{0}\PYG{o}{))}
+\end{Verbatim}

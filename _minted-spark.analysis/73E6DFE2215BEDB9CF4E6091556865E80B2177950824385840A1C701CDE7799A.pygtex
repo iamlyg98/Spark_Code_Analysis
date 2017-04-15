@@ -1,0 +1,30 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{case} \PYG{n}{smt}\PYG{k}{:} \PYG{k+kt}{ShuffleMapTask} \PYG{o}{=\PYGZgt{}}
+  \PYG{k}{val} \PYG{n}{shuffleStage} \PYG{k}{=} \PYG{n}{stage}\PYG{o}{.}\PYG{n}{asInstanceOf}\PYG{o}{[}\PYG{k+kt}{ShuffleMapStage}\PYG{o}{]}
+  \PYG{n}{updateAccumulators}\PYG{o}{(}\PYG{n}{event}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{status} \PYG{k}{=} \PYG{n}{event}\PYG{o}{.}\PYG{n}{result}\PYG{o}{.}\PYG{n}{asInstanceOf}\PYG{o}{[}\PYG{k+kt}{MapStatus}\PYG{o}{]}
+  \PYG{k}{val} \PYG{n}{execId} \PYG{k}{=} \PYG{n}{status}\PYG{o}{.}\PYG{n}{location}\PYG{o}{.}\PYG{n}{executorId}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{failedEpoch}\PYG{o}{.}\PYG{n}{contains}\PYG{o}{(}\PYG{n}{execId}\PYG{o}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{smt}\PYG{o}{.}\PYG{n}{epoch} \PYG{o}{\PYGZlt{}=} \PYG{n}{failedEpoch}\PYG{o}{(}\PYG{n}{execId}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{n}{shuffleStage}\PYG{o}{.}\PYG{n}{addOutputLoc}\PYG{o}{(}\PYG{n}{smt}\PYG{o}{.}\PYG{n}{partitionId}\PYG{o}{,} \PYG{n}{status}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{runningStages}\PYG{o}{.}\PYG{n}{contains}\PYG{o}{(}\PYG{n}{shuffleStage}\PYG{o}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{shuffleStage}\PYG{o}{.}\PYG{n}{pendingPartitions}\PYG{o}{.}\PYG{n}{isEmpty}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{markStageAsFinished}\PYG{o}{(}\PYG{n}{shuffleStage}\PYG{o}{)}
+    \PYG{n}{mapOutputTracker}\PYG{o}{.}\PYG{n}{registerMapOutputs}\PYG{o}{(}
+    \PYG{n}{shuffleStage}\PYG{o}{.}\PYG{n}{shuffleDep}\PYG{o}{.}\PYG{n}{shuffleId}\PYG{o}{,}
+    \PYG{n}{shuffleStage}\PYG{o}{.}\PYG{n}{outputLocInMapOutputTrackerFormat}\PYG{o}{(),}
+    \PYG{n}{changeEpoch} \PYG{k}{=} \PYG{k+kc}{true}\PYG{o}{)}
+    \PYG{n}{clearCacheLocs}\PYG{o}{()}
+    \PYG{k}{if} \PYG{o}{(!}\PYG{n}{shuffleStage}\PYG{o}{.}\PYG{n}{isAvailable}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{n}{shuffleStage}\PYG{o}{.}\PYG{n}{findMissingPartitions}\PYG{o}{().}\PYG{n}{mkString}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}, \PYGZdq{}}\PYG{o}{))}
+      \PYG{n}{submitStage}\PYG{o}{(}\PYG{n}{shuffleStage}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+      \PYG{k}{if} \PYG{o}{(}\PYG{n}{shuffleStage}\PYG{o}{.}\PYG{n}{mapStageJobs}\PYG{o}{.}\PYG{n}{nonEmpty}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{val} \PYG{n}{stats} \PYG{k}{=} \PYG{n}{mapOutputTracker}\PYG{o}{.}\PYG{n}{getStatistics}\PYG{o}{(}\PYG{n}{shuffleStage}\PYG{o}{.}\PYG{n}{shuffleDep}\PYG{o}{)}
+        \PYG{k}{for} \PYG{o}{(}\PYG{n}{job} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{shuffleStage}\PYG{o}{.}\PYG{n}{mapStageJobs}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+          \PYG{n}{markMapStageJobAsFinished}\PYG{o}{(}\PYG{n}{job}\PYG{o}{,} \PYG{n}{stats}\PYG{o}{)}
+        \PYG{o}{\PYGZcb{}}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

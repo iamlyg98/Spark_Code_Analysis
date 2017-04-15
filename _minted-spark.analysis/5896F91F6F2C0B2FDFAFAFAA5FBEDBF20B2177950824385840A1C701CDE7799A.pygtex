@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{val} \PYG{n}{tr} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{TaskRunner}\PYG{o}{(}\PYG{n}{context}\PYG{o}{,} \PYG{n}{taskId} \PYG{k}{=} \PYG{n}{taskId}\PYG{o}{,} \PYG{n}{attemptNumber} \PYG{k}{=} \PYG{n}{attemptNumber}\PYG{o}{,} \PYG{n}{taskName}\PYG{o}{,}
+\PYG{n}{serializedTask}\PYG{o}{)}
+\PYG{n}{runningTasks}\PYG{o}{.}\PYG{n}{put}\PYG{o}{(}\PYG{n}{taskId}\PYG{o}{,} \PYG{n}{tr}\PYG{o}{)}
+\PYG{n}{threadPool}\PYG{o}{.}\PYG{n}{execute}\PYG{o}{(}\PYG{n}{tr}\PYG{o}{)}
+\end{Verbatim}

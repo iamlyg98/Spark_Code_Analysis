@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kd}{public} \PYG{n+nf}{TransportContext}\PYG{o}{(}
+\PYG{n}{TransportConf} \PYG{n}{conf}\PYG{o}{,}
+\PYG{n}{RpcHandler} \PYG{n}{rpcHandler}\PYG{o}{,}
+\PYG{k+kt}{boolean} \PYG{n}{closeIdleConnections}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//主要控制Netty框架提供的shuffle的I/O交互的客户端和服务器线程数量}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{conf} \PYG{o}{=} \PYG{n}{conf}\PYG{o}{;}
+  \PYG{c+c1}{//负责shuffle的I/O服务端在接收到客户端RPC请求后，提供打开Block或者上传Block的RPC处理，此处即为NettyBlockRpcServer}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{rpcHandler} \PYG{o}{=} \PYG{n}{rpcHandler}\PYG{o}{;}
+  \PYG{c+c1}{//在shuffle的I/O客户端对消息进行编码}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{encoder} \PYG{o}{=} \PYG{k}{new} \PYG{n}{MessageEncoder}\PYG{o}{();}
+  \PYG{c+c1}{//在shuffle的I/O服务端对客户端传来的ByteBuf进行解析，防止丢包和解析出错}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{decoder} \PYG{o}{=} \PYG{k}{new} \PYG{n}{MessageDecoder}\PYG{o}{();}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{closeIdleConnections} \PYG{o}{=} \PYG{n}{closeIdleConnections}\PYG{o}{;}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

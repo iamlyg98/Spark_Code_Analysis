@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// directSend = sending directly back to the driver}
+\PYG{k}{val} \PYG{n}{serializedResult}\PYG{k}{:} \PYG{k+kt}{ByteBuffer} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+\PYG{k}{if} \PYG{o}{(}\PYG{n}{maxResultSize} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{resultSize} \PYG{o}{\PYGZgt{}} \PYG{n}{maxResultSize}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//如果resultSize大于spark.drive.driver.maxResultSize设置的大小值，则直接丢弃}
+  \PYG{n}{ser}\PYG{o}{.}\PYG{n}{serialize}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{IndirectTaskResult}\PYG{o}{[}\PYG{k+kt}{Any}\PYG{o}{](}\PYG{n+nc}{TaskResultBlockId}\PYG{o}{(}\PYG{n}{taskId}\PYG{o}{),} \PYG{n}{resultSize}\PYG{o}{))}
+\PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n}{resultSize} \PYG{o}{\PYGZgt{}=} \PYG{n}{akkaFrameSize} \PYG{o}{\PYGZhy{}} \PYG{n+nc}{AkkaUtils}\PYG{o}{.}\PYG{n}{reservedSizeBytes}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//如果不能通过AKKA的消息传递，那么放入BlockManager等待调用者以网络形式来获取}
+  \PYG{c+c1}{//AKKA的消息默认大小可以通过spark.akka.frameSize来设置}
+  \PYG{k}{val} \PYG{n}{blockId} \PYG{k}{=} \PYG{n+nc}{TaskResultBlockId}\PYG{o}{(}\PYG{n}{taskId}\PYG{o}{)}
+  \PYG{n}{env}\PYG{o}{.}\PYG{n}{blockManager}\PYG{o}{.}\PYG{n}{putBytes}\PYG{o}{(}
+  \PYG{n}{blockId}\PYG{o}{,} \PYG{n}{serializedDirectResult}\PYG{o}{,} \PYG{n+nc}{StorageLevel}\PYG{o}{.}\PYG{n+nc}{MEMORY\PYGZus{}AND\PYGZus{}DISK\PYGZus{}SER}\PYG{o}{)}
+  \PYG{n}{ser}\PYG{o}{.}\PYG{n}{serialize}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{IndirectTaskResult}\PYG{o}{[}\PYG{k+kt}{Any}\PYG{o}{](}\PYG{n}{blockId}\PYG{o}{,} \PYG{n}{resultSize}\PYG{o}{))}
+\PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//结果回传Driver}
+  \PYG{n}{serializedDirectResult}
+ \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{c+c1}{//通过AKKA向driver汇报本次Task已经完成}
+\PYG{n}{execBackend}\PYG{o}{.}\PYG{n}{statusUpdate}\PYG{o}{(}\PYG{n}{taskId}\PYG{o}{,} \PYG{n+nc}{TaskState}\PYG{o}{.}\PYG{n+nc}{FINISHED}\PYG{o}{,} \PYG{n}{serializedResult}\PYG{o}{)}
+\end{Verbatim}

@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{// Deserialize the RDD using the broadcast variable.}
+\PYG{k}{val} \PYG{n}{deserializeStartTime} \PYG{k}{=} \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{currentTimeMillis}\PYG{o}{()}
+\PYG{c+c1}{//获取反序列化实例}
+\PYG{k}{val} \PYG{n}{ser} \PYG{k}{=} \PYG{n+nc}{SparkEnv}\PYG{o}{.}\PYG{n}{get}\PYG{o}{.}\PYG{n}{closureSerializer}\PYG{o}{.}\PYG{n}{newInstance}\PYG{o}{()}
+\PYG{c+c1}{//以下两端代码是其区别，上面的为ShuffleMapTask，下面为ResultTask}
+\PYG{k}{val} \PYG{o}{(}\PYG{n}{rdd}\PYG{o}{,} \PYG{n}{dep}\PYG{o}{)} \PYG{k}{=} \PYG{n}{ser}\PYG{o}{.}\PYG{n}{deserialize}\PYG{o}{[(}\PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k}{\PYGZus{}}\PYG{o}{]}, \PYG{k+kt}{ShuffleDependency}\PYG{o}{[}\PYG{k}{\PYGZus{}}, \PYG{k}{\PYGZus{}}, \PYG{k}{\PYGZus{}}\PYG{o}{])](}
+\PYG{c+c1}{//获取rdd和作用于rdd结果的函数}
+\PYG{k}{val} \PYG{o}{(}\PYG{n}{rdd}\PYG{o}{,} \PYG{n}{func}\PYG{o}{)} \PYG{k}{=} \PYG{n}{ser}\PYG{o}{.}\PYG{n}{deserialize}\PYG{o}{[(}\PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{]}, \PYG{o}{(}\PYG{k+kt}{TaskContext}, \PYG{k+kt}{Iterator}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{])} \PYG{k}{=\PYGZgt{}} \PYG{k+kt}{U}\PYG{o}{)](}
+
+\PYG{n+nc}{ByteBuffer}\PYG{o}{.}\PYG{n}{wrap}\PYG{o}{(}\PYG{n}{taskBinary}\PYG{o}{.}\PYG{n}{value}\PYG{o}{),} \PYG{n+nc}{Thread}\PYG{o}{.}\PYG{n}{currentThread}\PYG{o}{.}\PYG{n}{getContextClassLoader}\PYG{o}{)}
+\PYG{n+nc}{\PYGZus{}executorDeserializeTime} \PYG{k}{=} \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{currentTimeMillis}\PYG{o}{()} \PYG{o}{\PYGZhy{}} \PYG{n}{deserializeStartTime}
+\PYG{c+c1}{//Task的测量信息}
+\PYG{n}{metrics} \PYG{k}{=} \PYG{n+nc}{Some}\PYG{o}{(}\PYG{n}{context}\PYG{o}{.}\PYG{n}{taskMetrics}\PYG{o}{)}
+\end{Verbatim}

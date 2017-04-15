@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{ui}\PYG{o}{]} \PYG{k}{class} \PYG{n+nc}{JobsTab}\PYG{o}{(}\PYG{n}{parent}\PYG{k}{:} \PYG{k+kt}{SparkUI}\PYG{o}{)} \PYG{k}{extends} \PYG{n+nc}{SparkUITab}\PYG{o}{(}\PYG{n}{parent}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}jobs\PYGZdq{}}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{sc} \PYG{k}{=} \PYG{n}{parent}\PYG{o}{.}\PYG{n}{sc}
+  \PYG{k}{val} \PYG{n}{killEnabled} \PYG{k}{=} \PYG{n}{parent}\PYG{o}{.}\PYG{n}{killEnabled}
+  \PYG{k}{val} \PYG{n}{jobProgresslistener} \PYG{k}{=} \PYG{n}{parent}\PYG{o}{.}\PYG{n}{jobProgressListener}
+  \PYG{k}{val} \PYG{n}{executorListener} \PYG{k}{=} \PYG{n}{parent}\PYG{o}{.}\PYG{n}{executorsListener}
+  \PYG{k}{val} \PYG{n}{operationGraphListener} \PYG{k}{=} \PYG{n}{parent}\PYG{o}{.}\PYG{n}{operationGraphListener}
+  \PYG{k}{def} \PYG{n}{isFairScheduler}\PYG{k}{:} \PYG{k+kt}{Boolean} \PYG{o}{=}
+    \PYG{n}{jobProgresslistener}\PYG{o}{.}\PYG{n}{schedulingMode}\PYG{o}{.}\PYG{n}{exists}\PYG{o}{(}\PYG{k}{\PYGZus{}} \PYG{o}{==} \PYG{n+nc}{SchedulingMode}\PYG{o}{.}\PYG{n+nc}{FAIR}\PYG{o}{)}
+      \PYG{n}{attachPage}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{AllJobsPage}\PYG{o}{(}\PYG{k}{this}\PYG{o}{))}
+      \PYG{n}{attachPage}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{JobPage}\PYG{o}{(}\PYG{k}{this}\PYG{o}{))}
+  \PYG{o}{\PYGZcb{}}
+\end{Verbatim}

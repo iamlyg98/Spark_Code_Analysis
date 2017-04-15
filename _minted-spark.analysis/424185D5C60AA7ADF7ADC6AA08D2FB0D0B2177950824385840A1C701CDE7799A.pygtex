@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private} \PYG{k}{def} \PYG{n}{getParentStages}\PYG{o}{(}\PYG{n}{rdd}\PYG{k}{:} \PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k}{\PYGZus{}}\PYG{o}{],} \PYG{n}{firstJobId}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{List}\PYG{o}{[}\PYG{k+kt}{Stage}\PYG{o}{]} \PYG{k}{=} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{parents} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashSet}\PYG{o}{[}\PYG{k+kt}{Stage}\PYG{o}{]}
+  \PYG{k}{val} \PYG{n}{visited} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashSet}\PYG{o}{[}\PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k}{\PYGZus{}}\PYG{o}{]]}
+  \PYG{k}{val} \PYG{n}{waitingForVisit} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{Stack}\PYG{o}{[}\PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k}{\PYGZus{}}\PYG{o}{]]}
+  \PYG{k}{def} \PYG{n}{visit}\PYG{o}{(}\PYG{n}{r}\PYG{k}{:} \PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k}{\PYGZus{}}\PYG{o}{])} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(!}\PYG{n}{visited}\PYG{o}{(}\PYG{n}{r}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+      \PYG{n}{visited} \PYG{o}{+=} \PYG{n}{r}
+      \PYG{k}{for} \PYG{o}{(}\PYG{n}{dep} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{r}\PYG{o}{.}\PYG{n}{dependencies}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{n}{dep} \PYG{k}{match} \PYG{o}{\PYGZob{}}
+          \PYG{k}{case} \PYG{n}{shufDep}\PYG{k}{:} \PYG{k+kt}{ShuffleDependency}\PYG{o}{[}\PYG{k}{\PYGZus{}}, \PYG{k}{\PYGZus{}}, \PYG{k}{\PYGZus{}}\PYG{o}{]} \PYG{k}{=\PYGZgt{}}
+            \PYG{n}{parents} \PYG{o}{+=} \PYG{n}{getShuffleMapStage}\PYG{o}{(}\PYG{n}{shufDep}\PYG{o}{,} \PYG{n}{firstJobId}\PYG{o}{)}
+          \PYG{k}{case} \PYG{k}{\PYGZus{}} \PYG{k}{=\PYGZgt{}}\PYG{n}{waitingForVisit}\PYG{o}{.}\PYG{n}{push}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{rdd}\PYG{o}{)}
+        \PYG{o}{\PYGZcb{}}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{n}{waitingForVisit}\PYG{o}{.}\PYG{n}{push}\PYG{o}{(}\PYG{n}{rdd}\PYG{o}{)}
+  \PYG{k}{while} \PYG{o}{(}\PYG{n}{waitingForVisit}\PYG{o}{.}\PYG{n}{nonEmpty}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{visit}\PYG{o}{(}\PYG{n}{waitingForVisit}\PYG{o}{.}\PYG{n}{pop}\PYG{o}{())}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{n}{parents}\PYG{o}{.}\PYG{n}{toList}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

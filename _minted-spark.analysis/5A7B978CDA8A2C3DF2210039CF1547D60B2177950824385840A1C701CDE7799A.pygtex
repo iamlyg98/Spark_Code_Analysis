@@ -1,0 +1,35 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{override} \PYG{k}{def} \PYG{n}{uploadBlock}\PYG{o}{(}
+\PYG{n}{hostname}\PYG{k}{:} \PYG{k+kt}{String}\PYG{o}{,}
+\PYG{n}{port}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{,}
+\PYG{n}{execId}\PYG{k}{:} \PYG{k+kt}{String}\PYG{o}{,}
+\PYG{n}{blockId}\PYG{k}{:} \PYG{k+kt}{BlockId}\PYG{o}{,}
+\PYG{n}{blockData}\PYG{k}{:} \PYG{k+kt}{ManagedBuffer}\PYG{o}{,}
+\PYG{n}{level}\PYG{k}{:} \PYG{k+kt}{StorageLevel}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Future}\PYG{o}{[}\PYG{k+kt}{Unit}\PYG{o}{]} \PYG{k}{=} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{result} \PYG{k}{=} \PYG{n+nc}{Promise}\PYG{o}{[}\PYG{k+kt}{Unit}\PYG{o}{]()}
+  \PYG{c+c1}{//创建Netty服务客户端}
+  \PYG{k}{val} \PYG{n}{client} \PYG{k}{=} \PYG{n}{clientFactory}\PYG{o}{.}\PYG{n}{createClient}\PYG{o}{(}\PYG{n}{hostname}\PYG{o}{,} \PYG{n}{port}\PYG{o}{)}
+  \PYG{c+c1}{//将Block的存储级别StorageLevel序列化}
+  \PYG{k}{val} \PYG{n}{levelBytes} \PYG{k}{=} \PYG{n}{serializer}\PYG{o}{.}\PYG{n}{newInstance}\PYG{o}{().}\PYG{n}{serialize}\PYG{o}{(}\PYG{n}{level}\PYG{o}{).}\PYG{n}{array}\PYG{o}{()}
+  \PYG{c+c1}{//将Block中的ByteBuffer转化为数组，便于序列化}
+  \PYG{k}{val} \PYG{n}{nioBuffer} \PYG{k}{=} \PYG{n}{blockData}\PYG{o}{.}\PYG{n}{nioByteBuffer}\PYG{o}{()}
+  \PYG{k}{val} \PYG{n}{array} \PYG{k}{=} \PYG{k}{if} \PYG{o}{(}\PYG{n}{nioBuffer}\PYG{o}{.}\PYG{n}{hasArray}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{nioBuffer}\PYG{o}{.}\PYG{n}{array}\PYG{o}{()}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{k}{val} \PYG{n}{data} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{Array}\PYG{o}{[}\PYG{k+kt}{Byte}\PYG{o}{](}\PYG{n}{nioBuffer}\PYG{o}{.}\PYG{n}{remaining}\PYG{o}{())}
+    \PYG{n}{nioBuffer}\PYG{o}{.}\PYG{n}{get}\PYG{o}{(}\PYG{n}{data}\PYG{o}{)}
+    \PYG{n}{data}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{c+c1}{//调用Netty客户端的snedRpc方法将字节数组上传，回调RpcResponseCallback}
+  \PYG{n}{client}\PYG{o}{.}\PYG{n}{sendRpc}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{UploadBlock}\PYG{o}{(}\PYG{n}{appId}\PYG{o}{,} \PYG{n}{execId}\PYG{o}{,} \PYG{n}{blockId}\PYG{o}{.}\PYG{n}{toString}\PYG{o}{,} \PYG{n}{levelBytes}\PYG{o}{,} \PYG{n}{array}\PYG{o}{).}\PYG{n}{toByteBuffer}\PYG{o}{,}
+    \PYG{k}{new} \PYG{n+nc}{RpcResponseCallback} \PYG{o}{\PYGZob{}}
+      \PYG{k}{override} \PYG{k}{def} \PYG{n}{onSuccess}\PYG{o}{(}\PYG{n}{response}\PYG{k}{:} \PYG{k+kt}{ByteBuffer}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+        \PYG{n}{result}\PYG{o}{.}\PYG{n}{success}\PYG{o}{(()}\PYG{k}{:} \PYG{k+kt}{Unit}\PYG{o}{)}
+      \PYG{o}{\PYGZcb{}}
+      \PYG{k}{override} \PYG{k}{def} \PYG{n}{onFailure}\PYG{o}{(}\PYG{n}{e}\PYG{k}{:} \PYG{k+kt}{Throwable}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+        \PYG{n}{result}\PYG{o}{.}\PYG{n}{failure}\PYG{o}{(}\PYG{n}{e}\PYG{o}{)}
+      \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{})}
+  \PYG{n}{result}\PYG{o}{.}\PYG{n}{future}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

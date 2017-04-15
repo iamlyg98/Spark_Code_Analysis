@@ -1,0 +1,39 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{render}\PYG{o}{(}\PYG{n}{request}\PYG{k}{:} \PYG{k+kt}{HttpServletRequest}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Seq}\PYG{o}{[}\PYG{k+kt}{Node}\PYG{o}{]} \PYG{k}{=} \PYG{o}{\PYGZob{}}
+  \PYG{n}{progressListener}\PYG{o}{.}\PYG{n}{synchronized} \PYG{o}{\PYGZob{}}
+    \PYG{o}{......}
+    \PYG{k}{val} \PYG{n}{stageHeader} \PYG{k}{=} \PYG{l+s}{s\PYGZdq{}Details for Stage }\PYG{l+s+si}{\PYGZdl{}stageId}\PYG{l+s}{ (Attempt }\PYG{l+s+si}{\PYGZdl{}stageAttemptId}\PYG{l+s}{)\PYGZdq{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{stageDataOption}\PYG{o}{.}\PYG{n}{isEmpty}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{k}{val} \PYG{n}{content} \PYG{k}{=}
+      \PYG{o}{\PYGZlt{}}\PYG{n}{div} \PYG{n}{id}\PYG{o}{=}\PYG{l+s}{\PYGZdq{}no\PYGZhy{}info\PYGZdq{}}\PYG{o}{\PYGZgt{}}
+      \PYG{o}{\PYGZlt{}}\PYG{n}{p}\PYG{o}{\PYGZgt{}}\PYG{n+nc}{No} \PYG{n}{information} \PYG{n}{to} \PYG{n}{display} \PYG{k}{for} \PYG{n+nc}{Stage} \PYG{o}{\PYGZob{}}\PYG{n}{stageId}\PYG{o}{\PYGZcb{}} \PYG{o}{(}\PYG{n+nc}{Attempt} \PYG{o}{\PYGZob{}}\PYG{n}{stageAttemptId}\PYG{o}{\PYGZcb{})\PYGZlt{}/}\PYG{n}{p}\PYG{o}{\PYGZgt{}}
+      \PYG{o}{\PYGZlt{}/}\PYG{n}{div}\PYG{o}{\PYGZgt{}}
+      \PYG{k}{return} \PYG{n+nc}{UIUtils}\PYG{o}{.}\PYG{n}{headerSparkPage}\PYG{o}{(}\PYG{n}{stageHeader}\PYG{o}{,} \PYG{n}{content}\PYG{o}{,} \PYG{n}{parent}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{stageDataOption}\PYG{o}{.}\PYG{n}{get}\PYG{o}{.}\PYG{n}{taskData}\PYG{o}{.}\PYG{n}{isEmpty}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{k}{val} \PYG{n}{content} \PYG{k}{=}
+      \PYG{o}{\PYGZlt{}}\PYG{n}{div}\PYG{o}{\PYGZgt{}}
+      \PYG{o}{\PYGZlt{}}\PYG{n}{h4}\PYG{o}{\PYGZgt{}}\PYG{n+nc}{Summary} \PYG{n+nc}{Metrics}\PYG{o}{\PYGZlt{}/}\PYG{n}{h4}\PYG{o}{\PYGZgt{}} \PYG{n+nc}{No} \PYG{n}{tasks} \PYG{n}{have} \PYG{n}{started} \PYG{n}{yet}
+      \PYG{o}{\PYGZlt{}}\PYG{n}{h4}\PYG{o}{\PYGZgt{}}\PYG{n+nc}{Tasks}\PYG{o}{\PYGZlt{}/}\PYG{n}{h4}\PYG{o}{\PYGZgt{}} \PYG{n+nc}{No} \PYG{n}{tasks} \PYG{n}{have} \PYG{n}{started} \PYG{n}{yet}
+      \PYG{o}{\PYGZlt{}/}\PYG{n}{div}\PYG{o}{\PYGZgt{}}
+      \PYG{k}{return} \PYG{n+nc}{UIUtils}\PYG{o}{.}\PYG{n}{headerSparkPage}\PYG{o}{(}\PYG{n}{stageHeader}\PYG{o}{,} \PYG{n}{content}\PYG{o}{,} \PYG{n}{parent}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{k}{val} \PYG{n}{stageData} \PYG{k}{=} \PYG{n}{stageDataOption}\PYG{o}{.}\PYG{n}{get}
+  \PYG{k}{val} \PYG{n}{tasks} \PYG{k}{=} \PYG{n}{stageData}\PYG{o}{.}\PYG{n}{taskData}\PYG{o}{.}\PYG{n}{values}\PYG{o}{.}\PYG{n}{toSeq}\PYG{o}{.}\PYG{n}{sortBy}\PYG{o}{(}\PYG{k}{\PYGZus{}}\PYG{o}{.}\PYG{n}{taskInfo}\PYG{o}{.}\PYG{n}{launchTime}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{numCompleted} \PYG{k}{=} \PYG{n}{tasks}\PYG{o}{.}\PYG{n}{count}\PYG{o}{(}\PYG{k}{\PYGZus{}}\PYG{o}{.}\PYG{n}{taskInfo}\PYG{o}{.}\PYG{n}{finished}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{allAccumulables} \PYG{k}{=} \PYG{n}{progressListener}\PYG{o}{.}\PYG{n}{stageIdToData}\PYG{o}{((}\PYG{n}{stageId}\PYG{o}{,} \PYG{n}{stageAttemptId}\PYG{o}{)).}\PYG{n}{accumulables}
+  \PYG{k}{val} \PYG{n}{externalAccumulables} \PYG{k}{=} \PYG{n}{allAccumulables}\PYG{o}{.}\PYG{n}{values}\PYG{o}{.}\PYG{n}{filter} \PYG{o}{\PYGZob{}} \PYG{n}{acc} \PYG{k}{=\PYGZgt{}} \PYG{o}{!}\PYG{n}{acc}\PYG{o}{.}\PYG{n}{internal} \PYG{o}{\PYGZcb{}}
+  \PYG{k}{val} \PYG{n}{hasAccumulators} \PYG{k}{=} \PYG{n}{externalAccumulables}\PYG{o}{.}\PYG{n}{size} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}
+  \PYG{k}{val} \PYG{n}{summary} \PYG{k}{=}
+  \PYG{o}{\PYGZlt{}}\PYG{n}{div}\PYG{o}{\PYGZgt{}}
+  \PYG{o}{\PYGZlt{}}\PYG{n}{ul} \PYG{n}{class}\PYG{o}{=}\PYG{l+s}{\PYGZdq{}unstyled\PYGZdq{}}\PYG{o}{\PYGZgt{}}
+  \PYG{o}{\PYGZlt{}}\PYG{n}{li}\PYG{o}{\PYGZgt{}}
+  \PYG{o}{\PYGZlt{}}\PYG{n}{strong}\PYG{o}{\PYGZgt{}}\PYG{n+nc}{Total} \PYG{n+nc}{Time} \PYG{n+nc}{Across} \PYG{n+nc}{All} \PYG{n+nc}{Tasks}\PYG{k}{:} \PYG{k+kt}{\PYGZlt{}/strong\PYGZgt{}}
+  \PYG{o}{\PYGZob{}}\PYG{n+nc}{UIUtils}\PYG{o}{.}\PYG{n}{formatDuration}\PYG{o}{(}\PYG{n}{stageData}\PYG{o}{.}\PYG{n}{executorRunTime}\PYG{o}{)\PYGZcb{}}
+  \PYG{o}{\PYGZlt{}/}\PYG{n}{li}\PYG{o}{\PYGZgt{}}
+  \PYG{o}{\PYGZlt{}}\PYG{n}{li}\PYG{o}{\PYGZgt{}}
+  \PYG{o}{\PYGZlt{}}\PYG{n}{strong}\PYG{o}{\PYGZgt{}}\PYG{n+nc}{Locality} \PYG{n+nc}{Level} \PYG{n+nc}{Summary}\PYG{k}{:} \PYG{k+kt}{\PYGZlt{}/strong\PYGZgt{}}
+  \PYG{o}{\PYGZob{}}\PYG{n}{getLocalitySummaryString}\PYG{o}{(}\PYG{n}{stageData}\PYG{o}{)\PYGZcb{}}
+  \PYG{o}{\PYGZlt{}/}\PYG{n}{li}\PYG{o}{\PYGZgt{}}
+  \PYG{o}{......}
+\end{Verbatim}

@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private} \PYG{k}{def} \PYG{n}{newResultStage}\PYG{o}{(}\PYG{n}{rdd}\PYG{k}{:} \PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k}{\PYGZus{}}\PYG{o}{],}\PYG{n}{func}\PYG{k}{:} \PYG{o}{(}\PYG{k+kt}{TaskContext}\PYG{o}{,} \PYG{k+kt}{Iterator}\PYG{o}{[}\PYG{k}{\PYGZus{}}\PYG{o}{])} \PYG{k}{=\PYGZgt{}} \PYG{k}{\PYGZus{}}\PYG{o}{,}\PYG{n}{partitions}\PYG{k}{:} \PYG{k+kt}{Array}\PYG{o}{[}\PYG{k+kt}{Int}\PYG{o}{],}
+\PYG{n}{jobId}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{,}\PYG{n}{callSite}\PYG{k}{:} \PYG{k+kt}{CallSite}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{ResultStage} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{o}{(}\PYG{n}{parentStages}\PYG{k}{:} \PYG{k+kt}{List}\PYG{o}{[}\PYG{k+kt}{Stage}\PYG{o}{],} \PYG{n}{id}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{)} \PYG{k}{=} \PYG{n}{getParentStagesAndId}\PYG{o}{(}\PYG{n}{rdd}\PYG{o}{,} \PYG{n}{jobId}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{stage} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{ResultStage}\PYG{o}{(}\PYG{n}{id}\PYG{o}{,} \PYG{n}{rdd}\PYG{o}{,} \PYG{n}{func}\PYG{o}{,} \PYG{n}{partitions}\PYG{o}{,} \PYG{n}{parentStages}\PYG{o}{,} \PYG{n}{jobId}\PYG{o}{,} \PYG{n}{callSite}\PYG{o}{)}
+  \PYG{n}{stageIdToStage}\PYG{o}{(}\PYG{n}{id}\PYG{o}{)} \PYG{k}{=} \PYG{n}{stage}
+  \PYG{n}{updateJobIdStageIdMaps}\PYG{o}{(}\PYG{n}{jobId}\PYG{o}{,} \PYG{n}{stage}\PYG{o}{)}
+  \PYG{n}{stage}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

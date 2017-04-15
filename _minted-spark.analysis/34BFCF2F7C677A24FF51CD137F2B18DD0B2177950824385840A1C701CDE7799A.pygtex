@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{abstract} \PYG{k}{class} \PYG{n+nc}{NarrowDependency}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{](}\PYG{n+nc}{\PYGZus{}rdd}\PYG{k}{:} \PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{])} \PYG{k}{extends} \PYG{n+nc}{Dependency}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{]} \PYG{o}{\PYGZob{}}
+  \PYG{k}{def} \PYG{n}{getParents}\PYG{o}{(}\PYG{n}{partitionId}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Seq}\PYG{o}{[}\PYG{k+kt}{Int}\PYG{o}{]}
+  \PYG{k}{override} \PYG{k}{def} \PYG{n}{rdd}\PYG{k}{:} \PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{]} \PYG{k}{=} \PYG{n+nc}{\PYGZus{}rdd}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,41 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{n+nc}{SignalLogger}\PYG{o}{.}\PYG{n}{register}\PYG{o}{(}\PYG{n}{log}\PYG{o}{)}
+\PYG{n+nc}{SparkHadoopUtil}\PYG{o}{.}\PYG{n}{get}\PYG{o}{.}\PYG{n}{runAsSparkUser} \PYG{o}{\PYGZob{}} \PYG{o}{()} \PYG{k}{=\PYGZgt{}}
+  \PYG{k}{val} \PYG{n}{executorConf} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{SparkConf}
+  \PYG{k}{val} \PYG{n}{port} \PYG{k}{=} \PYG{n}{executorConf}\PYG{o}{.}\PYG{n}{getInt}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}spark.executor.port\PYGZdq{}}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{)}
+  \PYG{c+c1}{//这个fetcher通过rpcenv用来获得driver的ref，之后就关闭了}
+  \PYG{k}{val} \PYG{n}{fetcher} \PYG{k}{=} \PYG{n+nc}{RpcEnv}\PYG{o}{.}\PYG{n}{create}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}driverPropsFetcher\PYGZdq{}}\PYG{o}{,}\PYG{n}{hostname}\PYG{o}{,}\PYG{n}{port}\PYG{o}{,}
+  \PYG{n}{executorConf}\PYG{o}{,}\PYG{k}{new} \PYG{n+nc}{SecurityManager}\PYG{o}{(}\PYG{n}{executorConf}\PYG{o}{),}\PYG{n}{clientMode} \PYG{k}{=} \PYG{k+kc}{true}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{driver} \PYG{k}{=} \PYG{n}{fetcher}\PYG{o}{.}\PYG{n}{setupEndpointRefByURI}\PYG{o}{(}\PYG{n}{driverUrl}\PYG{o}{)}
+  \PYG{c+c1}{//获得Driver端的配置信息}
+  \PYG{k}{val} \PYG{n}{props} \PYG{k}{=} \PYG{n}{driver}\PYG{o}{.}\PYG{n}{askWithRetry}\PYG{o}{[}\PYG{k+kt}{Seq}\PYG{o}{[(}\PYG{k+kt}{String}, \PYG{k+kt}{String}\PYG{o}{)]](}\PYG{n+nc}{RetrieveSparkProps}\PYG{o}{)} \PYG{o}{++}
+  \PYG{n+nc}{Seq}\PYG{o}{[(}\PYG{k+kt}{String}, \PYG{k+kt}{String}\PYG{o}{)]((}\PYG{l+s}{\PYGZdq{}spark.app.id\PYGZdq{}}\PYG{o}{,} \PYG{n}{appId}\PYG{o}{))}
+  \PYG{n}{fetcher}\PYG{o}{.}\PYG{n}{shutdown}\PYG{o}{()}
+  \PYG{c+c1}{// 使用从Driver端获取的配置信息创建SparkEnv}
+  \PYG{k}{val} \PYG{n}{driverConf} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{SparkConf}\PYG{o}{()}
+    \PYG{k}{for} \PYG{o}{((}\PYG{n}{key}\PYG{o}{,} \PYG{n}{value}\PYG{o}{)} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{props}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{k}{if} \PYG{o}{(}\PYG{n+nc}{SparkConf}\PYG{o}{.}\PYG{n}{isExecutorStartupConf}\PYG{o}{(}\PYG{n}{key}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+        \PYG{n}{driverConf}\PYG{o}{.}\PYG{n}{setIfMissing}\PYG{o}{(}\PYG{n}{key}\PYG{o}{,} \PYG{n}{value}\PYG{o}{)}
+      \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+        \PYG{n}{driverConf}\PYG{o}{.}\PYG{n}{set}\PYG{o}{(}\PYG{n}{key}\PYG{o}{,} \PYG{n}{value}\PYG{o}{)}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{c+c1}{//这里如果是yarn模式下，他其实一直在跟新和HDFS交互的密钥信息}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{driverConf}\PYG{o}{.}\PYG{n}{contains}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}spark.yarn.credentials.file\PYGZdq{}}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+    \PYG{n+nc}{SparkHadoopUtil}\PYG{o}{.}\PYG{n}{get}\PYG{o}{.}\PYG{n}{startExecutorDelegationTokenRenewer}\PYG{o}{(}\PYG{n}{driverConf}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{c+c1}{//创建ExecutorEnv，代码和Driver端的基本一摸一样}
+  \PYG{k}{val} \PYG{n}{env} \PYG{k}{=} \PYG{n+nc}{SparkEnv}\PYG{o}{.}\PYG{n}{createExecutorEnv}\PYG{o}{(}\PYG{n}{driverConf}\PYG{o}{,} \PYG{n}{executorId}\PYG{o}{,} \PYG{n}{hostname}\PYG{o}{,} \PYG{n}{port}\PYG{o}{,} \PYG{n}{cores}\PYG{o}{,} \PYG{n}{isLocal} \PYG{k}{=} \PYG{k+kc}{false}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{sparkHostPort} \PYG{k}{=} \PYG{n}{env}\PYG{o}{.}\PYG{n}{conf}\PYG{o}{.}\PYG{n}{getOption}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}spark.executor.port\PYGZdq{}}\PYG{o}{).}\PYG{n}{map} \PYG{o}{\PYGZob{}} \PYG{n}{port} \PYG{k}{=\PYGZgt{}}
+    \PYG{n}{hostname} \PYG{o}{+} \PYG{l+s}{\PYGZdq{}:\PYGZdq{}} \PYG{o}{+} \PYG{n}{port}\PYG{o}{\PYGZcb{}.}\PYG{n}{orNull}
+  \PYG{c+c1}{//这里创建了一个Endpoint用于与driver交互执行task。是由此可以看出Executor的真正实现CoarseGrainedExecutorBackend}
+  \PYG{n}{env}\PYG{o}{.}\PYG{n}{rpcEnv}\PYG{o}{.}\PYG{n}{setupEndpoint}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Executor\PYGZdq{}}\PYG{o}{,} \PYG{k}{new} \PYG{n+nc}{CoarseGrainedExecutorBackend}\PYG{o}{(}
+  \PYG{n}{env}\PYG{o}{.}\PYG{n}{rpcEnv}\PYG{o}{,} \PYG{n}{driverUrl}\PYG{o}{,} \PYG{n}{executorId}\PYG{o}{,} \PYG{n}{sparkHostPort}\PYG{o}{,} \PYG{n}{cores}\PYG{o}{,} \PYG{n}{userClassPath}\PYG{o}{,} \PYG{n}{env}\PYG{o}{))}
+  \PYG{c+c1}{//WorkerWatcher就是用来监视worker的，当与worker断开连接时，它将会关闭这个jvm进程}
+  \PYG{n}{workerUrl}\PYG{o}{.}\PYG{n}{foreach} \PYG{o}{\PYGZob{}} \PYG{n}{url} \PYG{k}{=\PYGZgt{}}
+    \PYG{n}{env}\PYG{o}{.}\PYG{n}{rpcEnv}\PYG{o}{.}\PYG{n}{setupEndpoint}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}WorkerWatcher\PYGZdq{}}\PYG{o}{,} \PYG{k}{new} \PYG{n+nc}{WorkerWatcher}\PYG{o}{(}\PYG{n}{env}\PYG{o}{.}\PYG{n}{rpcEnv}\PYG{o}{,} \PYG{n}{url}\PYG{o}{))}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{n}{env}\PYG{o}{.}\PYG{n}{rpcEnv}\PYG{o}{.}\PYG{n}{awaitTermination}\PYG{o}{()}
+  \PYG{n+nc}{SparkHadoopUtil}\PYG{o}{.}\PYG{n}{get}\PYG{o}{.}\PYG{n}{stopExecutorDelegationTokenRenewer}\PYG{o}{()}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

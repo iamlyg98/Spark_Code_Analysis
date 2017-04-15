@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//管理所有数据，无论在哪的数据，创建BlockManager}
+\PYG{k}{val} \PYG{n}{blockManager} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{BlockManager}\PYG{o}{(}\PYG{n}{executorId}\PYG{o}{,} \PYG{n}{rpcEnv}\PYG{o}{,} \PYG{n}{blockManagerMaster}\PYG{o}{,}\PYG{n}{serializer}\PYG{o}{,} \PYG{n}{conf}\PYG{o}{,} \PYG{n}{memoryManager}\PYG{o}{,} \PYG{n}{mapOutputTracker}\PYG{o}{,} \PYG{n}{shuffleManager}\PYG{o}{,}\PYG{n}{blockTransferService}\PYG{o}{,} \PYG{n}{securityManager}\PYG{o}{,} \PYG{n}{numUsableCores}\PYG{o}{)}
+\PYG{c+c1}{//blockTransferService的初始化和shuffleClient的初始化，shuffleClient默认是NettyBlockTransferService}
+\PYG{n}{blockTransferService}\PYG{o}{.}\PYG{n}{init}\PYG{o}{(}\PYG{k}{this}\PYG{o}{)}
+\PYG{n}{shuffleClient}\PYG{o}{.}\PYG{n}{init}\PYG{o}{(}\PYG{n}{appId}\PYG{o}{)}
+\PYG{n}{blockManagerId} \PYG{k}{=} \PYG{n+nc}{BlockManagerId}\PYG{o}{(}
+\PYG{n}{executorId}\PYG{o}{,} \PYG{n}{blockTransferService}\PYG{o}{.}\PYG{n}{hostName}\PYG{o}{,} \PYG{n}{blockTransferService}\PYG{o}{.}\PYG{n}{port}\PYG{o}{)}
+\PYG{c+c1}{//当有外部的ShuffleService时，创建新的BlockManagerId，否则就利用现有的blockManagerId}
+\PYG{n}{shuffleServerId} \PYG{k}{=} \PYG{k}{if} \PYG{o}{(}\PYG{n}{externalShuffleServiceEnabled}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{n+nc}{BlockManagerId}\PYG{o}{(}\PYG{n}{executorId}\PYG{o}{,} \PYG{n}{blockTransferService}\PYG{o}{.}\PYG{n}{hostName}\PYG{o}{,} \PYG{n}{externalShuffleServicePort}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+  \PYG{n}{blockManagerId}
+\PYG{o}{\PYGZcb{}}
+\PYG{c+c1}{//向BlockManagerMaster注册blockManagerId slaveEndpoint}
+  \PYG{n}{master}\PYG{o}{.}\PYG{n}{registerBlockManager}\PYG{o}{(}\PYG{n}{blockManagerId}\PYG{o}{,} \PYG{n}{maxMemory}\PYG{o}{,} \PYG{n}{slaveEndpoint}\PYG{o}{)}
+\PYG{k}{if} \PYG{o}{(}\PYG{n}{externalShuffleServiceEnabled} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{o}{!}\PYG{n}{blockManagerId}\PYG{o}{.}\PYG{n}{isDriver}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{n}{registerWithExternalShuffleServer}\PYG{o}{()}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

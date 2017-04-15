@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//从SparkEnv中获得shuffleManager，具体分析会在shuffle模块讲述}
+\PYG{k}{val} \PYG{n}{manager} \PYG{k}{=} \PYG{n+nc}{SparkEnv}\PYG{o}{.}\PYG{n}{get}\PYG{o}{.}\PYG{n}{shuffleManager}
+\PYG{c+c1}{//从shuffleManager获得写入器}
+\PYG{n}{writer} \PYG{k}{=} \PYG{n}{manager}\PYG{o}{.}\PYG{n}{getWriter}\PYG{o}{[}\PYG{k+kt}{Any}, \PYG{k+kt}{Any}\PYG{o}{](}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{shuffleHandle}\PYG{o}{,} \PYG{n}{partitionId}\PYG{o}{,} \PYG{n}{context}\PYG{o}{)}
+\PYG{c+c1}{//调用rdd开始计算，并且最后通过写入器写入文件系统}
+\PYG{n}{writer}\PYG{o}{.}\PYG{n}{write}\PYG{o}{(}\PYG{n}{rdd}\PYG{o}{.}\PYG{n}{iterator}\PYG{o}{(}\PYG{n}{partition}\PYG{o}{,} \PYG{n}{context}\PYG{o}{).}\PYG{n}{asInstanceOf}\PYG{o}{[}\PYG{k+kt}{Iterator}\PYG{o}{[}\PYG{k}{\PYGZus{}} \PYG{k}{\PYGZlt{}:} \PYG{k+kt}{Product2}\PYG{o}{[}\PYG{k+kt}{Any}, \PYG{k+kt}{Any}\PYG{o}{]]])}
+\PYG{c+c1}{//关闭写入器，并将最后结果返回}
+\PYG{n}{writer}\PYG{o}{.}\PYG{n}{stop}\PYG{o}{(}\PYG{n}{success} \PYG{k}{=} \PYG{k+kc}{true}\PYG{o}{).}\PYG{n}{get}
+\end{Verbatim}

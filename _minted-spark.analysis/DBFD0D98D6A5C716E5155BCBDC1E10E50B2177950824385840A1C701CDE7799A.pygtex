@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//开始执行Task}
+\PYG{n}{taskStart} \PYG{k}{=} \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{currentTimeMillis}\PYG{o}{()}
+\PYG{k}{var} \PYG{n}{threwException} \PYG{k}{=} \PYG{k+kc}{true}
+\PYG{k}{val} \PYG{o}{(}\PYG{n}{value}\PYG{o}{,} \PYG{n}{accumUpdates}\PYG{o}{)} \PYG{k}{=} \PYG{k}{try} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{res} \PYG{k}{=} \PYG{n}{task}\PYG{o}{.}\PYG{n}{run}\PYG{o}{(}
+  \PYG{n}{taskAttemptId} \PYG{k}{=} \PYG{n}{taskId}\PYG{o}{,}
+  \PYG{n}{attemptNumber} \PYG{k}{=} \PYG{n}{attemptNumber}\PYG{o}{,}
+  \PYG{n}{metricsSystem} \PYG{k}{=} \PYG{n}{env}\PYG{o}{.}\PYG{n}{metricsSystem}\PYG{o}{)}
+  \PYG{n}{threwException} \PYG{k}{=} \PYG{k+kc}{false}
+  \PYG{n}{res}
+\PYG{o}{\PYGZcb{}} \PYG{k}{finally} \PYG{o}{\PYGZob{}}
+  \PYG{o}{......}
+\PYG{o}{\PYGZcb{}}
+\PYG{k}{val} \PYG{n}{taskFinish} \PYG{k}{=} \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{currentTimeMillis}\PYG{o}{()}
+\end{Verbatim}

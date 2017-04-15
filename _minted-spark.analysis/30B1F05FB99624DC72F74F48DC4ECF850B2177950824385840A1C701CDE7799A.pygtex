@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+  \PYG{k}{override} \PYG{k}{def} \PYG{n}{start}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+    \PYG{k}{val} \PYG{n}{properties} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{ArrayBuffer}\PYG{o}{[(}\PYG{k+kt}{String}, \PYG{k+kt}{String}\PYG{o}{)]}
+    \PYG{k}{for} \PYG{o}{((}\PYG{n}{key}\PYG{o}{,} \PYG{n}{value}\PYG{o}{)} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{scheduler}\PYG{o}{.}\PYG{n}{sc}\PYG{o}{.}\PYG{n}{conf}\PYG{o}{.}\PYG{n}{getAll}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{k}{if} \PYG{o}{(}\PYG{n}{key}\PYG{o}{.}\PYG{n}{startsWith}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}spark.\PYGZdq{}}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+        \PYG{n}{properties} \PYG{o}{+=} \PYG{o}{((}\PYG{n}{key}\PYG{o}{,} \PYG{n}{value}\PYG{o}{))}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{c+c1}{// TODO (prashant) send conf instead of properties}
+    \PYG{n}{driverEndpoint} \PYG{k}{=} \PYG{n}{rpcEnv}\PYG{o}{.}\PYG{n}{setupEndpoint}\PYG{o}{(}\PYG{n+nc}{ENDPOINT\PYGZus{}NAME}\PYG{o}{,} \PYG{n}{createDriverEndpoint}\PYG{o}{(}\PYG{n}{properties}\PYG{o}{))}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

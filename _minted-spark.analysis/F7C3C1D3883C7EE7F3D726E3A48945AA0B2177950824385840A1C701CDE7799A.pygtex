@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{case} \PYG{n+nc}{LaunchTask}\PYG{o}{(}\PYG{n}{data}\PYG{o}{)} \PYG{k}{=\PYGZgt{}}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{executor} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{logError}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Received LaunchTask command but executor was null\PYGZdq{}}\PYG{o}{)}
+    \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{exit}\PYG{o}{(}\PYG{l+m+mi}{1}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{k}{val} \PYG{n}{taskDesc} \PYG{k}{=} \PYG{n}{ser}\PYG{o}{.}\PYG{n}{deserialize}\PYG{o}{[}\PYG{k+kt}{TaskDescription}\PYG{o}{](}\PYG{n}{data}\PYG{o}{.}\PYG{n}{value}\PYG{o}{)}
+    \PYG{n}{logInfo}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Got assigned task \PYGZdq{}} \PYG{o}{+} \PYG{n}{taskDesc}\PYG{o}{.}\PYG{n}{taskId}\PYG{o}{)}
+    \PYG{n}{executor}\PYG{o}{.}\PYG{n}{launchTask}\PYG{o}{(}\PYG{k}{this}\PYG{o}{,} \PYG{n}{taskId} \PYG{k}{=} \PYG{n}{taskDesc}\PYG{o}{.}\PYG{n}{taskId}\PYG{o}{,} \PYG{n}{attemptNumber} \PYG{k}{=} \PYG{n}{taskDesc}\PYG{o}{.}\PYG{n}{attemptNumber}\PYG{o}{,}
+    \PYG{n}{taskDesc}\PYG{o}{.}\PYG{n}{name}\PYG{o}{,} \PYG{n}{taskDesc}\PYG{o}{.}\PYG{n}{serializedTask}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

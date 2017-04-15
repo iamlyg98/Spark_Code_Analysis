@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{n}{shuffleClient}\PYG{o}{.}\PYG{n}{fetchBlocks}\PYG{o}{(}\PYG{n}{address}\PYG{o}{.}\PYG{n}{host}\PYG{o}{,} \PYG{n}{address}\PYG{o}{.}\PYG{n}{port}\PYG{o}{,} \PYG{n}{address}\PYG{o}{.}\PYG{n}{executorId}\PYG{o}{,} \PYG{n}{blockIds}\PYG{o}{.}\PYG{n}{toArray}\PYG{o}{,}
+\PYG{k}{new} \PYG{n+nc}{BlockFetchingListener} \PYG{o}{\PYGZob{}}
+  \PYG{k}{override} \PYG{k}{def} \PYG{n}{onBlockFetchSuccess}\PYG{o}{(}\PYG{n}{blockId}\PYG{k}{:} \PYG{k+kt}{String}\PYG{o}{,} \PYG{n}{buf}\PYG{k}{:} \PYG{k+kt}{ManagedBuffer}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}\PYG{c+c1}{//请求成功}
+    \PYG{k}{if} \PYG{o}{(!}\PYG{n}{isZombie}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{n}{buf}\PYG{o}{.}\PYG{n}{retain}\PYG{o}{()}
+      \PYG{n}{results}\PYG{o}{.}\PYG{n}{put}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{SuccessFetchResult}\PYG{o}{(}\PYG{n+nc}{BlockId}\PYG{o}{(}\PYG{n}{blockId}\PYG{o}{),} \PYG{n}{address}\PYG{o}{,} \PYG{n}{sizeMap}\PYG{o}{(}\PYG{n}{blockId}\PYG{o}{),} \PYG{n}{buf}\PYG{o}{))}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{k}{override} \PYG{k}{def} \PYG{n}{onBlockFetchFailure}\PYG{o}{(}\PYG{n}{blockId}\PYG{k}{:} \PYG{k+kt}{String}\PYG{o}{,} \PYG{n}{e}\PYG{k}{:} \PYG{k+kt}{Throwable}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+    \PYG{n}{results}\PYG{o}{.}\PYG{n}{put}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{FailureFetchResult}\PYG{o}{(}\PYG{n+nc}{BlockId}\PYG{o}{(}\PYG{n}{blockId}\PYG{o}{),} \PYG{n}{address}\PYG{o}{,} \PYG{n}{e}\PYG{o}{))}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{})}
+\end{Verbatim}

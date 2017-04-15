@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{registerBlockManager}\PYG{o}{(}
+\PYG{n}{blockManagerId}\PYG{k}{:} \PYG{k+kt}{BlockManagerId}\PYG{o}{,} \PYG{n}{maxMemSize}\PYG{k}{:} \PYG{k+kt}{Long}\PYG{o}{,} \PYG{n}{slaveEndpoint}\PYG{k}{:} \PYG{k+kt}{RpcEndpointRef}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{n}{logInfo}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Trying to register BlockManager\PYGZdq{}}\PYG{o}{)}
+  \PYG{n}{tell}\PYG{o}{(}\PYG{n+nc}{RegisterBlockManager}\PYG{o}{(}\PYG{n}{blockManagerId}\PYG{o}{,} \PYG{n}{maxMemSize}\PYG{o}{,} \PYG{n}{slaveEndpoint}\PYG{o}{))}
+  \PYG{n}{logInfo}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Registered BlockManager\PYGZdq{}}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{initialize}\PYG{o}{(}\PYG{n}{backend}\PYG{k}{:} \PYG{k+kt}{SchedulerBackend}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{k}{this}\PYG{o}{.}\PYG{n}{backend} \PYG{k}{=} \PYG{n}{backend}
+  \PYG{n}{rootPool} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{Pool}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}\PYGZdq{}}\PYG{o}{,} \PYG{n}{schedulingMode}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{,} \PYG{l+m+mi}{0}\PYG{o}{)}
+  \PYG{n}{schedulableBuilder} \PYG{k}{=} \PYG{o}{\PYGZob{}}
+    \PYG{n}{schedulingMode} \PYG{k}{match} \PYG{o}{\PYGZob{}}
+      \PYG{k}{case} \PYG{n+nc}{SchedulingMode}\PYG{o}{.}\PYG{n+nc}{FIFO} \PYG{k}{=\PYGZgt{}}
+      \PYG{k}{new} \PYG{n+nc}{FIFOSchedulableBuilder}\PYG{o}{(}\PYG{n}{rootPool}\PYG{o}{)}
+      \PYG{k}{case} \PYG{n+nc}{SchedulingMode}\PYG{o}{.}\PYG{n+nc}{FAIR} \PYG{k}{=\PYGZgt{}}
+        \PYG{k}{new} \PYG{n+nc}{FairSchedulableBuilder}\PYG{o}{(}\PYG{n}{rootPool}\PYG{o}{,} \PYG{n}{conf}\PYG{o}{)}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{n}{schedulableBuilder}\PYG{o}{.}\PYG{n}{buildPools}\PYG{o}{()}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

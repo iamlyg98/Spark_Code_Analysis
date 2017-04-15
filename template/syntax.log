@@ -1,0 +1,42 @@
+This is XeTeX, Version 3.14159265-2.6-0.99996 (MiKTeX 2.9.6210 64-bit) (preloaded format=xelatex 2017.1.15)  19 JAN 2017 14:03
+entering extended mode
+**C:/Users/wutianxiong/AppData/Roaming/MiKTeX/2.9/tex/latex/syntax2/syntax.tex
+(C:/Users/wutianxiong/AppData/Roaming/MiKTeX/2.9/tex/latex/syntax2/syntax.tex
+LaTeX2e <2016/03/31> patch level 3
+Babel <3.9r> and hyphenation patterns for 75 language(s) loaded.
+Verwende: 'syntax.tex' v0.02 von Bernd Worsch
+\breite=\skip41
+\hoehe=\skip42
+\tiefe=\skip43
+\gesamthoehe=\skip44
+\tmpLength=\skip45
+\Messbox=\box26
+\LineLengStan=\skip46
+\LineThikStan=\skip47
+\Centerbox=\box27
+\Centercor=\skip48
+\VertSkipStan=\skip49
+\upperbox=\box28
+\lowerbox=\box29
+\togetherbox=\box30
+\VertLineLength=\skip50
+\VertSkip=\skip51
+\upperVertLineLength=\skip52
+\lowerVertLineLength=\skip53
+\tabulcor=\skip54
+)
+! Emergency stop.
+<*> ...ing/MiKTeX/2.9/tex/latex/syntax2/syntax.tex
+                                                  
+*** (job aborted, no legal \end found)
+
+ 
+Here is how much of TeX's memory you used:
+ 55 strings out of 428408
+ 658 string characters out of 3163951
+ 53889 words of memory out of 3000000
+ 3551 multiletter control sequences out of 15000+200000
+ 3640 words of font info for 14 fonts, out of 3000000 for 9000
+ 1328 hyphenation exceptions out of 8191
+ 9i,0n,12p,154b,8s stack positions out of 5000i,500n,10000p,200000b,50000s
+No pages of output.

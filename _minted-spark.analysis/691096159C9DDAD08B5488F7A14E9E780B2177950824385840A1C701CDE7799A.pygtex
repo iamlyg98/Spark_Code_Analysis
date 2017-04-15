@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{override} \PYG{k}{def} \PYG{n}{onReceive}\PYG{o}{(}\PYG{n}{event}\PYG{k}{:} \PYG{k+kt}{DAGSchedulerEvent}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{timerContext} \PYG{k}{=} \PYG{n}{timer}\PYG{o}{.}\PYG{n}{time}\PYG{o}{()}
+  \PYG{k}{try} \PYG{o}{\PYGZob{}}
+    \PYG{n}{doOnReceive}\PYG{o}{(}\PYG{n}{event}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{finally} \PYG{o}{\PYGZob{}}
+    \PYG{n}{timerContext}\PYG{o}{.}\PYG{n}{stop}\PYG{o}{()}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

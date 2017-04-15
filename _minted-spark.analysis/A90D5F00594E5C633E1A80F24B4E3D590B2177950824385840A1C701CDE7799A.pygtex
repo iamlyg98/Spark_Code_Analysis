@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//为了避免Task集中分配到某些机器上，随机打乱}
+\PYG{k}{val} \PYG{n}{shuffledOffers} \PYG{k}{=} \PYG{n+nc}{Random}\PYG{o}{.}\PYG{n}{shuffle}\PYG{o}{(}\PYG{n}{offers}\PYG{o}{)}
+\PYG{c+c1}{//存储分配好的Task}
+\PYG{k}{val} \PYG{n}{tasks} \PYG{k}{=} \PYG{n}{shuffledOffers}\PYG{o}{.}\PYG{n}{map}\PYG{o}{(}\PYG{n}{o} \PYG{k}{=\PYGZgt{}} \PYG{k}{new} \PYG{n+nc}{ArrayBuffer}\PYG{o}{[}\PYG{k+kt}{TaskDescription}\PYG{o}{](}\PYG{n}{o}\PYG{o}{.}\PYG{n}{cores}\PYG{o}{))}
+\PYG{k}{val} \PYG{n}{availableCpus} \PYG{k}{=} \PYG{n}{shuffledOffers}\PYG{o}{.}\PYG{n}{map}\PYG{o}{(}\PYG{n}{o} \PYG{k}{=\PYGZgt{}} \PYG{n}{o}\PYG{o}{.}\PYG{n}{cores}\PYG{o}{).}\PYG{n}{toArray}
+\PYG{k}{val} \PYG{n}{sortedTaskSets} \PYG{k}{=} \PYG{n}{rootPool}\PYG{o}{.}\PYG{n}{getSortedTaskSetQueue}
+\PYG{k}{for} \PYG{o}{(}\PYG{n}{taskSet} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{sortedTaskSets}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{n}{taskSet}\PYG{o}{.}\PYG{n}{parent}\PYG{o}{.}\PYG{n}{name}\PYG{o}{,} \PYG{n}{taskSet}\PYG{o}{.}\PYG{n}{name}\PYG{o}{,} \PYG{n}{taskSet}\PYG{o}{.}\PYG{n}{runningTasks}\PYG{o}{))}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{newExecAvail}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{taskSet}\PYG{o}{.}\PYG{n}{executorAdded}\PYG{o}{()}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{k}{var} \PYG{n}{launchedTask} \PYG{k}{=} \PYG{k+kc}{false}
+\PYG{k}{for} \PYG{o}{(}\PYG{n}{taskSet} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{sortedTaskSets}\PYG{o}{;} \PYG{n}{maxLocality} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{taskSet}\PYG{o}{.}\PYG{n}{myLocalityLevels}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{k}{do} \PYG{o}{\PYGZob{}}
+    \PYG{n}{launchedTask} \PYG{k}{=} \PYG{n}{resourceOfferSingleTaskSet}\PYG{o}{(}\PYG{n}{taskSet}\PYG{o}{,} \PYG{n}{maxLocality}\PYG{o}{,} \PYG{n}{shuffledOffers}\PYG{o}{,} \PYG{n}{availableCpus}\PYG{o}{,} \PYG{n}{tasks}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{while} \PYG{o}{(}\PYG{n}{launchedTask}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\PYG{k}{if} \PYG{o}{(}\PYG{n}{tasks}\PYG{o}{.}\PYG{n}{size} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{n}{hasLaunchedTask} \PYG{k}{=} \PYG{k+kc}{true}
+\PYG{o}{\PYGZcb{}}
+\PYG{k}{return} \PYG{n}{tasks}
+\end{Verbatim}

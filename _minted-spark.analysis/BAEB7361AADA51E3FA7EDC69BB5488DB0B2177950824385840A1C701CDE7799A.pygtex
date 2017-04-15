@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private} \PYG{k}{def} \PYG{n}{register}\PYG{o}{(}\PYG{n}{id}\PYG{k}{:} \PYG{k+kt}{BlockManagerId}\PYG{o}{,} \PYG{n}{maxMemSize}\PYG{k}{:} \PYG{k+kt}{Long}\PYG{o}{,} \PYG{n}{slaveEndpoint}\PYG{k}{:} \PYG{k+kt}{RpcEndpointRef}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{time} \PYG{k}{=} \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{currentTimeMillis}\PYG{o}{()}
+  \PYG{c+c1}{//确保blockManagerInfo持有消息中的BlockManagerId及其对应信息}
+  \PYG{k}{if} \PYG{o}{(!}\PYG{n}{blockManagerInfo}\PYG{o}{.}\PYG{n}{contains}\PYG{o}{(}\PYG{n}{id}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{//确保一个Executor只有一个BlockManagerId}
+    \PYG{n}{blockManagerIdByExecutor}\PYG{o}{.}\PYG{n}{get}\PYG{o}{(}\PYG{n}{id}\PYG{o}{.}\PYG{n}{executorId}\PYG{o}{)} \PYG{k}{match} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{//旧的BlockManagerId会被移除}
+      \PYG{k}{case} \PYG{n+nc}{Some}\PYG{o}{(}\PYG{n}{oldId}\PYG{o}{)} \PYG{k}{=\PYGZgt{}}
+        \PYG{n}{removeExecutor}\PYG{o}{(}\PYG{n}{id}\PYG{o}{.}\PYG{n}{executorId}\PYG{o}{)}
+      \PYG{k}{case} \PYG{n+nc}{None} \PYG{k}{=\PYGZgt{}}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{n}{blockManagerIdByExecutor}\PYG{o}{(}\PYG{n}{id}\PYG{o}{.}\PYG{n}{executorId}\PYG{o}{)} \PYG{k}{=} \PYG{n}{id}
+  \PYG{n}{blockManagerInfo}\PYG{o}{(}\PYG{n}{id}\PYG{o}{)} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{BlockManagerInfo}\PYG{o}{(}\PYG{n}{id}\PYG{o}{,} \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{currentTimeMillis}\PYG{o}{(),} \PYG{n}{maxMemSize}\PYG{o}{,} \PYG{n}{slaveEndpoint}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{c+c1}{//最后向listenerBus推送一个SparkListenerBlockManagerAdded消息}
+  \PYG{n}{listenerBus}\PYG{o}{.}\PYG{n}{post}\PYG{o}{(}\PYG{n+nc}{SparkListenerBlockManagerAdded}\PYG{o}{(}\PYG{n}{time}\PYG{o}{,} \PYG{n}{id}\PYG{o}{,} \PYG{n}{maxMemSize}\PYG{o}{))}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

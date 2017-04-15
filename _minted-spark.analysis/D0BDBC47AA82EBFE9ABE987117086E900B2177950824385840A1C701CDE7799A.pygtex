@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//根据ShuffleId和MapId获得索引文件}
+\PYG{k}{val} \PYG{n}{indexFile} \PYG{k}{=} \PYG{n}{getIndexFile}\PYG{o}{(}\PYG{n}{blockId}\PYG{o}{.}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{blockId}\PYG{o}{.}\PYG{n}{mapId}\PYG{o}{)}
+\PYG{k}{val} \PYG{n}{in} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{DataInputStream}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{FileInputStream}\PYG{o}{(}\PYG{n}{indexFile}\PYG{o}{))}
+\PYG{k}{try} \PYG{o}{\PYGZob{}}
+  \PYG{n+nc}{ByteStreams}\PYG{o}{.}\PYG{n}{skipFully}\PYG{o}{(}\PYG{n}{in}\PYG{o}{,}\PYG{n}{blockId}\PYG{o}{.}\PYG{n}{reduceId}\PYG{o}{*}\PYG{l+m+mi}{8}\PYG{o}{)}\PYG{c+c1}{//本次Block的数据区}
+  \PYG{k}{val} \PYG{n}{offset} \PYG{k}{=} \PYG{n}{in}\PYG{o}{.}\PYG{n}{readLong}\PYG{o}{()}\PYG{c+c1}{//开始}
+  \PYG{k}{val} \PYG{n}{nextOffset} \PYG{k}{=} \PYG{n}{in}\PYG{o}{.}\PYG{n}{readLong}\PYG{o}{()}\PYG{c+c1}{//结束}
+  \PYG{k}{new} \PYG{n+nc}{FileSegmentManagedBuffer}\PYG{o}{(}\PYG{n}{transportConf}\PYG{o}{,}\PYG{n}{getDataFile}\PYG{o}{(}
+  \PYG{n}{blockId}\PYG{o}{.}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{blockId}\PYG{o}{.}\PYG{n}{mapId}\PYG{o}{),}\PYG{n}{offset}\PYG{o}{,}\PYG{n}{nextOffset} \PYG{o}{\PYGZhy{}} \PYG{n}{offset}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

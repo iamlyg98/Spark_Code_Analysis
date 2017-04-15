@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{runJob}\PYG{o}{[}\PYG{k+kt}{T}, \PYG{k+kt}{U}\PYG{o}{](}\PYG{n}{rdd}\PYG{k}{:} \PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{],}\PYG{n}{func}\PYG{k}{:} \PYG{o}{(}\PYG{k+kt}{TaskContext}\PYG{o}{,} \PYG{k+kt}{Iterator}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{])} \PYG{k}{=\PYGZgt{}} \PYG{n}{U}\PYG{o}{,}\PYG{n}{partitions}\PYG{k}{:} \PYG{k+kt}{Seq}\PYG{o}{[}\PYG{k+kt}{Int}\PYG{o}{],}\PYG{n}{callSite}\PYG{k}{:} \PYG{k+kt}{CallSite}\PYG{o}{,}\PYG{n}{resultHandler}\PYG{k}{:} \PYG{o}{(}\PYG{k+kt}{Int}\PYG{o}{,} \PYG{k+kt}{U}\PYG{o}{)} \PYG{k}{=\PYGZgt{}} \PYG{n+nc}{Unit}\PYG{o}{,}\PYG{n}{properties}\PYG{k}{:} \PYG{k+kt}{Properties}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{o}{......}
+  \PYG{k}{val} \PYG{n}{waiter} \PYG{k}{=} \PYG{n}{submitJob}\PYG{o}{(}\PYG{n}{rdd}\PYG{o}{,} \PYG{n}{func}\PYG{o}{,} \PYG{n}{partitions}\PYG{o}{,} \PYG{n}{callSite}\PYG{o}{,} \PYG{n}{resultHandler}\PYG{o}{,} \PYG{n}{properties}\PYG{o}{)}
+  \PYG{n}{waiter}\PYG{o}{.}\PYG{n}{awaitResult}\PYG{o}{()} \PYG{k}{match} \PYG{o}{\PYGZob{}}
+    \PYG{k}{case} \PYG{n+nc}{JobSucceeded} \PYG{k}{=\PYGZgt{}}
+      \PYG{o}{(}\PYG{n}{waiter}\PYG{o}{.}\PYG{n}{jobId}\PYG{o}{,} \PYG{n}{callSite}\PYG{o}{.}\PYG{n}{shortForm}\PYG{o}{,} \PYG{o}{(}\PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{nanoTime} \PYG{o}{\PYGZhy{}} \PYG{n}{start}\PYG{o}{)} \PYG{o}{/} \PYG{l+m+mi}{1}\PYG{n}{e9}\PYG{o}{))}
+    \PYG{k}{case} \PYG{n+nc}{JobFailed}\PYG{o}{(}\PYG{n}{exception}\PYG{k}{:} \PYG{k+kt}{Exception}\PYG{o}{)} \PYG{k}{=\PYGZgt{}}
+      \PYG{o}{(}\PYG{n}{waiter}\PYG{o}{.}\PYG{n}{jobId}\PYG{o}{,} \PYG{n}{callSite}\PYG{o}{.}\PYG{n}{shortForm}\PYG{o}{,} \PYG{o}{(}\PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{nanoTime} \PYG{o}{\PYGZhy{}} \PYG{n}{start}\PYG{o}{)} \PYG{o}{/} \PYG{l+m+mi}{1}\PYG{n}{e9}\PYG{o}{))}
+      \PYG{k}{val} \PYG{n}{callerStackTrace} \PYG{k}{=} \PYG{n+nc}{Thread}\PYG{o}{.}\PYG{n}{currentThread}\PYG{o}{().}\PYG{n}{getStackTrace}\PYG{o}{.}\PYG{n}{tail}
+      \PYG{n}{exception}\PYG{o}{.}\PYG{n}{setStackTrace}\PYG{o}{(}\PYG{n}{exception}\PYG{o}{.}\PYG{n}{getStackTrace} \PYG{o}{++} \PYG{n}{callerStackTrace}\PYG{o}{)}
+      \PYG{k}{throw} \PYG{n}{exception}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

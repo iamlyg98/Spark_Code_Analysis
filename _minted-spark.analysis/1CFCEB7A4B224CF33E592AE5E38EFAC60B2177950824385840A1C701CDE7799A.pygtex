@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{override} \PYG{k}{def} \PYG{n}{init}\PYG{o}{(}\PYG{n}{blockDataManager}\PYG{k}{:} \PYG{k+kt}{BlockDataManager}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//创建rpc服务}
+  \PYG{k}{val} \PYG{n}{rpcHandler} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{NettyBlockRpcServer}\PYG{o}{(}\PYG{n}{conf}\PYG{o}{.}\PYG{n}{getAppId}\PYG{o}{,} \PYG{n}{serializer}\PYG{o}{,} \PYG{n}{blockDataManager}\PYG{o}{)}
+  \PYG{k}{var} \PYG{n}{serverBootstrap}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{TransportServerBootstrap}\PYG{o}{]} \PYG{k}{=} \PYG{n+nc}{None}
+  \PYG{k}{var} \PYG{n}{clientBootstrap}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{TransportClientBootstrap}\PYG{o}{]} \PYG{k}{=} \PYG{n+nc}{None}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{authEnabled}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{serverBootstrap} \PYG{k}{=} \PYG{n+nc}{Some}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{SaslServerBootstrap}\PYG{o}{(}\PYG{n}{transportConf}\PYG{o}{,} \PYG{n}{securityManager}\PYG{o}{))}
+    \PYG{n}{clientBootstrap} \PYG{k}{=} \PYG{n+nc}{Some}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{SaslClientBootstrap}\PYG{o}{(}\PYG{n}{transportConf}\PYG{o}{,} \PYG{n}{conf}\PYG{o}{.}\PYG{n}{getAppId}\PYG{o}{,} \PYG{n}{securityManager}\PYG{o}{,}
+    \PYG{n}{securityManager}\PYG{o}{.}\PYG{n}{isSaslEncryptionEnabled}\PYG{o}{()))}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{c+c1}{//创建TransportContext}
+  \PYG{n}{transportContext} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{TransportContext}\PYG{o}{(}\PYG{n}{transportConf}\PYG{o}{,} \PYG{n}{rpcHandler}\PYG{o}{)}
+  \PYG{c+c1}{//创建RPC客户端工厂}
+  \PYG{n}{clientFactory} \PYG{k}{=} \PYG{n}{transportContext}\PYG{o}{.}\PYG{n}{createClientFactory}\PYG{o}{(}\PYG{n}{clientBootstrap}\PYG{o}{.}\PYG{n}{toSeq}\PYG{o}{.}\PYG{n}{asJava}\PYG{o}{)}
+  \PYG{c+c1}{//创建Netty服务器TransportServer，端口由spark.blockManager.port控制}
+  \PYG{n}{server} \PYG{k}{=} \PYG{n}{createServer}\PYG{o}{(}\PYG{n}{serverBootstrap}\PYG{o}{.}\PYG{n}{toList}\PYG{o}{)}
+  \PYG{n}{appId} \PYG{k}{=} \PYG{n}{conf}\PYG{o}{.}\PYG{n}{getAppId}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

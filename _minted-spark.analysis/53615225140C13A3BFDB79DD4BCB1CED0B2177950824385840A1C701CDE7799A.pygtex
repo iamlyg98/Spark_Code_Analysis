@@ -1,0 +1,29 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private} \PYG{k}{def} \PYG{n}{create}\PYG{o}{(}
+  \PYG{n}{sc}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{SparkContext}\PYG{o}{],}
+  \PYG{n}{conf}\PYG{k}{:} \PYG{k+kt}{SparkConf}\PYG{o}{,}
+  \PYG{n}{listenerBus}\PYG{k}{:} \PYG{k+kt}{SparkListenerBus}\PYG{o}{,}
+  \PYG{n}{securityManager}\PYG{k}{:} \PYG{k+kt}{SecurityManager}\PYG{o}{,}
+  \PYG{n}{appName}\PYG{k}{:} \PYG{k+kt}{String}\PYG{o}{,}
+  \PYG{n}{basePath}\PYG{k}{:} \PYG{k+kt}{String} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}\PYGZdq{}}\PYG{o}{,}
+  \PYG{n}{jobProgressListener}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{JobProgressListener}\PYG{o}{]} \PYG{k}{=} \PYG{n+nc}{None}\PYG{o}{,}
+  \PYG{n}{startTime}\PYG{k}{:} \PYG{k+kt}{Long}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{SparkUI} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+    \PYG{k}{val} \PYG{n+nc}{\PYGZus{}jobProgressListener}\PYG{k}{:} \PYG{k+kt}{JobProgressListener} \PYG{o}{=} \PYG{n}{jobProgressListener}\PYG{o}{.}\PYG{n}{getOrElse} \PYG{o}{\PYGZob{}}
+    \PYG{k}{val} \PYG{n}{listener} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{JobProgressListener}\PYG{o}{(}\PYG{n}{conf}\PYG{o}{)}
+    \PYG{n}{listenerBus}\PYG{o}{.}\PYG{n}{addListener}\PYG{o}{(}\PYG{n}{listener}\PYG{o}{)} \PYG{n}{listener}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{k}{val} \PYG{n}{environmentListener} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{EnvironmentListener}
+  \PYG{k}{val} \PYG{n}{storageStatusListener} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{StorageStatusListener}
+  \PYG{k}{val} \PYG{n}{executorsListener} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{ExecutorsListener}\PYG{o}{(}\PYG{n}{storageStatusListener}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{storageListener} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{StorageListener}\PYG{o}{(}\PYG{n}{storageStatusListener}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{operationGraphListener} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{RDDOperationGraphListener}\PYG{o}{(}\PYG{n}{conf}\PYG{o}{)}
+  \PYG{n}{listenerBus}\PYG{o}{.}\PYG{n}{addListener}\PYG{o}{(}\PYG{n}{environmentListener}\PYG{o}{)}
+  \PYG{n}{listenerBus}\PYG{o}{.}\PYG{n}{addListener}\PYG{o}{(}\PYG{n}{storageStatusListener}\PYG{o}{)}
+  \PYG{n}{listenerBus}\PYG{o}{.}\PYG{n}{addListener}\PYG{o}{(}\PYG{n}{executorsListener}\PYG{o}{)}
+  \PYG{n}{listenerBus}\PYG{o}{.}\PYG{n}{addListener}\PYG{o}{(}\PYG{n}{storageListener}\PYG{o}{)}
+  \PYG{n}{listenerBus}\PYG{o}{.}\PYG{n}{addListener}\PYG{o}{(}\PYG{n}{operationGraphListener}\PYG{o}{)}
+  \PYG{k}{new} \PYG{n+nc}{SparkUI}\PYG{o}{(}\PYG{n}{sc}\PYG{o}{,} \PYG{n}{conf}\PYG{o}{,} \PYG{n}{securityManager}\PYG{o}{,} \PYG{n}{environmentListener}\PYG{o}{,} \PYG{n}{storageStatusListener}\PYG{o}{,}
+  \PYG{n}{executorsListener}\PYG{o}{,} \PYG{n+nc}{\PYGZus{}jobProgressListener}\PYG{o}{,} \PYG{n}{storageListener}\PYG{o}{,} \PYG{n}{operationGraphListener}\PYG{o}{,}
+  \PYG{n}{appName}\PYG{o}{,} \PYG{n}{basePath}\PYG{o}{,} \PYG{n}{startTime}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

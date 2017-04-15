@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private} \PYG{k}{def} \PYG{n}{launchTasks}\PYG{o}{(}\PYG{n}{tasks}\PYG{k}{:} \PYG{k+kt}{Seq}\PYG{o}{[}\PYG{k+kt}{Seq}\PYG{o}{[}\PYG{k+kt}{TaskDescription}\PYG{o}{]])} \PYG{o}{\PYGZob{}}
+  \PYG{k}{for} \PYG{o}{(}\PYG{n}{task} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{tasks}\PYG{o}{.}\PYG{n}{flatten}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{serializedTask} \PYG{k}{=} \PYG{n}{ser}\PYG{o}{.}\PYG{n}{serialize}\PYG{o}{(}\PYG{n}{task}\PYG{o}{)}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{serializedTask}\PYG{o}{.}\PYG{n}{limit} \PYG{o}{\PYGZgt{}=} \PYG{n}{akkaFrameSize} \PYG{o}{\PYGZhy{}} \PYG{n+nc}{AkkaUtils}\PYG{o}{.}\PYG{n}{reservedSizeBytes}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{scheduler}\PYG{o}{.}\PYG{n}{taskIdToTaskSetManager}\PYG{o}{.}\PYG{n}{get}\PYG{o}{(}\PYG{n}{task}\PYG{o}{.}\PYG{n}{taskId}\PYG{o}{).}\PYG{n}{foreach} \PYG{o}{\PYGZob{}} \PYG{n}{taskSetMgr} \PYG{k}{=\PYGZgt{}}
+    \PYG{k}{try} \PYG{o}{\PYGZob{}}
+      \PYG{n}{taskSetMgr}\PYG{o}{.}\PYG{n}{abort}\PYG{o}{(}\PYG{n}{msg}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{catch} \PYG{o}{\PYGZob{}}
+      \PYG{k}{case} \PYG{n}{e}\PYG{k}{:} \PYG{k+kt}{Exception} \PYG{o}{=\PYGZgt{}} \PYG{n}{logError}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Exception in error callback\PYGZdq{}}\PYG{o}{,} \PYG{n}{e}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{k}{val} \PYG{n}{executorData} \PYG{k}{=} \PYG{n}{executorDataMap}\PYG{o}{(}\PYG{n}{task}\PYG{o}{.}\PYG{n}{executorId}\PYG{o}{)}
+    \PYG{n}{executorData}\PYG{o}{.}\PYG{n}{freeCores} \PYG{o}{\PYGZhy{}=} \PYG{n}{scheduler}\PYG{o}{.}\PYG{n+nc}{CPUS\PYGZus{}PER\PYGZus{}TASK}
+    \PYG{n}{executorData}\PYG{o}{.}\PYG{n}{executorEndpoint}\PYG{o}{.}\PYG{n}{send}\PYG{o}{(}\PYG{n+nc}{LaunchTask}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{SerializableBuffer}\PYG{o}{(}\PYG{n}{serializedTask}\PYG{o}{)))}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

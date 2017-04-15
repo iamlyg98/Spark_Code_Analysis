@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{val} \PYG{n}{nextJobId} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{AtomicInteger}\PYG{o}{(}\PYG{l+m+mi}{0}\PYG{o}{)}
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{def} \PYG{n}{numTotalJobs}\PYG{k}{:} \PYG{k+kt}{Int} \PYG{o}{=} \PYG{n}{nextJobId}\PYG{o}{.}\PYG{n}{get}\PYG{o}{()}
+\PYG{k}{private} \PYG{k}{val} \PYG{n}{nextStageId} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{AtomicInteger}\PYG{o}{(}\PYG{l+m+mi}{0}\PYG{o}{)}
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{val} \PYG{n}{jobIdToStageIds} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashMap}\PYG{o}{[}\PYG{k+kt}{Int}, \PYG{k+kt}{HashSet}\PYG{o}{[}\PYG{k+kt}{Int}\PYG{o}{]]}
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{val} \PYG{n}{stageIdToStage} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashMap}\PYG{o}{[}\PYG{k+kt}{Int}, \PYG{k+kt}{Stage}\PYG{o}{]}
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{val} \PYG{n}{shuffleToMapStage} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashMap}\PYG{o}{[}\PYG{k+kt}{Int}, \PYG{k+kt}{ShuffleMapStage}\PYG{o}{]}
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{val} \PYG{n}{jobIdToActiveJob} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashMap}\PYG{o}{[}\PYG{k+kt}{Int}, \PYG{k+kt}{ActiveJob}\PYG{o}{]}
+\PYG{c+c1}{// Stages we need to run whose parents aren\PYGZsq{}t done}
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{val} \PYG{n}{waitingStages} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashSet}\PYG{o}{[}\PYG{k+kt}{Stage}\PYG{o}{]}
+\PYG{c+c1}{// Stages we are running right now}
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{val} \PYG{n}{runningStages} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashSet}\PYG{o}{[}\PYG{k+kt}{Stage}\PYG{o}{]}
+\PYG{c+c1}{// Stages that must be resubmitted due to fetch failures}
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{val} \PYG{n}{failedStages} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashSet}\PYG{o}{[}\PYG{k+kt}{Stage}\PYG{o}{]}
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{scheduler}\PYG{o}{]} \PYG{k}{val} \PYG{n}{activeJobs} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{HashSet}\PYG{o}{[}\PYG{k+kt}{ActiveJob}\PYG{o}{]}
+\end{Verbatim}

@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{abstract} \PYG{k}{class} \PYG{n+nc}{Dependency}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{]} \PYG{n+nc}{extends} \PYG{n+nc}{Serializable} \PYG{o}{\PYGZob{}}
+  \PYG{k}{def} \PYG{n}{rdd}\PYG{k}{:} \PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k+kt}{T}\PYG{o}{]}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

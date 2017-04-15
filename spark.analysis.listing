@@ -1,0 +1,24 @@
+def getFile(filename: String): File = {
+  //根据文件名blockId.name计算哈希值
+  val hash = Utils.nonNegativeHash(filename)
+  //根据哈希值与本地文件一级目录的总数求余数，记为dirId
+  val dirId = hash % localDirs.length
+  //根据哈希值与本地文件一级目录的总数求商，此商与二级目录的数据在求余数，记为subDirId
+  val subDirId = (hash / localDirs.length) % subDirsPerLocalDir
+  //如果dirId/subDirId目录存在，则获取dirId/subDirId目录下的文件
+  val subDir = subDirs(dirId).synchronized {
+    val old = subDirs(dirId)(subDirId)
+    if (old != null) {
+      old
+    } else {
+      //否则新建dirId/subDirId目录
+      val newDir = new File(localDirs(dirId), "%02x".format(subDirId))
+      if (!newDir.exists() && !newDir.mkdir()) {
+        throw new IOException(s"Failed to create local dir in \$newDir.")
+      }
+      subDirs(dirId)(subDirId) = newDir
+      newDir
+    }
+  }
+  new File(subDir, filename)
+}

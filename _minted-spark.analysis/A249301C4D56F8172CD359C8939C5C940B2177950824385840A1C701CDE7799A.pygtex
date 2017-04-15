@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{override} \PYG{k}{def} \PYG{n}{start}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//Yarn\PYGZhy{}cluster模式下为YarnClusterSchedulerBackend}
+  \PYG{n}{backend}\PYG{o}{.}\PYG{n}{start}\PYG{o}{()}
+    \PYG{k}{if} \PYG{o}{(!}\PYG{n}{isLocal} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{conf}\PYG{o}{.}\PYG{n}{getBoolean}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}spark.speculation\PYGZdq{}}\PYG{o}{,} \PYG{k+kc}{false}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+      \PYG{n}{speculationScheduler}\PYG{o}{.}\PYG{n}{scheduleAtFixedRate}\PYG{o}{(}\PYG{k}{new} \PYG{n+nc}{Runnable} \PYG{o}{\PYGZob{}}
+        \PYG{k}{override} \PYG{k}{def} \PYG{n}{run}\PYG{o}{()}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{n+nc}{Utils}\PYG{o}{.}\PYG{n}{tryOrStopSparkContext}\PYG{o}{(}\PYG{n}{sc}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+          \PYG{n}{checkSpeculatableTasks}\PYG{o}{()}
+        \PYG{o}{\PYGZcb{}}
+      \PYG{o}{\PYGZcb{},} \PYG{n+nc}{SPECULATION\PYGZus{}INTERVAL\PYGZus{}MS}\PYG{o}{,} \PYG{n+nc}{SPECULATION\PYGZus{}INTERVAL\PYGZus{}MS}\PYG{o}{,} \PYG{n+nc}{TimeUnit}\PYG{o}{.}\PYG{n+nc}{MILLISECONDS}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

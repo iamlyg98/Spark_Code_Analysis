@@ -1,0 +1,26 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{getFile}\PYG{o}{(}\PYG{n}{filename}\PYG{k}{:} \PYG{k+kt}{String}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{File} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//根据文件名blockId.name计算哈希值}
+  \PYG{k}{val} \PYG{n}{hash} \PYG{k}{=} \PYG{n+nc}{Utils}\PYG{o}{.}\PYG{n}{nonNegativeHash}\PYG{o}{(}\PYG{n}{filename}\PYG{o}{)}
+  \PYG{c+c1}{//根据哈希值与本地文件一级目录的总数求余数，记为dirId}
+  \PYG{k}{val} \PYG{n}{dirId} \PYG{k}{=} \PYG{n}{hash} \PYG{o}{\PYGZpc{}} \PYG{n}{localDirs}\PYG{o}{.}\PYG{n}{length}
+  \PYG{c+c1}{//根据哈希值与本地文件一级目录的总数求商，此商与二级目录的数据在求余数，记为subDirId}
+  \PYG{k}{val} \PYG{n}{subDirId} \PYG{k}{=} \PYG{o}{(}\PYG{n}{hash} \PYG{o}{/} \PYG{n}{localDirs}\PYG{o}{.}\PYG{n}{length}\PYG{o}{)} \PYG{o}{\PYGZpc{}} \PYG{n}{subDirsPerLocalDir}
+  \PYG{c+c1}{//如果dirId/subDirId目录存在，则获取dirId/subDirId目录下的文件}
+  \PYG{k}{val} \PYG{n}{subDir} \PYG{k}{=} \PYG{n}{subDirs}\PYG{o}{(}\PYG{n}{dirId}\PYG{o}{).}\PYG{n}{synchronized} \PYG{o}{\PYGZob{}}
+    \PYG{k}{val} \PYG{n}{old} \PYG{k}{=} \PYG{n}{subDirs}\PYG{o}{(}\PYG{n}{dirId}\PYG{o}{)(}\PYG{n}{subDirId}\PYG{o}{)}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{old} \PYG{o}{!=} \PYG{k+kc}{null}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{n}{old}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+      \PYG{c+c1}{//否则新建dirId/subDirId目录}
+      \PYG{k}{val} \PYG{n}{newDir} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{File}\PYG{o}{(}\PYG{n}{localDirs}\PYG{o}{(}\PYG{n}{dirId}\PYG{o}{),} \PYG{l+s}{\PYGZdq{}\PYGZpc{}02x\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{o}{(}\PYG{n}{subDirId}\PYG{o}{))}
+      \PYG{k}{if} \PYG{o}{(!}\PYG{n}{newDir}\PYG{o}{.}\PYG{n}{exists}\PYG{o}{()} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{o}{!}\PYG{n}{newDir}\PYG{o}{.}\PYG{n}{mkdir}\PYG{o}{())} \PYG{o}{\PYGZob{}}
+        \PYG{k}{throw} \PYG{k}{new} \PYG{n+nc}{IOException}\PYG{o}{(}\PYG{l+s}{s\PYGZdq{}Failed to create local dir in \PYGZbs{}\PYGZdl{}newDir.\PYGZdq{}}\PYG{o}{)}
+      \PYG{o}{\PYGZcb{}}
+      \PYG{n}{subDirs}\PYG{o}{(}\PYG{n}{dirId}\PYG{o}{)(}\PYG{n}{subDirId}\PYG{o}{)} \PYG{k}{=} \PYG{n}{newDir}
+      \PYG{n}{newDir}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{k}{new} \PYG{n+nc}{File}\PYG{o}{(}\PYG{n}{subDir}\PYG{o}{,} \PYG{n}{filename}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

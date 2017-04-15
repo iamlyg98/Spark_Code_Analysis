@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{val} \PYG{n}{msg} \PYG{k}{=} \PYG{n+nc}{StatusUpdate}\PYG{o}{(}\PYG{n}{executorId}\PYG{o}{,} \PYG{n}{taskId}\PYG{o}{,} \PYG{n}{state}\PYG{o}{,} \PYG{n}{data}\PYG{o}{)}
+\PYG{n}{driver} \PYG{k}{match} \PYG{o}{\PYGZob{}}
+  \PYG{k}{case} \PYG{n+nc}{Some}\PYG{o}{(}\PYG{n}{driverRef}\PYG{o}{)} \PYG{k}{=\PYGZgt{}} \PYG{n}{driverRef}\PYG{o}{.}\PYG{n}{send}\PYG{o}{(}\PYG{n}{msg}\PYG{o}{)}
+  \PYG{k}{case} \PYG{n+nc}{None} \PYG{k}{=\PYGZgt{}} \PYG{n}{logWarning}\PYG{o}{(}\PYG{l+s}{s\PYGZdq{}Drop }\PYG{l+s+si}{\PYGZdl{}msg}\PYG{l+s}{ because has not yet connected to driver\PYGZdq{}}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

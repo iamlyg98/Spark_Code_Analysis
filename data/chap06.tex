@@ -1,0 +1,301 @@
+\chapter{Job运行和调度器模块}
+\label{jobrunning}
+RDD上的操作分为两种类型转换和动作。第\ref{chap:rddcreate}章中RDD的转换会构成DAG，最后RDD会触发action，WordCount例子中触发action的算子为saveAsTextFile。此算子会将数据集中的元素以textFile的形式保存到传入的路径中，本地文件或者HDFS。RDD中的saveAsTextFile经过一系列runJob的调用，最后调用了DagScheduler中的runJob。DagScheduler在第\ref{scinitial}章中已被初始化。其代码如程序\ref{inputPrg:dagrunjob}所示。
+\begin{codeInput}{Scala}{DagScheduler.runJob}{dagrunjob}
+def runJob[T, U](rdd: RDD[T],func: (TaskContext, Iterator[T]) => U,partitions: Seq[Int],callSite: CallSite,resultHandler: (Int, U) => Unit,properties: Properties): Unit = {
+  ......
+  val waiter = submitJob(rdd, func, partitions, callSite, resultHandler, properties)
+  waiter.awaitResult() match {
+    case JobSucceeded =>
+      (waiter.jobId, callSite.shortForm, (System.nanoTime - start) / 1e9))
+    case JobFailed(exception: Exception) =>
+      (waiter.jobId, callSite.shortForm, (System.nanoTime - start) / 1e9))
+      val callerStackTrace = Thread.currentThread().getStackTrace.tail
+      exception.setStackTrace(exception.getStackTrace ++ callerStackTrace)
+      throw exception
+  }
+}
+\end{codeInput}
+
+DagScheduler.runJobz主要调用了submitJob方法和waiter.awaitResult()，这里可以看出任务的运行是异步的。submitJob方法如程序\ref{inputPrg:submitjob}所示,代码中只保留了重要部分。
+\begin{codeInput}{Scala}{DAGScheduler.submitJob}{submitjob}
+def submitJob[T, U](
+rdd: RDD[T],
+func: (TaskContext, Iterator[T]) => U,
+partitions: Seq[Int],
+callSite: CallSite,
+resultHandler: (Int, U) => Unit,
+properties: Properties): JobWaiter[U] = {
+......
+val jobId = nextJobId.getAndIncrement()
+......
+val waiter = new JobWaiter(this, jobId, partitions.size, resultHandler)
+eventProcessLoop.post(JobSubmitted(
+  jobId, rdd, func2, partitions.toArray, callSite, waiter,
+  SerializationUtils.clone(properties)))
+  waiter
+}
+\end{codeInput}
+
+由程序\ref{inputPrg:submitjob}可以看出submitJob会想生成一个jobId，并且生成jobwaiter来监听job的运行状态，最后通过DAGScheduler的事件处理线程进行处理。dag-scheduler-event-loop在SparkContex中初始化且作为守护线程存在。DAGSchedulerEventProcessLoop收到JobSubmitted事件后会立即调用DAGScheduler.handleJobSubmitted方法进行处理，这方法中会进行Stage的划分以及提交Stage。
+\section{DagScheduler实现}
+\subsection{Stage的划分}
+
+在Spark中，一个Job会被分成多个Stage，各个直接存在着依赖关系，其中最下游的Stage也成为finalStage或resultStage。并行在不同分区进行相同的逻辑计算且互不影响的任务属于同一个Stage，而shuffle过程要从父RDD的多个分区中拉取数据，必须要等待多个分区任务完成才能开始计算，故其不能并行化，属于不同的Stage，DAG中划分Stage就是以Shuflle为依据进行的。
+
+handleJobSubmitted通过调用org.apache.spark.DAGScheduler\#newResultStage来创建finalStage，
+\begin{orgianlboxnotitle}
+	finalStage = newResultStage(finalRDD, func, partitions, jobId, callSite)
+\end{orgianlboxnotitle}
+
+newResultStage会根据传入的finalRDD来获取父Stage和jobId，然后开始创建ResultStage即当前的Stage，这里父RDD使用列表类型。代码如程序\ref{inputPrg:newresultstage}所示
+\begin{codeInput}{Scala}{DAGScheduler.newResultStage}{newresultstage}
+private def newResultStage(rdd: RDD[_],func: (TaskContext, Iterator[_]) => _,partitions: Array[Int],
+jobId: Int,callSite: CallSite): ResultStage = {
+  val (parentStages: List[Stage], id: Int) = getParentStagesAndId(rdd, jobId)
+  val stage = new ResultStage(id, rdd, func, partitions, parentStages, jobId, callSite)
+  stageIdToStage(id) = stage
+  updateJobIdStageIdMaps(jobId, stage)
+  stage
+}
+\end{codeInput}
+
+程序\ref{inputPrg:newresultstage}中getParentStagesAndId方法会进一步调用getParentStages方法，getParentStages方法为划分Stage的核心。它的返回类型为List[Stage]，每遇到DAG中RDD的ShuffleDependency就会参数一个新的Stage，其代码如程序\ref{inputPrg:getparentstages}所示。
+\begin{codeInput}{Scala}{DAGScheduler.getParentStages}{getparentstages}
+private def getParentStages(rdd: RDD[_], firstJobId: Int): List[Stage] = {
+  val parents = new HashSet[Stage]
+  val visited = new HashSet[RDD[_]]
+  val waitingForVisit = new Stack[RDD[_]]
+  def visit(r: RDD[_]) {
+    if (!visited(r)) {
+      visited += r
+      for (dep <- r.dependencies) {
+        dep match {
+          case shufDep: ShuffleDependency[_, _, _] =>
+            parents += getShuffleMapStage(shufDep, firstJobId)
+          case _ =>waitingForVisit.push(dep.rdd)
+        }
+      }
+    }
+  }
+  waitingForVisit.push(rdd)
+  while (waitingForVisit.nonEmpty) {
+    visit(waitingForVisit.pop())
+  }
+  parents.toList
+}
+\end{codeInput}
+
+getParentStages方法中定义了一个visit方法，此方法会对方法外的变量parents、visited及waitingForVisit产生影响，这里用到Scala函数的闭包特性。getParentStages变量说明如下
+\begin{centertitlebox}{getParentStages变量说明}
+	parents：存放各个ShuffleDependency所依赖的Stage\\
+	visited：存放DAG中已经遍历过的RDD\\
+	waitingForVisit：存放即将要遍历的RDD，为栈结构
+\end{centertitlebox}
+\subsection{实例:WordCount划分Stage}
+
+以本WordCount样例展示如何划分Stage。WordCount DAG如图\ref{fig:SparkCountDetails}所示，提前三个重要的信息组成新的RDD数据结构，定义如下
+\begin{centertitlebox}{新定义RDD数据结构}
+	数据结构：RDD(deps:List[Dependency],partitions:List(partitionId))\\
+	deps：代表当前RDD的依赖列表\\
+	partitions:指当前RDD的分区列表\\
+	textFile：\\  HadoopRDD[1](Nil,List(1,2))\\
+	flatMap:\\  MapPartitionRDD[2](List(onoToOneDependency(HadoopRDD[1]),List(1,2))\\
+	map:\\  MapPartitionRDD[3](List(onoToOneDependency(MapPartitionRDD[2])),List(1,2))\\
+	reduceByKey:\\  ShuffledRDD[4](List(ShuffleDependency(MapPartitionRDD[3])),List(3,4))\\
+	filter:\\  MapPartitionRDD[5](List(onoToOneDependency(ShuffledRDD[4])),List(3,4))\\
+	saveTextFile:\\  MapPartitionRDD[6](List(onoToOneDependency(MapPartitionRDD[5])),List(3,4))
+\end{centertitlebox}
+
+这里定义RDD中包含了两种数据元素，分别为当前RDD的依赖列表和当前RDD的分区列表。依赖列表中存放有当前RDD所依赖的父RDD的对象，分区列表中存放着分区的Id，要获取该分区数据可以通过BlockManager来获取。
+
+DAG以finalRDD即MapPartitionRDD[6]为起始点，依次进入函数getParentStages,各变量参数的值变化情况如表\ref{tab:getstage}所示
+\begin{table}[H]
+	\caption{getParentStages变量值}
+	\label{tab:getstage}
+	\begin{tabularx}{\linewidth}{lXX}
+		\toprule[1.5pt]
+		{\heiti visited:HashSet} & {\heiti parents:HashSet} &{\heiti waittingForVisit:Stack}\\
+		\midrule[1pt]
+		6& Nil &6 \\
+		6& Nil &5 \\
+		6 5& Nil &4 \\
+		6 5 4& ShuffleMapStage(3,shuffleDep(3)) &Nil \\
+		\bottomrule[1.5pt]
+	\end{tabularx}
+\end{table}
+
+这里函数生成了ShuffleMapStage，其中存放了RDD[3]的信息,另外ShuffleMapStage中Task计算的结果会传给Driver端的mapOutputTracker，其他任Task可以通过查询它来获取这些结果，不过这些结果并不是真实的数据，而是保存真实数据所在位置、大小等元数据信息，其他Task通过这些元数据信息获取其需要处理的数据。接下来回到程序\ref{inputPrg:newresultstage}，进入newResultStage代码块。最后返回ResultStage(RDD[6],List(ShuffleMapStage(3,shuffleDep(3))))。最后函数newResultStage将jobId和ResultStage进行绑定，返回ResultStage，也就是finalStage。
+\section{任务调度器实现}
+\subsection{任务的生成}
+
+现在回到handleJobSubmitted，上节生成了finalStage，此方法后面部分会调用submitStage来提交这个Stage，如果当前提交的Stage还有父Stage没有提交，那么就递归提交父Stage，只有父Stage提交完了，才能提交当前Stage，submitStage如程序\ref{inputPrg:submitStage}所示
+\begin{codeInput}{Scala}{DAGScheduler.submitStage}{submitStage}
+private def submitStage(stage: Stage) {
+  val jobId = activeJobForStage(stage)
+  if (jobId.isDefined) {
+    if (!waitingStages(stage) && !runningStages(stage) && !failedStages(stage)) {
+      val missing = getMissingParentStages(stage).sortBy(_.id) //List(ShuffleMapStage[0])
+      if (missing.isEmpty) {
+        submitMissingTasks(stage, jobId.get)
+      } else {
+        for (parent <- missing) {
+          submitStage(parent)
+        }
+        waitingStages += stage//此时waitingStages=set(ResultStage 1)
+      }
+    }
+  } else {
+    abortStage(stage, "No active job for stage " + stage.id, None)
+  }
+}
+\end{codeInput}
+
+经过上节DAGScheduler对DAG Stage的划分，WordCount实例逻辑上可以形成图\ref{fig:SparkCountDetails}所示的Stage。Stage1作为submitStage的参数进入，函数先判断其是否有父Stage，有父Stage就递归提交父Stage，最后会由submitMissingTasks来完成最后的提交任务工作。submitMissingTasks函数会首先分析其包含的分区数，对于每一个分区会为其生成一个Task，然后同属于一个Stage的Task会被封装为TaskSet，最后提交给TaskScheduler。TaskSet中包含了一组处理逻辑完全相同的Task，只是作用数据不同。
+\subsection{TaskScheduler的创建}
+
+对于每个TaskScheduler都会对应一个SchedulerBackend。其中TaskScheduler负责程序的不同job之间的调度，SchedulerBackend负责与集群资源管理器进行通信，取得应用所需要的资源，并且将资源传递给TaskScheduler，由TaskScheduler为其最后分配计算资源。
+
+TaskScheduler和SchedulerBackend在SparkContext初始化的时候创建，不同的资源管理模式和部署模式下其对应的值不相同，在SparkContext初始化章节中分析了Yarn-Cluster模式下TaskScheduler和SchedulerBackend分别对应YarnClusterScheduler和YarnClusterSchedulerBackend。这里TaskScheduler和SchedulerBackend都是接口，SchedulerBackend负责分配当前可用的资源，具体就是向当前等待分配计算资源的Task分配计算资源。
+
+\subsection{Task的提交}
+
+submitMissingTasks中会通过TaskScheduler.submitTasks来提交Tasks，TaskScheduler提供的是一个接口，在不同模式下会有不同实现。在Yarn-Cluster模式下会调用TaskSchedulerImpl.submitTasks(TaskSet)，其作用首先将保存这组任务的TaskSet加入到一个TaskManager中，TaskManager会根据数据的locality aware为Task分配资源，并且也对Task的执行状态监控。接着为应用分配调度策略，主要包括FIFO和FAIR。默认情况下为FIFO，调度的单位为TaskSet，优先调度jobId小的以及先到rootPool的TaskSet。最后将调用SchedulerBackend.reviveOffers()，实际调用CoarseGrainedSchedulerBackend.reviveOffers(),接着调用CoarseGrainedSchedulerBackend.DriverEndpoint.makeOffers(),遍历出每个Executor的资源封装之后，传入TaskSchlerImpl.resourceOffers()为每个Task分配具体的Executor，分配资源部分代码如程序\ref{inputPrg:allocateRes}所示
+\begin{codeInput}{Scala}{TaskSchedulerImpl.resourceOffers}{allocateRes}
+//为了避免Task集中分配到某些机器上，随机打乱
+val shuffledOffers = Random.shuffle(offers)
+//存储分配好的Task
+val tasks = shuffledOffers.map(o => new ArrayBuffer[TaskDescription](o.cores))
+val availableCpus = shuffledOffers.map(o => o.cores).toArray
+val sortedTaskSets = rootPool.getSortedTaskSetQueue
+for (taskSet <- sortedTaskSets) {
+  taskSet.parent.name, taskSet.name, taskSet.runningTasks))
+  if (newExecAvail) {
+    taskSet.executorAdded()
+  }
+}
+var launchedTask = false
+for (taskSet <- sortedTaskSets; maxLocality <- taskSet.myLocalityLevels) {
+  do {
+    launchedTask = resourceOfferSingleTaskSet(taskSet, maxLocality, shuffledOffers, availableCpus, tasks)
+  } while (launchedTask)
+}
+if (tasks.size > 0) {
+  hasLaunchedTask = true
+}
+return tasks
+\end{codeInput}
+
+程序返回的是TaskDescription的二维数组，TaskDescription包含的是TaskId、ExecutorId和Task执行所需要的依赖环境信息等。
+
+最后调用CoarseGrainedSchedulerBackend.DriverEndPoint.launchTasks，它的输入为一个TaskDescription的二维数组，即上面程序段的返回值。此函数的作用先对TaskDescription进行序列化，然后更新Executor资源状况，空闲cpu core减去每个Task需要的cpu core，最后将Task通过Rpc发送到Executor，Executor收到这个消息后就会开始执行Task。相应的代码如程序\ref{inputPrg:driverlaunchtasks}所示
+\begin{codeInput}{Scala}{CoarseGrainedSchedulerBackend.DriverEndPoint.launchTasks}{driverlaunchtasks}
+private def launchTasks(tasks: Seq[Seq[TaskDescription]]) {
+  for (task <- tasks.flatten) {
+  val serializedTask = ser.serialize(task)
+  if (serializedTask.limit >= akkaFrameSize - AkkaUtils.reservedSizeBytes) {
+    scheduler.taskIdToTaskSetManager.get(task.taskId).foreach { taskSetMgr =>
+    try {
+      taskSetMgr.abort(msg)
+    } catch {
+      case e: Exception => logError("Exception in error callback", e)
+    }
+  }
+  }
+  else {
+    val executorData = executorDataMap(task.executorId)
+    executorData.freeCores -= scheduler.CPUS_PER_TASK
+    executorData.executorEndpoint.send(LaunchTask(new SerializableBuffer(serializedTask)))
+    }
+  }
+}
+\end{codeInput}
+
+Executor执行Task会在下一章中进行介绍。
+\subsection{Task计算结果的处理}
+\label{driverdealresult}
+Executor在执行完Task时会向Driver发送StatusUpdate的消息来通知Driver任务的状态更新未TaskState.FINISHED。Driver会通知TaskScheduler，TaskScheduler会执行TaskSchedulerImpl.statusUpdate，其代码如程序\ref{inputPrg:taskimplstatus}所示
+\begin{codeInput}{Scala}{TaskSchedulerImpl.statusUpdate}{taskimplstatus}
+taskIdToTaskSetManager.get(tid) match {
+  case Some(taskSet) => 
+    if (TaskState.isFinished(state)) {
+    taskIdToTaskSetManager.remove(tid)
+    taskIdToExecutorId.remove(tid).foreach { execId =>
+      if (executorIdToTaskCount.contains(execId)) {
+        executorIdToTaskCount(execId) -= 1
+     }
+    }
+  }
+  if (state == TaskState.FINISHED) {
+    taskSet.removeRunningTask(tid)
+    taskResultGetter.enqueueSuccessfulTask(taskSet, tid, serializedData)
+  } else if (Set(TaskState.FAILED, TaskState.KILLED, TaskState.LOST).contains(state)) {
+    taskSet.removeRunningTask(tid)
+    taskResultGetter.enqueueFailedTask(taskSet, tid, state, serializedData)
+  }
+  case None =>
+    logError(
+    ("Ignoring update with state %s for TID %s because its task set is gone (this is " +
+    "likely the result of receiving duplicate task finished status updates)")
+    .format(state, tid))
+}
+\end{codeInput}
+
+Task只有在FINISHED状态下，才会被标记为成功，其他状态为执行失败。对于成功的Task，Driver会将Task加入到成功任务队列。Executor执行Task成功返回的结果可能有两种情形，
+\begin{enumerate}[\bfseries 1]
+    \item 直接结果
+    
+    这种情况下直接返回结果即可
+    \item 非直接结果
+    
+    需要向远程worker网络获取结果，获取之后在远程节点上删除结果，这通过Spark中的BlockManager完成。
+\end{enumerate}
+
+这两种结果的产生会在下章Executor执行Task章节讲述。
+
+接着通过TaskScheduleImpl.handleSuccessfulTask来负责处理获取到的计算结果。这里调用栈如下所示
+\begin{centertitlebox}{handleSuccessfulTask调用栈}
+	(1)TaskScheduleImpl.handleSuccessfulTask\\
+	(2)TaskSetManager.handleSuccessfulTask\\
+	(3)DAGScheduler.taskEnded\\
+	(4)DAGScheduler.handleTaskCompletion
+\end{centertitlebox}
+
+其中最核心的为第4个，它会对不同的Task进行模式匹配，进行不同的处理，对于ShuffleMapTask，程序代码如程序\ref{inputPrg:shufflemaptask}所示
+\begin{codeInput}{Scala}{ShuffleMapTask结果处理}{shufflemaptask}
+case smt: ShuffleMapTask =>
+  val shuffleStage = stage.asInstanceOf[ShuffleMapStage]
+  updateAccumulators(event)
+  val status = event.result.asInstanceOf[MapStatus]
+  val execId = status.location.executorId
+  if (failedEpoch.contains(execId) && smt.epoch <= failedEpoch(execId)) {
+  } else {
+    shuffleStage.addOutputLoc(smt.partitionId, status)
+  }
+  if (runningStages.contains(shuffleStage) && shuffleStage.pendingPartitions.isEmpty) {
+    markStageAsFinished(shuffleStage)
+    mapOutputTracker.registerMapOutputs(
+    shuffleStage.shuffleDep.shuffleId,
+    shuffleStage.outputLocInMapOutputTrackerFormat(),
+    changeEpoch = true)	
+    clearCacheLocs()	
+    if (!shuffleStage.isAvailable) {
+      shuffleStage.findMissingPartitions().mkString(", "))
+      submitStage(shuffleStage)
+    } else {
+      if (shuffleStage.mapStageJobs.nonEmpty) {
+        val stats = mapOutputTracker.getStatistics(shuffleStage.shuffleDep)
+        for (job <- shuffleStage.mapStageJobs) {
+          markMapStageJobAsFinished(job, stats)
+        }
+      }
+    }
+}
+\end{codeInput}
+
+首先会将整体结果注册到MapOutputTracker中去，这样下一个Stage的Task就可以方便的获取所需数据的元数据信息。接着判断当前Stage中是否所有任务都已成功返回，如果有部分数据是空的，那证明执行该分区的Task执行失败，需要重新提交Stage；如果当前Stage执行成功并且没有父Stage，那么就通过submitWaitingStages()将waitingStage集合中的Stage提交。
+
+至此一个Stage就已经执行完成，如果Stage是ResultStage，那么一个job就执行完成了。
+
+Spark中有两种Task，ShuffleMapTask和ResultTask。ShuffleMapTask根据Task的Partition存放计算结果，而ResultTask将计算结果发送到Driver。用户程序出发action后，会调用SparkContext的runJob方法开始进行任务的提交。最后会通过DAG的事件处理器传递到DAGScheduler.handleJobSubmitted，它会首先划分Stage，然后提交Task。至此，Task开始在集群上运行了。
+Stage的开始就是从外部存储或者shuffle结果中读取数据；一个Stage的结束就是由于发生shuflle或者生成结果。

@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{n+nc}{\PYGZus{}ui} \PYG{k}{=}
+\PYG{k}{if} \PYG{o}{(}\PYG{n}{conf}\PYG{o}{.}\PYG{n}{getBoolean}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}spark.ui.enabled\PYGZdq{}}\PYG{o}{,} \PYG{k+kc}{true}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+  \PYG{n+nc}{Some}\PYG{o}{(}\PYG{n+nc}{SparkUI}\PYG{o}{.}\PYG{n}{createLiveUI}\PYG{o}{(}\PYG{k}{this}\PYG{o}{,} \PYG{n+nc}{\PYGZus{}conf}\PYG{o}{,} \PYG{n}{listenerBus}\PYG{o}{,} \PYG{n+nc}{\PYGZus{}jobProgressListener}\PYG{o}{,}
+  \PYG{n+nc}{\PYGZus{}env}\PYG{o}{.}\PYG{n}{securityManager}\PYG{o}{,} \PYG{n}{appName}\PYG{o}{,} \PYG{n}{startTime} \PYG{k}{=} \PYG{n}{startTime}\PYG{o}{))}
+\PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{// For tests, do not enable the UI}
+  \PYG{n+nc}{None}
+\PYG{o}{\PYGZcb{}}
+\PYG{n+nc}{\PYGZus{}ui}\PYG{o}{.}\PYG{n}{foreach}\PYG{o}{(}\PYG{k}{\PYGZus{}}\PYG{o}{.}\PYG{n}{bind}\PYG{o}{())}
+\end{Verbatim}

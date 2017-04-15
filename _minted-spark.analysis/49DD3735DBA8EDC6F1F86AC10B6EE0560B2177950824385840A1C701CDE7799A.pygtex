@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+cm}{/** Bind to the HTTP server behind this web interface. */}
+\PYG{k}{def} \PYG{n}{bind}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+  \PYG{n}{assert}\PYG{o}{(!}\PYG{n}{serverInfo}\PYG{o}{.}\PYG{n}{isDefined}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}Attempted to bind \PYGZpc{}s more than once!\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{o}{(}\PYG{n}{className}\PYG{o}{))}
+  \PYG{k}{try} \PYG{o}{\PYGZob{}}
+    \PYG{k}{var} \PYG{n}{host} \PYG{k}{=} \PYG{n+nc}{Option}\PYG{o}{(}\PYG{n}{conf}\PYG{o}{.}\PYG{n}{getenv}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}SPARK\PYGZus{}LOCAL\PYGZus{}IP\PYGZdq{}}\PYG{o}{)).}\PYG{n}{getOrElse}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}0.0.0.0\PYGZdq{}}\PYG{o}{)}
+    \PYG{n}{serverInfo} \PYG{k}{=} \PYG{n+nc}{Some}\PYG{o}{(}\PYG{n}{startJettyServer}\PYG{o}{(}\PYG{n}{host}\PYG{o}{,} \PYG{n}{port}\PYG{o}{,} \PYG{n}{handlers}\PYG{o}{,} \PYG{n}{conf}\PYG{o}{,} \PYG{n}{name}\PYG{o}{))}
+    \PYG{n}{logInfo}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Bound \PYGZpc{}s to \PYGZpc{}s, and started at http://\PYGZpc{}s:\PYGZpc{}d\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{o}{(}\PYG{n}{className}\PYG{o}{,} \PYG{n}{host}\PYG{o}{,}
+      \PYG{n}{publicHostName}\PYG{o}{,} \PYG{n}{boundPort}\PYG{o}{))}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{catch} \PYG{o}{\PYGZob{}}
+      \PYG{k}{case} \PYG{n}{e}\PYG{k}{:} \PYG{k+kt}{Exception} \PYG{o}{=\PYGZgt{}}
+        \PYG{n}{logError}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Failed to bind \PYGZpc{}s\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{o}{(}\PYG{n}{className}\PYG{o}{),} \PYG{n}{e}\PYG{o}{)}
+        \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{exit}\PYG{o}{(}\PYG{l+m+mi}{1}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

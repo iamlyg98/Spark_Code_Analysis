@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{override} \PYG{k}{def} \PYG{n}{fetchBlocks}\PYG{o}{(}
+\PYG{n}{host}\PYG{k}{:} \PYG{k+kt}{String}\PYG{o}{,}
+\PYG{n}{port}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{,}
+\PYG{n}{execId}\PYG{k}{:} \PYG{k+kt}{String}\PYG{o}{,}
+\PYG{n}{blockIds}\PYG{k}{:} \PYG{k+kt}{Array}\PYG{o}{[}\PYG{k+kt}{String}\PYG{o}{],}
+\PYG{n}{listener}\PYG{k}{:} \PYG{k+kt}{BlockFetchingListener}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+    \PYG{k}{val} \PYG{n}{blockFetchStarter} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{RetryingBlockFetcher}\PYG{o}{.}\PYG{n+nc}{BlockFetchStarter} \PYG{o}{\PYGZob{}}
+      \PYG{k}{override} \PYG{k}{def} \PYG{n}{createAndStart}\PYG{o}{(}\PYG{n}{blockIds}\PYG{k}{:} \PYG{k+kt}{Array}\PYG{o}{[}\PYG{k+kt}{String}\PYG{o}{],} \PYG{n}{listener}\PYG{k}{:} \PYG{k+kt}{BlockFetchingListener}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{val} \PYG{n}{client} \PYG{k}{=} \PYG{n}{clientFactory}\PYG{o}{.}\PYG{n}{createClient}\PYG{o}{(}\PYG{n}{host}\PYG{o}{,} \PYG{n}{port}\PYG{o}{)}
+        \PYG{k}{new} \PYG{n+nc}{OneForOneBlockFetcher}\PYG{o}{(}\PYG{n}{client}\PYG{o}{,} \PYG{n}{appId}\PYG{o}{,} \PYG{n}{execId}\PYG{o}{,} \PYG{n}{blockIds}\PYG{o}{.}\PYG{n}{toArray}\PYG{o}{,} \PYG{n}{listener}\PYG{o}{).}\PYG{n}{start}\PYG{o}{()}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{val} \PYG{n}{maxRetries} \PYG{k}{=} \PYG{n}{transportConf}\PYG{o}{.}\PYG{n}{maxIORetries}\PYG{o}{()}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{maxRetries} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{k}{new} \PYG{n+nc}{RetryingBlockFetcher}\PYG{o}{(}\PYG{n}{transportConf}\PYG{o}{,} \PYG{n}{blockFetchStarter}\PYG{o}{,} \PYG{n}{blockIds}\PYG{o}{,} \PYG{n}{listener}\PYG{o}{).}\PYG{n}{start}\PYG{o}{()}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+      \PYG{n}{blockFetchStarter}\PYG{o}{.}\PYG{n}{createAndStart}\PYG{o}{(}\PYG{n}{blockIds}\PYG{o}{,} \PYG{n}{listener}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

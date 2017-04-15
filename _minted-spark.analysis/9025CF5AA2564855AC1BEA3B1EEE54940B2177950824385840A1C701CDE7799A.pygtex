@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//从SparkEnv中获取shuffleManager}
+\PYG{k}{val} \PYG{n}{manager} \PYG{k}{=} \PYG{n+nc}{SparkEnv}\PYG{o}{.}\PYG{n}{get}\PYG{o}{.}\PYG{n}{shuffleManager}
+\PYG{c+c1}{//从manager中获取Writer，这里是SortShuffleWriter}
+\PYG{n}{writer} \PYG{k}{=} \PYG{n}{manager}\PYG{o}{.}\PYG{n}{getWriter}\PYG{o}{[}\PYG{k+kt}{Any}, \PYG{k+kt}{Any}\PYG{o}{](}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{shuffleHandle}\PYG{o}{,} \PYG{n}{partitionId}\PYG{o}{,} \PYG{n}{context}\PYG{o}{)}
+\PYG{c+c1}{//调用RDD开始运算，运算结果通过Writer进行持久化,之后将文件所有记录写入并创建索引文件，通过MapStatus告知下游Task}
+\PYG{n}{writer}\PYG{o}{.}\PYG{n}{write}\PYG{o}{(}\PYG{n}{rdd}\PYG{o}{.}\PYG{n}{iterator}\PYG{o}{(}\PYG{n}{partition}\PYG{o}{,} \PYG{n}{context}\PYG{o}{).}\PYG{n}{asInstanceOf}\PYG{o}{[}\PYG{k+kt}{Iterator}\PYG{o}{[}\PYG{k}{\PYGZus{}} \PYG{k}{\PYGZlt{}:} \PYG{k+kt}{Product2}\PYG{o}{[}\PYG{k+kt}{Any}, \PYG{k+kt}{Any}\PYG{o}{]]])}
+\PYG{n}{writer}\PYG{o}{.}\PYG{n}{stop}\PYG{o}{(}\PYG{n}{success} \PYG{k}{=} \PYG{k+kc}{true}\PYG{o}{).}\PYG{n}{get}
+\end{Verbatim}

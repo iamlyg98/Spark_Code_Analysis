@@ -1,0 +1,28 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{case} \PYG{l+s}{\PYGZdq{}yarn\PYGZhy{}standalone\PYGZdq{}} \PYG{o}{|} \PYG{l+s}{\PYGZdq{}yarn\PYGZhy{}cluster\PYGZdq{}} \PYG{k}{=\PYGZgt{}}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{master} \PYG{o}{==} \PYG{l+s}{\PYGZdq{}yarn\PYGZhy{}standalone\PYGZdq{}}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{logWarning}\PYG{o}{(}
+    \PYG{l+s}{\PYGZdq{}\PYGZbs{}\PYGZdq{}yarn\PYGZhy{}standalone\PYGZbs{}\PYGZdq{} is deprecated as of Spark 1.0. Use \PYGZbs{}\PYGZdq{}yarn\PYGZhy{}cluster\PYGZbs{}\PYGZdq{} instead.\PYGZdq{}}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{k}{val} \PYG{n}{scheduler} \PYG{k}{=} \PYG{k}{try} \PYG{o}{\PYGZob{}}
+    \PYG{k}{val} \PYG{n}{clazz} \PYG{k}{=} \PYG{n+nc}{Utils}\PYG{o}{.}\PYG{n}{classForName}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}org.apache.spark.scheduler.cluster.}
+\PYG{l+s}{    YarnClusterScheduler\PYGZdq{}}\PYG{o}{)}
+    \PYG{k}{val} \PYG{n}{cons} \PYG{k}{=} \PYG{n}{clazz}\PYG{o}{.}\PYG{n}{getConstructor}\PYG{o}{(}\PYG{n}{classOf}\PYG{o}{[}\PYG{k+kt}{SparkContext}\PYG{o}{])}
+    \PYG{n}{cons}\PYG{o}{.}\PYG{n}{newInstance}\PYG{o}{(}\PYG{n}{sc}\PYG{o}{).}\PYG{n}{asInstanceOf}\PYG{o}{[}\PYG{k+kt}{TaskSchedulerImpl}\PYG{o}{]}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{catch} \PYG{o}{\PYGZob{}}
+  \PYG{k}{case} \PYG{n}{e}\PYG{k}{:} \PYG{k+kt}{Exception} \PYG{o}{=\PYGZgt{}} \PYG{o}{\PYGZob{}}
+    \PYG{k}{throw} \PYG{k}{new} \PYG{n+nc}{SparkException}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}YARN mode not available ?\PYGZdq{}}\PYG{o}{,} \PYG{n}{e}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{k}{val} \PYG{n}{backend} \PYG{k}{=} \PYG{k}{try} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{clazz} \PYG{k}{=}\PYG{n+nc}{Utils}\PYG{o}{.}\PYG{n}{classForName}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}org.apache.spark.scheduler.cluster.}
+\PYG{l+s}{  YarnClusterSchedulerBackend\PYGZdq{}}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{cons} \PYG{k}{=} \PYG{n}{clazz}\PYG{o}{.}\PYG{n}{getConstructor}\PYG{o}{(}\PYG{n}{classOf}\PYG{o}{[}\PYG{k+kt}{TaskSchedulerImpl}\PYG{o}{],} \PYG{n}{classOf}\PYG{o}{[}\PYG{k+kt}{SparkContext}\PYG{o}{])}
+  \PYG{n}{cons}\PYG{o}{.}\PYG{n}{newInstance}\PYG{o}{(}\PYG{n}{scheduler}\PYG{o}{,} \PYG{n}{sc}\PYG{o}{).}\PYG{n}{asInstanceOf}\PYG{o}{[}\PYG{k+kt}{CoarseGrainedSchedulerBackend}\PYG{o}{]}
+\PYG{o}{\PYGZcb{}} \PYG{k}{catch} \PYG{o}{\PYGZob{}}
+  \PYG{o}{......}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\PYG{n}{scheduler}\PYG{o}{.}\PYG{n}{initialize}\PYG{o}{(}\PYG{n}{backend}\PYG{o}{)}
+\PYG{o}{(}\PYG{n}{backend}\PYG{o}{,} \PYG{n}{scheduler}\PYG{o}{)}
+\end{Verbatim}

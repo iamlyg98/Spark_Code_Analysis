@@ -1,0 +1,66 @@
+\contentsline {chapter}{\numberline {第1章}Spark应用启动过程分析}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}WordCount程序}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}提交WordCount程序}{2}{section.1.2}
+\contentsline {section}{\numberline {1.3}准备WordCount提交程序运行环境}{3}{section.1.3}
+\contentsline {section}{\numberline {1.4}进入Spark-Submit提交主类}{5}{section.1.4}
+\contentsline {section}{\numberline {1.5}Yarn代理的启动}{7}{section.1.5}
+\contentsline {section}{\numberline {1.6}ApplicationMaster的启动}{11}{section.1.6}
+\contentsline {section}{\numberline {1.7}Driver的启动}{12}{section.1.7}
+\contentsline {chapter}{\numberline {第2章}SparkContext的初始化}{14}{chapter.2}
+\contentsline {section}{\numberline {2.1}执行环境SparkConf}{14}{section.2.1}
+\contentsline {section}{\numberline {2.2}SparkContext综合概述}{14}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}调用栈}{15}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}监听主线ListenerBus}{15}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}元数据清理器}{16}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}可视化监控服务SparkUI}{16}{subsection.2.2.4}
+\contentsline {subsection}{\numberline {2.2.5}任务调度器}{20}{subsection.2.2.5}
+\contentsline {subsection}{\numberline {2.2.6}DAG调度器}{26}{subsection.2.2.6}
+\contentsline {chapter}{\numberline {第3章}Spark RDD创建及转换}{29}{chapter.3}
+\contentsline {section}{\numberline {3.1}Spark RDD综述}{29}{section.3.1}
+\contentsline {section}{\numberline {3.2}Spark RDD创建}{30}{section.3.2}
+\contentsline {section}{\numberline {3.3}Spark RDD转换}{30}{section.3.3}
+\contentsline {section}{\numberline {3.4}DAG的生成}{30}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}RDD中依赖}{30}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}DAG构建}{33}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}WordCount的RDD转换和DAG生成}{34}{subsection.3.4.3}
+\contentsline {chapter}{\numberline {第4章}Job运行和调度器模块}{36}{chapter.4}
+\contentsline {section}{\numberline {4.1}DagScheduler实现}{37}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Stage的划分}{37}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}实例:WordCount划分Stage}{39}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}任务调度器实现}{41}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}任务的生成}{41}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}TaskScheduler的创建}{42}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Task的提交}{42}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Task计算结果的处理}{44}{subsection.4.2.4}
+\contentsline {chapter}{\numberline {第5章}Executor执行Task}{48}{chapter.5}
+\contentsline {section}{\numberline {5.1}Executor启动}{48}{section.5.1}
+\contentsline {section}{\numberline {5.2}Task的执行}{52}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Task执行前的准备}{52}{subsection.5.2.1}
+\contentsline {subsection}{\numberline {5.2.2}执行Task}{53}{subsection.5.2.2}
+\contentsline {subsection}{\numberline {5.2.3}Task结果的处理}{57}{subsection.5.2.3}
+\contentsline {section}{\numberline {5.3}Executor生命周期}{58}{section.5.3}
+\contentsline {chapter}{\numberline {第6章}Spark Shuffle分析}{60}{chapter.6}
+\contentsline {section}{\numberline {6.1}Shuffle Writer}{61}{section.6.1}
+\contentsline {subsection}{\numberline {6.1.1}Hash Based Shuffle Write}{61}{subsection.6.1.1}
+\contentsline {subsection}{\numberline {6.1.2}Hash Based Shuffle Write存在的问题}{62}{subsection.6.1.2}
+\contentsline {subsection}{\numberline {6.1.3}Shuffle Consolidate Writer}{62}{subsection.6.1.3}
+\contentsline {subsection}{\numberline {6.1.4}Sort Based Write}{63}{subsection.6.1.4}
+\contentsline {section}{\numberline {6.2}Shuffle Read}{64}{section.6.2}
+\contentsline {subsection}{\numberline {6.2.1}reduce端读取中间计算结果}{66}{subsection.6.2.1}
+\contentsline {subsection}{\numberline {6.2.2}本地数据的获取}{68}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.3}远程数据的获取}{69}{subsection.6.2.3}
+\contentsline {subsection}{\numberline {6.2.4}Shuffle Read流程图}{70}{subsection.6.2.4}
+\contentsline {chapter}{\numberline {第7章}存储体系}{72}{chapter.7}
+\contentsline {section}{\numberline {7.1}概述}{72}{section.7.1}
+\contentsline {section}{\numberline {7.2}ShuffleClient模块}{74}{section.7.2}
+\contentsline {subsection}{\numberline {7.2.1}Block的RPC服务}{75}{subsection.7.2.1}
+\contentsline {subsection}{\numberline {7.2.2}传输上下文TransportContext}{76}{subsection.7.2.2}
+\contentsline {subsection}{\numberline {7.2.3}RPC客户端TransportClientFactory}{77}{subsection.7.2.3}
+\contentsline {subsection}{\numberline {7.2.4}Netty服务器TransportServer}{78}{subsection.7.2.4}
+\contentsline {subsection}{\numberline {7.2.5}获取远程shuffle文件}{78}{subsection.7.2.5}
+\contentsline {subsection}{\numberline {7.2.6}上传shuffle文件}{79}{subsection.7.2.6}
+\contentsline {section}{\numberline {7.3}BlockManagerMaster对BlockManager的管理}{80}{section.7.3}
+\contentsline {subsection}{\numberline {7.3.1}BlockManagerMasterEndpoint}{80}{subsection.7.3.1}
+\contentsline {subsection}{\numberline {7.3.2}BlockManagerSlaveEndpoint}{81}{subsection.7.3.2}
+\contentsline {section}{\numberline {7.4}磁盘管理器DiskBlockManager}{82}{section.7.4}
+\contentsline {section}{\numberline {7.5}内存存储MemoryStore}{83}{section.7.5}

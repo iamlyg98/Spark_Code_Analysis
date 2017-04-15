@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private} \PYG{k}{def} \PYG{n}{submitStage}\PYG{o}{(}\PYG{n}{stage}\PYG{k}{:} \PYG{k+kt}{Stage}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{jobId} \PYG{k}{=} \PYG{n}{activeJobForStage}\PYG{o}{(}\PYG{n}{stage}\PYG{o}{)}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{jobId}\PYG{o}{.}\PYG{n}{isDefined}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(!}\PYG{n}{waitingStages}\PYG{o}{(}\PYG{n}{stage}\PYG{o}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{o}{!}\PYG{n}{runningStages}\PYG{o}{(}\PYG{n}{stage}\PYG{o}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{o}{!}\PYG{n}{failedStages}\PYG{o}{(}\PYG{n}{stage}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+      \PYG{k}{val} \PYG{n}{missing} \PYG{k}{=} \PYG{n}{getMissingParentStages}\PYG{o}{(}\PYG{n}{stage}\PYG{o}{).}\PYG{n}{sortBy}\PYG{o}{(}\PYG{k}{\PYGZus{}}\PYG{o}{.}\PYG{n}{id}\PYG{o}{)} \PYG{c+c1}{//List(ShuffleMapStage[0])}
+      \PYG{k}{if} \PYG{o}{(}\PYG{n}{missing}\PYG{o}{.}\PYG{n}{isEmpty}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{n}{submitMissingTasks}\PYG{o}{(}\PYG{n}{stage}\PYG{o}{,} \PYG{n}{jobId}\PYG{o}{.}\PYG{n}{get}\PYG{o}{)}
+      \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+        \PYG{k}{for} \PYG{o}{(}\PYG{n}{parent} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{missing}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+          \PYG{n}{submitStage}\PYG{o}{(}\PYG{n}{parent}\PYG{o}{)}
+        \PYG{o}{\PYGZcb{}}
+        \PYG{n}{waitingStages} \PYG{o}{+=} \PYG{n}{stage}\PYG{c+c1}{//此时waitingStages=set(ResultStage 1)}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{n}{abortStage}\PYG{o}{(}\PYG{n}{stage}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}No active job for stage \PYGZdq{}} \PYG{o}{+} \PYG{n}{stage}\PYG{o}{.}\PYG{n}{id}\PYG{o}{,} \PYG{n+nc}{None}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

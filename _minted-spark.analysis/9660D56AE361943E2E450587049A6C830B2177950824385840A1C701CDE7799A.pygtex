@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//调用rdd的迭代器执行传入函数的操作}
+\PYG{n}{func}\PYG{o}{(}\PYG{n}{context}\PYG{o}{,} \PYG{n}{rdd}\PYG{o}{.}\PYG{n}{iterator}\PYG{o}{(}\PYG{n}{partition}\PYG{o}{,} \PYG{n}{context}\PYG{o}{))}
+\end{Verbatim}

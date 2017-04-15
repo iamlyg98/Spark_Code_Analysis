@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private} \PYG{k}{val} \PYG{n}{eventThread} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{Thread}\PYG{o}{(}\PYG{n}{name}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{n}{setDaemon}\PYG{o}{(}\PYG{k+kc}{true}\PYG{o}{)}
+  \PYG{k}{override} \PYG{k}{def} \PYG{n}{run}\PYG{o}{()}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+    \PYG{k}{try} \PYG{o}{\PYGZob{}}
+      \PYG{k}{while} \PYG{o}{(!}\PYG{n}{stopped}\PYG{o}{.}\PYG{n}{get}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{val} \PYG{n}{event} \PYG{k}{=} \PYG{n}{eventQueue}\PYG{o}{.}\PYG{n}{take}\PYG{o}{()}
+          \PYG{k}{try} \PYG{o}{\PYGZob{}}
+            \PYG{n}{onReceive}\PYG{o}{(}\PYG{n}{event}\PYG{o}{)}
+          \PYG{o}{\PYGZcb{}} \PYG{k}{catch} \PYG{o}{\PYGZob{}}
+            \PYG{k}{case} \PYG{n+nc}{NonFatal}\PYG{o}{(}\PYG{n}{e}\PYG{o}{)} \PYG{k}{=\PYGZgt{}} \PYG{o}{\PYGZob{}}
+              \PYG{o}{......}
+                \PYG{o}{\PYGZcb{}}
+              \PYG{o}{\PYGZcb{}}
+            \PYG{o}{\PYGZcb{}}
+          \PYG{o}{\PYGZcb{}} \PYG{k}{catch} \PYG{o}{\PYGZob{}}
+            \PYG{o}{......}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//   指定shuffle的类型}
+\PYG{k}{val} \PYG{n}{shortShuffleMgrNames} \PYG{k}{=} \PYG{n+nc}{Map}\PYG{o}{(}
+\PYG{l+s}{\PYGZdq{}hash\PYGZdq{}} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{l+s}{\PYGZdq{}org.apache.spark.shuffle.hash.HashShuffleManager\PYGZdq{}}\PYG{o}{,}
+\PYG{l+s}{\PYGZdq{}sort\PYGZdq{}} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{l+s}{\PYGZdq{}org.apache.spark.shuffle.sort.SortShuffleManager\PYGZdq{}}\PYG{o}{,}
+\PYG{l+s}{\PYGZdq{}tungsten\PYGZhy{}sort\PYGZdq{}} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{l+s}{\PYGZdq{}org.apache.spark.shuffle.sort.SortShuffleManager\PYGZdq{}}\PYG{o}{)}
+\PYG{k}{val} \PYG{n}{shuffleMgrName} \PYG{k}{=} \PYG{n}{conf}\PYG{o}{.}\PYG{n}{get}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}spark.shuffle.manager\PYGZdq{}}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}sort\PYGZdq{}}\PYG{o}{)}
+\PYG{k}{val} \PYG{n}{shuffleMgrClass} \PYG{k}{=} \PYG{n}{shortShuffleMgrNames}\PYG{o}{.}\PYG{n}{getOrElse}\PYG{o}{(}\PYG{n}{shuffleMgrName}\PYG{o}{.}\PYG{n}{toLowerCase}\PYG{o}{,} \PYG{n}{shuffleMgrName}\PYG{o}{)}
+\PYG{k}{val} \PYG{n}{shuffleManager} \PYG{k}{=} \PYG{n}{instantiateClass}\PYG{o}{[}\PYG{k+kt}{ShuffleManager}\PYG{o}{](}\PYG{n}{shuffleMgrClass}\PYG{o}{)}
+\end{Verbatim}

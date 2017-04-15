@@ -1,0 +1,22 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{class} \PYG{n+nc}{ShuffleDependency}\PYG{o}{[}\PYG{k+kt}{K:} \PYG{k+kt}{ClassTag}, \PYG{k+kt}{V:} \PYG{k+kt}{ClassTag}, \PYG{k+kt}{C:} \PYG{k+kt}{ClassTag}\PYG{o}{](}
+  \PYG{n+nd}{@transient} \PYG{k}{private} \PYG{k}{val} \PYG{n+nc}{\PYGZus{}rdd}\PYG{k}{:} \PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k}{\PYGZus{}} \PYG{k}{\PYGZlt{}:} \PYG{k+kt}{Product2}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}\PYG{o}{]],}
+  \PYG{k}{val} \PYG{n}{partitioner}\PYG{k}{:} \PYG{k+kt}{Partitioner}\PYG{o}{,}
+  \PYG{k}{val} \PYG{n}{serializer}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{Serializer}\PYG{o}{]} \PYG{k}{=} \PYG{n+nc}{None}\PYG{o}{,}
+  \PYG{k}{val} \PYG{n}{keyOrdering}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{Ordering}\PYG{o}{[}\PYG{k+kt}{K}\PYG{o}{]]} \PYG{k}{=} \PYG{n+nc}{None}\PYG{o}{,}
+  \PYG{k}{val} \PYG{n}{aggregator}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{Aggregator}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}, \PYG{k+kt}{C}\PYG{o}{]]} \PYG{k}{=} \PYG{n+nc}{None}\PYG{o}{,}
+  \PYG{k}{val} \PYG{n}{mapSideCombine}\PYG{k}{:} \PYG{k+kt}{Boolean} \PYG{o}{=} \PYG{k+kc}{false}\PYG{o}{)}
+    \PYG{k}{extends} \PYG{n+nc}{Dependency}\PYG{o}{[}\PYG{k+kt}{Product2}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}\PYG{o}{]]} \PYG{o}{\PYGZob{}}
+      \PYG{k}{override} \PYG{k}{def} \PYG{n}{rdd}\PYG{k}{:} \PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k+kt}{Product2}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}\PYG{o}{]]} \PYG{k}{=} \PYG{n+nc}{\PYGZus{}rdd}\PYG{o}{.}\PYG{n}{asInstanceOf}\PYG{o}{[}\PYG{k+kt}{RDD}\PYG{o}{[}\PYG{k+kt}{Product2}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}\PYG{o}{]]]}
+      \PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{spark}\PYG{o}{]} \PYG{k}{val} \PYG{n}{keyClassName}\PYG{k}{:} \PYG{k+kt}{String} \PYG{o}{=} \PYG{n}{reflect}\PYG{o}{.}\PYG{n}{classTag}\PYG{o}{[}\PYG{k+kt}{K}\PYG{o}{].}\PYG{n}{runtimeClass}\PYG{o}{.}\PYG{n}{getName}
+      \PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{spark}\PYG{o}{]} \PYG{k}{val} \PYG{n}{valueClassName}\PYG{k}{:} \PYG{k+kt}{String} \PYG{o}{=} \PYG{n}{reflect}\PYG{o}{.}\PYG{n}{classTag}\PYG{o}{[}\PYG{k+kt}{V}\PYG{o}{].}\PYG{n}{runtimeClass}\PYG{o}{.}\PYG{n}{getName}
+      \PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{spark}\PYG{o}{]} \PYG{k}{val} \PYG{n}{combinerClassName}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{String}\PYG{o}{]} \PYG{k}{=}
+      \PYG{n+nc}{Option}\PYG{o}{(}\PYG{n}{reflect}\PYG{o}{.}\PYG{n}{classTag}\PYG{o}{[}\PYG{k+kt}{C}\PYG{o}{]).}\PYG{n}{map}\PYG{o}{(}\PYG{k}{\PYGZus{}}\PYG{o}{.}\PYG{n}{runtimeClass}\PYG{o}{.}\PYG{n}{getName}\PYG{o}{)}
+      \PYG{k}{val} \PYG{n}{shuffleId}\PYG{k}{:} \PYG{k+kt}{Int} \PYG{o}{=} \PYG{n+nc}{\PYGZus{}rdd}\PYG{o}{.}\PYG{n}{context}\PYG{o}{.}\PYG{n}{newShuffleId}\PYG{o}{()}
+      \PYG{k}{val} \PYG{n}{shuffleHandle}\PYG{k}{:} \PYG{k+kt}{ShuffleHandle} \PYG{o}{=}
+       \PYG{n+nc}{\PYGZus{}rdd}\PYG{o}{.}\PYG{n}{context}\PYG{o}{.}\PYG{n}{env}\PYG{o}{.}\PYG{n}{shuffleManager}\PYG{o}{.}\PYG{n}{registerShuffle}\PYG{o}{(}
+        \PYG{n}{shuffleId}\PYG{o}{,}\PYG{n+nc}{\PYGZus{}rdd}\PYG{o}{.}\PYG{n}{partitions}\PYG{o}{.}\PYG{n}{size}\PYG{o}{,}\PYG{k}{this}\PYG{o}{)}
+      \PYG{n+nc}{\PYGZus{}rdd}\PYG{o}{.}\PYG{n}{sparkContext}\PYG{o}{.}\PYG{n}{cleaner}\PYG{o}{.}\PYG{n}{foreach}\PYG{o}{(}
+        \PYG{k}{\PYGZus{}}\PYG{o}{.}\PYG{n}{registerShuffleForCleanup}\PYG{o}{(}\PYG{k}{this}\PYG{o}{))}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}
