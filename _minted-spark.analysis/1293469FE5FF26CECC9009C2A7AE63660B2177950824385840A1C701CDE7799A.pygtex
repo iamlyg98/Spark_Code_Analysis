@@ -1,0 +1,17 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{destructiveSortedWritablePartitionedIterator}\PYG{o}{(}\PYG{n}{keyComparator}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{Comparator}\PYG{o}{[}\PYG{k+kt}{K}\PYG{o}{]])}
+\PYG{k}{:} \PYG{k+kt}{WritablePartitionedIterator} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{// 这里的partitionedDestructiveSortedIterator会根据是map或者buffer有不同的实现}
+  \PYG{k}{val} \PYG{n}{it} \PYG{k}{=} \PYG{n}{partitionedDestructiveSortedIterator}\PYG{o}{(}\PYG{n}{keyComparator}\PYG{o}{)}
+  \PYG{c+c1}{// 最后返回的是WritablePartitionedIterator，上面进行写操作的时候就是调用该迭代器中的writeNext方法}
+  \PYG{k}{new} \PYG{n+nc}{WritablePartitionedIterator} \PYG{o}{\PYGZob{}}
+    \PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{this}\PYG{o}{]} \PYG{k}{var} \PYG{n}{cur} \PYG{k}{=} \PYG{k}{if} \PYG{o}{(}\PYG{n}{it}\PYG{o}{.}\PYG{n}{hasNext}\PYG{o}{)} \PYG{n}{it}\PYG{o}{.}\PYG{n}{next}\PYG{o}{()} \PYG{k}{else} \PYG{k+kc}{null}
+    \PYG{k}{def} \PYG{n}{writeNext}\PYG{o}{(}\PYG{n}{writer}\PYG{k}{:} \PYG{k+kt}{DiskBlockObjectWriter}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+      \PYG{n}{writer}\PYG{o}{.}\PYG{n}{write}\PYG{o}{(}\PYG{n}{cur}\PYG{o}{.}\PYG{n}{\PYGZus{}1}\PYG{o}{.}\PYG{n}{\PYGZus{}2}\PYG{o}{,} \PYG{n}{cur}\PYG{o}{.}\PYG{n}{\PYGZus{}2}\PYG{o}{)}\PYG{c+c1}{//((partitionId,K),V)}
+      \PYG{n}{cur} \PYG{k}{=} \PYG{k}{if} \PYG{o}{(}\PYG{n}{it}\PYG{o}{.}\PYG{n}{hasNext}\PYG{o}{)} \PYG{n}{it}\PYG{o}{.}\PYG{n}{next}\PYG{o}{()} \PYG{k}{else} \PYG{k+kc}{null}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{def} \PYG{n}{hasNext}\PYG{o}{()}\PYG{k}{:} \PYG{k+kt}{Boolean} \PYG{o}{=} \PYG{n}{cur} \PYG{o}{!=} \PYG{k+kc}{null}
+    \PYG{k}{def} \PYG{n}{nextPartition}\PYG{o}{()}\PYG{k}{:} \PYG{k+kt}{Int} \PYG{o}{=} \PYG{n}{cur}\PYG{o}{.}\PYG{n}{\PYGZus{}1}\PYG{o}{.}\PYG{n}{\PYGZus{}1}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

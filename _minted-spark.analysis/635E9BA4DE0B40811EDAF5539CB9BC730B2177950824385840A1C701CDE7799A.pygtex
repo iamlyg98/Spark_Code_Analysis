@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{getMapSizesByExecutorId}\PYG{o}{(}\PYG{n}{shuffleId}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{,} \PYG{n}{startPartition}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{,} \PYG{n}{endPartition}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{)}
+\PYG{k}{:} \PYG{k+kt}{Seq}\PYG{o}{[(}\PYG{k+kt}{BlockManagerId}, \PYG{k+kt}{Seq}\PYG{o}{[(}\PYG{k+kt}{BlockId}, \PYG{k+kt}{Long}\PYG{o}{)])]} \PYG{k}{=} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{// 获得Map阶段输出的中间计算结果的元数据信息}
+  \PYG{k}{val} \PYG{n}{statuses} \PYG{k}{=} \PYG{n}{getStatuses}\PYG{o}{(}\PYG{n}{shuffleId}\PYG{o}{)}
+  \PYG{c+c1}{// Synchronize on the returned array because, on the driver, it gets mutated in place}
+  \PYG{c+c1}{// 将获得的元数据信息转化成形如Seq[(BlockManagerId, Seq[(BlockId, Long)])]格式的位置信息，用来读取指定的Map阶段产生的数据}
+  \PYG{n}{statuses}\PYG{o}{.}\PYG{n}{synchronized} \PYG{o}{\PYGZob{}}
+    \PYG{k}{return} \PYG{n+nc}{MapOutputTracker}\PYG{o}{.}\PYG{n}{convertMapStatuses}\PYG{o}{(}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{startPartition}\PYG{o}{,} \PYG{n}{endPartition}\PYG{o}{,} \PYG{n}{statuses}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

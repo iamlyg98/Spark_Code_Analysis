@@ -1,0 +1,41 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{insertAll}\PYG{o}{(}\PYG{n}{records}\PYG{k}{:} \PYG{k+kt}{Iterator}\PYG{o}{[}\PYG{k+kt}{Product2}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}\PYG{o}{]])}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{shouldCombine} \PYG{k}{=} \PYG{n}{aggregator}\PYG{o}{.}\PYG{n}{isDefined}
+  \PYG{c+c1}{//首先判断是否需要进行Map端的combine操作}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{shouldCombine}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{//如果需要进行Map端combine操作，使用PartitionedAppendOnlyMap作为缓存}
+    \PYG{c+c1}{// mergeValue其实就是我们用reduceByKey的时候参数值，即\PYGZus{}+\PYGZus{}}
+    \PYG{k}{val} \PYG{n}{mergeValue} \PYG{k}{=} \PYG{n}{aggregator}\PYG{o}{.}\PYG{n}{get}\PYG{o}{.}\PYG{n}{mergeValue}
+    \PYG{c+c1}{//(C, V) =\PYGZgt{} C  =\PYGZgt{}func}
+    \PYG{c+c1}{//createCombiner其实是和mergeValue一样的，都是\PYGZus{}+\PYGZus{}，但是在使用createCombiner中只传了一个参数，所以另一个参///数默认采用默认值，这里为0}
+    \PYG{k}{val} \PYG{n}{createCombiner} \PYG{k}{=} \PYG{n}{aggregator}\PYG{o}{.}\PYG{n}{get}\PYG{o}{.}\PYG{n}{createCombiner}\PYG{c+c1}{//V =\PYGZgt{} C}
+    \PYG{k}{var} \PYG{n}{kv}\PYG{k}{:} \PYG{k+kt}{Product2}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}\PYG{o}{]} \PYG{k}{=} \PYG{k+kc}{null}
+    \PYG{c+c1}{// 这个update也是一个函数，逻辑为如果某个Key已经存在记录record就使用上面获取的聚合函数进行聚合操作，}
+    \PYG{c+c1}{// 如果不存在记录，就使用createCombiner方法进行初始化操作}
+    \PYG{k}{val} \PYG{n}{update} \PYG{k}{=} \PYG{o}{(}\PYG{n}{hadValue}\PYG{k}{:} \PYG{k+kt}{Boolean}\PYG{o}{,} \PYG{n}{oldValue}\PYG{k}{:} \PYG{k+kt}{C}\PYG{o}{)} \PYG{k}{=\PYGZgt{}} \PYG{o}{\PYGZob{}}
+      \PYG{k}{if} \PYG{o}{(}\PYG{n}{hadValue}\PYG{o}{)} \PYG{n}{mergeValue}\PYG{o}{(}\PYG{n}{oldValue}\PYG{o}{,} \PYG{n}{kv}\PYG{o}{.}\PYG{n}{\PYGZus{}2}\PYG{o}{)} \PYG{k}{else} \PYG{n}{createCombiner}\PYG{o}{(}\PYG{n}{kv}\PYG{o}{.}\PYG{n}{\PYGZus{}2}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{c+c1}{//遍历所有的records}
+    \PYG{k}{while} \PYG{o}{(}\PYG{n}{records}\PYG{o}{.}\PYG{n}{hasNext}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{c+c1}{//记录spill的频率，每当read一条record的时候就会记录一次}
+      \PYG{n}{addElementsRead}\PYG{o}{()}
+      \PYG{c+c1}{//使用kv存储当前读的records}
+      \PYG{n}{kv} \PYG{k}{=} \PYG{n}{records}\PYG{o}{.}\PYG{n}{next}\PYG{o}{()}
+      \PYG{c+c1}{//对key相同的记录的value进行合并}
+      \PYG{c+c1}{//更新map中的数据，其中private var map = new PartitionedAppendOnlyMap[K, C]，}
+      \PYG{c+c1}{// 如果需要进行combine就将数据放在map中，然后在map中对数据进行更新操作}
+      \PYG{n}{map}\PYG{o}{.}\PYG{n}{changeValue}\PYG{o}{((}\PYG{n}{getPartition}\PYG{o}{(}\PYG{n}{kv}\PYG{o}{.}\PYG{n}{\PYGZus{}1}\PYG{o}{),} \PYG{n}{kv}\PYG{o}{.}\PYG{n}{\PYGZus{}1}\PYG{o}{),} \PYG{n}{update}\PYG{o}{)}
+      \PYG{c+c1}{//判断是否需要进行spill操作}
+      \PYG{n}{maybeSpillCollection}\PYG{o}{(}\PYG{n}{usingMap} \PYG{k}{=} \PYG{k+kc}{true}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{// 如果不需要进行Map端的聚合操作，就直接将记录放到buffer(PartitionedPairBuffer)中}
+    \PYG{k}{while} \PYG{o}{(}\PYG{n}{records}\PYG{o}{.}\PYG{n}{hasNext}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{n}{addElementsRead}\PYG{o}{()}
+      \PYG{k}{val} \PYG{n}{kv} \PYG{k}{=} \PYG{n}{records}\PYG{o}{.}\PYG{n}{next}\PYG{o}{()}
+      \PYG{n}{buffer}\PYG{o}{.}\PYG{n}{insert}\PYG{o}{(}\PYG{n}{getPartition}\PYG{o}{(}\PYG{n}{kv}\PYG{o}{.}\PYG{n}{\PYGZus{}1}\PYG{o}{),} \PYG{n}{kv}\PYG{o}{.}\PYG{n}{\PYGZus{}1}\PYG{o}{,} \PYG{n}{kv}\PYG{o}{.}\PYG{n}{\PYGZus{}2}\PYG{o}{.}\PYG{n}{asInstanceOf}\PYG{o}{[}\PYG{k+kt}{C}\PYG{o}{])}
+      \PYG{n}{maybeSpillCollection}\PYG{o}{(}\PYG{n}{usingMap} \PYG{k}{=} \PYG{k+kc}{false}\PYG{o}{)}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

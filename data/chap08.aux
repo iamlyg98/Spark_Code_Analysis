@@ -8,7 +8,7 @@
 \newlabel{inputPrg:shuffleManager@cref}{{[tcb@cnt@codeInput][1][6]6.1}{61}}
 \newlabel{inputPrg:runTaskGetShuffleManager}{{6.2}{62}{Spark Shuffle分析}{tcb@cnt@codeInput.6.2}{}}
 \newlabel{inputPrg:runTaskGetShuffleManager@cref}{{[tcb@cnt@codeInput][2][6]6.2}{62}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Shuffle Writer}{62}{section.6.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Shuffle Writer历史版本}{62}{section.6.1}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1.1}Hash Based Shuffle Write}{62}{subsection.6.1.1}}
 \FN@pp@footnote@aux{8}{62}
 \@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces 早期的ShuffleWriter工作原理\relax }}{63}{figure.caption.22}}
@@ -25,29 +25,73 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Sort Base Shuffle工作原理\relax }}{65}{figure.caption.24}}
 \newlabel{fig:sortshuffle}{{6.3}{65}{Sort Base Shuffle工作原理\relax }{figure.caption.24}{}}
 \newlabel{fig:sortshuffle@cref}{{[figure][3][6]6.3}{65}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Shuffle Read}{65}{section.6.2}}
-\newlabel{inputPrg:shuffleReader}{{6.3}{66}{Shuffle Read}{tcb@cnt@codeInput.6.3}{}}
-\newlabel{inputPrg:shuffleReader@cref}{{[tcb@cnt@codeInput][3][6]6.3}{66}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}reduce端读取中间计算结果}{67}{subsection.6.2.1}}
-\newlabel{inputPrg:spiltLocalRemoteBlocks}{{6.4}{67}{reduce端读取中间计算结果}{tcb@cnt@codeInput.6.4}{}}
-\newlabel{inputPrg:spiltLocalRemoteBlocks@cref}{{[tcb@cnt@codeInput][4][6]6.4}{67}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}本地数据的获取}{69}{subsection.6.2.2}}
-\newlabel{inputPrg:getLocalBlocks}{{6.5}{69}{本地数据的获取}{tcb@cnt@codeInput.6.5}{}}
-\newlabel{inputPrg:getLocalBlocks@cref}{{[tcb@cnt@codeInput][5][6]6.5}{69}}
-\newlabel{inputPrg:sortShuffleGetBlockData}{{6.6}{70}{本地数据的获取}{tcb@cnt@codeInput.6.6}{}}
-\newlabel{inputPrg:sortShuffleGetBlockData@cref}{{[tcb@cnt@codeInput][6][6]6.6}{70}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.3}远程数据的获取}{70}{subsection.6.2.3}}
-\newlabel{inputPrg:fetchRemoteBlocks}{{6.7}{70}{远程数据的获取}{tcb@cnt@codeInput.6.7}{}}
-\newlabel{inputPrg:fetchRemoteBlocks@cref}{{[tcb@cnt@codeInput][7][6]6.7}{70}}
-\newlabel{inputPrg:shuffleClient}{{6.8}{71}{远程数据的获取}{tcb@cnt@codeInput.6.8}{}}
-\newlabel{inputPrg:shuffleClient@cref}{{[tcb@cnt@codeInput][8][6]6.8}{71}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.4}Shuffle Read流程图}{71}{subsection.6.2.4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces shuffleread详细实现\relax }}{72}{figure.caption.25}}
-\newlabel{fig:shuffleread}{{6.4}{72}{shuffleread详细实现\relax }{figure.caption.25}{}}
-\newlabel{fig:shuffleread@cref}{{[figure][4][6]6.4}{72}}
-\FN@pp@footnotehinttrue 
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Spark1.6版本Shuffle Write}{65}{section.6.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}BaseShuffleHandle 对应 SortShuffleWriter}{65}{subsection.6.2.1}}
+\newlabel{inputPrg:sortShuffleWriter}{{6.3}{66}{BaseShuffleHandle 对应 SortShuffleWriter}{tcb@cnt@codeInput.6.3}{}}
+\newlabel{inputPrg:sortShuffleWriter@cref}{{[tcb@cnt@codeInput][3][6]6.3}{66}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}实例化ExternalSorter}{67}{subsection.6.2.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces ReduceByKey算子\relax }}{67}{figure.caption.25}}
+\newlabel{fig:instantiateExternalSorter}{{6.4}{67}{ReduceByKey算子\relax }{figure.caption.25}{}}
+\newlabel{fig:instantiateExternalSorter@cref}{{[figure][4][6]6.4}{67}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.3}shuffle写操作}{67}{subsection.6.2.3}}
+\newlabel{inputPrg:insertAll}{{6.4}{68}{shuffle写操作}{tcb@cnt@codeInput.6.4}{}}
+\newlabel{inputPrg:insertAll@cref}{{[tcb@cnt@codeInput][4][6]6.4}{68}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces Map和Buffer类图\relax }}{69}{figure.caption.26}}
+\newlabel{fig:mapAndBuffer}{{6.5}{69}{Map和Buffer类图\relax }{figure.caption.26}{}}
+\newlabel{fig:mapAndBuffer@cref}{{[figure][5][6]6.5}{69}}
+\newlabel{inputPrg:mapChangeValue}{{6.5}{70}{shuffle写操作}{tcb@cnt@codeInput.6.5}{}}
+\newlabel{inputPrg:mapChangeValue@cref}{{[tcb@cnt@codeInput][5][6]6.5}{70}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.4}shuffle结果本地缓存}{71}{subsection.6.2.4}}
+\newlabel{inputPrg:cachePartitionFile}{{6.6}{71}{shuffle结果本地缓存}{tcb@cnt@codeInput.6.6}{}}
+\newlabel{inputPrg:cachePartitionFile@cref}{{[tcb@cnt@codeInput][6][6]6.6}{71}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.4.1}写分区文件}{72}{subsubsection.6.2.4.1}}
+\newlabel{inputPrg:writePartitionFile}{{6.7}{72}{写分区文件}{tcb@cnt@codeInput.6.7}{}}
+\newlabel{inputPrg:writePartitionFile@cref}{{[tcb@cnt@codeInput][7][6]6.7}{72}}
+\newlabel{inputPrg:destructiveSortedWritablePartitionedIterator}{{6.8}{74}{写分区文件}{tcb@cnt@codeInput.6.8}{}}
+\newlabel{inputPrg:destructiveSortedWritablePartitionedIterator@cref}{{[tcb@cnt@codeInput][8][6]6.8}{74}}
+\newlabel{inputPrg:PartitionedAppendOnlyMapIter}{{6.9}{74}{写分区文件}{tcb@cnt@codeInput.6.9}{}}
+\newlabel{inputPrg:PartitionedAppendOnlyMapIter@cref}{{[tcb@cnt@codeInput][9][6]6.9}{74}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.4.2}写索引文件}{75}{subsubsection.6.2.4.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.5}BypassMergeSortShuffleHandle对应BypassMergeSortShuffleWriter}{75}{subsection.6.2.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.6}SerializedShuffleHandle对应UnsafeShuffleWriter}{75}{subsection.6.2.6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.7}Shuffle Write流程图}{76}{subsection.6.2.7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.6}{\ignorespaces SortShuffleWriter流程图\relax }}{76}{figure.caption.27}}
+\newlabel{fig:sortShuffleWriter}{{6.6}{76}{SortShuffleWriter流程图\relax }{figure.caption.27}{}}
+\newlabel{fig:sortShuffleWriter@cref}{{[figure][6][6]6.6}{76}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Spark1.6版本Shuffle Read}{77}{section.6.3}}
+\newlabel{inputPrg:shuffleReader}{{6.10}{77}{Spark1.6版本Shuffle Read}{tcb@cnt@codeInput.6.10}{}}
+\newlabel{inputPrg:shuffleReader@cref}{{[tcb@cnt@codeInput][10][6]6.10}{77}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.1}shuffleClient}{79}{subsection.6.3.1}}
+\newlabel{inputPrg:shuffleClientInitial}{{6.11}{79}{shuffleClient}{tcb@cnt@codeInput.6.11}{}}
+\newlabel{inputPrg:shuffleClientInitial@cref}{{[tcb@cnt@codeInput][11][6]6.11}{79}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.2}元数据获取}{80}{subsection.6.3.2}}
+\newlabel{inputPrg:mapOutputTracker}{{6.12}{80}{元数据获取}{tcb@cnt@codeInput.6.12}{}}
+\newlabel{inputPrg:mapOutputTracker@cref}{{[tcb@cnt@codeInput][12][6]6.12}{80}}
+\newlabel{inputPrg:getStatus}{{6.13}{80}{元数据获取}{tcb@cnt@codeInput.6.13}{}}
+\newlabel{inputPrg:getStatus@cref}{{[tcb@cnt@codeInput][13][6]6.13}{80}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.3}根据元数据信息抓取数据}{82}{subsection.6.3.3}}
+\newlabel{inputPrg:ShuffleBlockFetcherIteratorInitialize}{{6.14}{82}{根据元数据信息抓取数据}{tcb@cnt@codeInput.6.14}{}}
+\newlabel{inputPrg:ShuffleBlockFetcherIteratorInitialize@cref}{{[tcb@cnt@codeInput][14][6]6.14}{82}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.4}reduce端读取中间计算结果}{83}{subsection.6.3.4}}
+\newlabel{inputPrg:spiltLocalRemoteBlocks}{{6.15}{83}{reduce端读取中间计算结果}{tcb@cnt@codeInput.6.15}{}}
+\newlabel{inputPrg:spiltLocalRemoteBlocks@cref}{{[tcb@cnt@codeInput][15][6]6.15}{83}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.5}本地数据的获取}{85}{subsection.6.3.5}}
+\newlabel{inputPrg:getLocalBlocks}{{6.16}{85}{本地数据的获取}{tcb@cnt@codeInput.6.16}{}}
+\newlabel{inputPrg:getLocalBlocks@cref}{{[tcb@cnt@codeInput][16][6]6.16}{85}}
+\newlabel{inputPrg:sortShuffleGetBlockData}{{6.17}{85}{本地数据的获取}{tcb@cnt@codeInput.6.17}{}}
+\newlabel{inputPrg:sortShuffleGetBlockData@cref}{{[tcb@cnt@codeInput][17][6]6.17}{85}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.6}远程数据的获取}{86}{subsection.6.3.6}}
+\newlabel{inputPrg:fetchRemoteBlocks}{{6.18}{86}{远程数据的获取}{tcb@cnt@codeInput.6.18}{}}
+\newlabel{inputPrg:fetchRemoteBlocks@cref}{{[tcb@cnt@codeInput][18][6]6.18}{86}}
+\newlabel{inputPrg:shuffleClient}{{6.19}{87}{远程数据的获取}{tcb@cnt@codeInput.6.19}{}}
+\newlabel{inputPrg:shuffleClient@cref}{{[tcb@cnt@codeInput][19][6]6.19}{87}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.7}BlockStoreShuffleReader.read方法}{88}{subsection.6.3.7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.8}Shuffle Read流程图}{88}{subsection.6.3.8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.7}{\ignorespaces shuffleread详细实现\relax }}{89}{figure.caption.28}}
+\newlabel{fig:shuffleread}{{6.7}{89}{shuffleread详细实现\relax }{figure.caption.28}{}}
+\newlabel{fig:shuffleread@cref}{{[figure][7][6]6.7}{89}}
 \@setckpt{data/chap08}{
-\setcounter{page}{73}
+\setcounter{page}{90}
 \setcounter{equation}{0}
 \setcounter{enumi}{9}
 \setcounter{enumii}{2}
@@ -57,12 +101,12 @@
 \setcounter{mpfootnote}{0}
 \setcounter{part}{0}
 \setcounter{chapter}{6}
-\setcounter{section}{2}
-\setcounter{subsection}{4}
+\setcounter{section}{3}
+\setcounter{subsection}{8}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{4}
+\setcounter{figure}{7}
 \setcounter{table}{0}
 \setcounter{parentequation}{0}
 \setcounter{ContinuedFloat}{0}
@@ -71,15 +115,15 @@
 \setcounter{AM@survey}{0}
 \setcounter{pp@next@reset}{11}
 \setcounter{@fnserial}{10}
-\setcounter{endNonectr}{18}
+\setcounter{endNonectr}{22}
 \setcounter{currNonectr}{0}
 \setcounter{LT@tables}{0}
 \setcounter{LT@chunks}{0}
 \setcounter{NAT@ctr}{0}
-\setcounter{Item}{43}
+\setcounter{Item}{55}
 \setcounter{Hfootnote}{10}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{53}
+\setcounter{bookmark@seq@number}{65}
 \setcounter{thu@bookmark}{1}
 \setcounter{translationbibi}{0}
 \setcounter{publicationsi}{0}
@@ -126,23 +170,23 @@
 \setcounter{float@type}{32}
 \setcounter{FancyVerbLine}{11}
 \setcounter{linenumber}{1}
-\setcounter{LN@truepage}{76}
+\setcounter{LN@truepage}{93}
 \setcounter{FV@TrueTabGroupLevel}{0}
 \setcounter{FV@TrueTabCounter}{0}
 \setcounter{FV@HighlightLinesStart}{0}
 \setcounter{FV@HighlightLinesStop}{0}
 \setcounter{FancyVerbLineBreakLast}{2}
 \setcounter{minted@FancyVerbLineTemp}{0}
-\setcounter{minted@pygmentizecounter}{48}
+\setcounter{minted@pygmentizecounter}{59}
 \setcounter{listing}{0}
 \setcounter{lstnumber}{19}
-\setcounter{tcbbreakpart}{1}
+\setcounter{tcbbreakpart}{2}
 \setcounter{tcblayer}{0}
 \setcounter{tcbrastercolumn}{0}
 \setcounter{tcbrasterrow}{0}
 \setcounter{tcbraster}{0}
-\setcounter{tcblisting}{48}
-\setcounter{tcb@cnt@codeInput}{8}
+\setcounter{tcblisting}{59}
+\setcounter{tcb@cnt@codeInput}{19}
 \setcounter{section@level}{2}
 \setcounter{lstlisting}{0}
 }

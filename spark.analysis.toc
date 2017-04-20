@@ -40,28 +40,42 @@
 \contentsline {subsection}{\numberline {5.2.3}Task结果的处理}{58}{subsection.5.2.3}
 \contentsline {section}{\numberline {5.3}Executor生命周期}{59}{section.5.3}
 \contentsline {chapter}{\numberline {第6章}Spark Shuffle分析}{61}{chapter.6}
-\contentsline {section}{\numberline {6.1}Shuffle Writer}{62}{section.6.1}
+\contentsline {section}{\numberline {6.1}Shuffle Writer历史版本}{62}{section.6.1}
 \contentsline {subsection}{\numberline {6.1.1}Hash Based Shuffle Write}{62}{subsection.6.1.1}
 \contentsline {subsection}{\numberline {6.1.2}Hash Based Shuffle Write存在的问题}{63}{subsection.6.1.2}
 \contentsline {subsection}{\numberline {6.1.3}Shuffle Consolidate Writer}{63}{subsection.6.1.3}
 \contentsline {subsection}{\numberline {6.1.4}Sort Based Write}{64}{subsection.6.1.4}
-\contentsline {section}{\numberline {6.2}Shuffle Read}{65}{section.6.2}
-\contentsline {subsection}{\numberline {6.2.1}reduce端读取中间计算结果}{67}{subsection.6.2.1}
-\contentsline {subsection}{\numberline {6.2.2}本地数据的获取}{69}{subsection.6.2.2}
-\contentsline {subsection}{\numberline {6.2.3}远程数据的获取}{70}{subsection.6.2.3}
-\contentsline {subsection}{\numberline {6.2.4}Shuffle Read流程图}{71}{subsection.6.2.4}
-\contentsline {chapter}{\numberline {第7章}存储体系}{73}{chapter.7}
-\contentsline {section}{\numberline {7.1}概述}{73}{section.7.1}
-\contentsline {section}{\numberline {7.2}ShuffleClient模块}{75}{section.7.2}
-\contentsline {subsection}{\numberline {7.2.1}Block的RPC服务}{76}{subsection.7.2.1}
-\contentsline {subsection}{\numberline {7.2.2}传输上下文TransportContext}{77}{subsection.7.2.2}
-\contentsline {subsection}{\numberline {7.2.3}RPC客户端TransportClientFactory}{78}{subsection.7.2.3}
-\contentsline {subsection}{\numberline {7.2.4}Netty服务器TransportServer}{79}{subsection.7.2.4}
-\contentsline {subsection}{\numberline {7.2.5}获取远程shuffle文件}{79}{subsection.7.2.5}
-\contentsline {subsection}{\numberline {7.2.6}上传shuffle文件}{80}{subsection.7.2.6}
-\contentsline {section}{\numberline {7.3}BlockManagerMaster对BlockManager的管理}{81}{section.7.3}
-\contentsline {subsection}{\numberline {7.3.1}BlockManagerMasterEndpoint}{81}{subsection.7.3.1}
-\contentsline {subsection}{\numberline {7.3.2}BlockManagerSlaveEndpoint}{82}{subsection.7.3.2}
-\contentsline {section}{\numberline {7.4}磁盘管理器DiskBlockManager}{83}{section.7.4}
-\contentsline {section}{\numberline {7.5}内存存储MemoryStore}{84}{section.7.5}
-\contentsline {section}{\numberline {7.6}磁盘存储DiskStore}{85}{section.7.6}
+\contentsline {section}{\numberline {6.2}Spark1.6版本Shuffle Write}{65}{section.6.2}
+\contentsline {subsection}{\numberline {6.2.1}BaseShuffleHandle 对应 SortShuffleWriter}{65}{subsection.6.2.1}
+\contentsline {subsection}{\numberline {6.2.2}实例化ExternalSorter}{67}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.3}shuffle写操作}{67}{subsection.6.2.3}
+\contentsline {subsection}{\numberline {6.2.4}shuffle结果本地缓存}{71}{subsection.6.2.4}
+\contentsline {subsubsection}{\numberline {6.2.4.1}写分区文件}{72}{subsubsection.6.2.4.1}
+\contentsline {subsubsection}{\numberline {6.2.4.2}写索引文件}{75}{subsubsection.6.2.4.2}
+\contentsline {subsection}{\numberline {6.2.5}BypassMergeSortShuffleHandle对应BypassMergeSortShuffleWriter}{75}{subsection.6.2.5}
+\contentsline {subsection}{\numberline {6.2.6}SerializedShuffleHandle对应UnsafeShuffleWriter}{75}{subsection.6.2.6}
+\contentsline {subsection}{\numberline {6.2.7}Shuffle Write流程图}{76}{subsection.6.2.7}
+\contentsline {section}{\numberline {6.3}Spark1.6版本Shuffle Read}{77}{section.6.3}
+\contentsline {subsection}{\numberline {6.3.1}shuffleClient}{79}{subsection.6.3.1}
+\contentsline {subsection}{\numberline {6.3.2}元数据获取}{80}{subsection.6.3.2}
+\contentsline {subsection}{\numberline {6.3.3}根据元数据信息抓取数据}{82}{subsection.6.3.3}
+\contentsline {subsection}{\numberline {6.3.4}reduce端读取中间计算结果}{83}{subsection.6.3.4}
+\contentsline {subsection}{\numberline {6.3.5}本地数据的获取}{85}{subsection.6.3.5}
+\contentsline {subsection}{\numberline {6.3.6}远程数据的获取}{86}{subsection.6.3.6}
+\contentsline {subsection}{\numberline {6.3.7}BlockStoreShuffleReader.read方法}{88}{subsection.6.3.7}
+\contentsline {subsection}{\numberline {6.3.8}Shuffle Read流程图}{88}{subsection.6.3.8}
+\contentsline {chapter}{\numberline {第7章}存储体系}{90}{chapter.7}
+\contentsline {section}{\numberline {7.1}概述}{90}{section.7.1}
+\contentsline {section}{\numberline {7.2}ShuffleClient模块}{92}{section.7.2}
+\contentsline {subsection}{\numberline {7.2.1}Block的RPC服务}{93}{subsection.7.2.1}
+\contentsline {subsection}{\numberline {7.2.2}传输上下文TransportContext}{94}{subsection.7.2.2}
+\contentsline {subsection}{\numberline {7.2.3}RPC客户端TransportClientFactory}{95}{subsection.7.2.3}
+\contentsline {subsection}{\numberline {7.2.4}Netty服务器TransportServer}{96}{subsection.7.2.4}
+\contentsline {subsection}{\numberline {7.2.5}获取远程shuffle文件}{96}{subsection.7.2.5}
+\contentsline {subsection}{\numberline {7.2.6}上传shuffle文件}{97}{subsection.7.2.6}
+\contentsline {section}{\numberline {7.3}BlockManagerMaster对BlockManager的管理}{98}{section.7.3}
+\contentsline {subsection}{\numberline {7.3.1}BlockManagerMasterEndpoint}{98}{subsection.7.3.1}
+\contentsline {subsection}{\numberline {7.3.2}BlockManagerSlaveEndpoint}{99}{subsection.7.3.2}
+\contentsline {section}{\numberline {7.4}磁盘管理器DiskBlockManager}{100}{section.7.4}
+\contentsline {section}{\numberline {7.5}内存存储MemoryStore}{101}{section.7.5}
+\contentsline {section}{\numberline {7.6}磁盘存储DiskStore}{102}{section.7.6}

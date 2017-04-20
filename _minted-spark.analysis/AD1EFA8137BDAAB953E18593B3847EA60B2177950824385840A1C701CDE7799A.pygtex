@@ -1,0 +1,46 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{writePartitionedFile}\PYG{o}{(}
+\PYG{n}{blockId}\PYG{k}{:} \PYG{k+kt}{BlockId}\PYG{o}{,}
+\PYG{n}{outputFile}\PYG{k}{:} \PYG{k+kt}{File}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Array}\PYG{o}{[}\PYG{k+kt}{Long}\PYG{o}{]} \PYG{k}{=} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{lengths} \PYG{k}{=} \PYG{k}{new} \PYG{n+nc}{Array}\PYG{o}{[}\PYG{k+kt}{Long}\PYG{o}{](}\PYG{n}{numPartitions}\PYG{o}{)}
+  \PYG{c+c1}{//首先判断是否有数据已经spill到磁盘了}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{spills}\PYG{o}{.}\PYG{n}{isEmpty}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{//当只有内存中有数据时}
+    \PYG{k}{val} \PYG{n}{collection} \PYG{k}{=} \PYG{k}{if} \PYG{o}{(}\PYG{n}{aggregator}\PYG{o}{.}\PYG{n}{isDefined}\PYG{o}{)} \PYG{n}{map} \PYG{k}{else} \PYG{n}{buffer}
+    \PYG{c+c1}{// 获得迭代器}
+    \PYG{k}{val} \PYG{n}{it} \PYG{k}{=} \PYG{n}{collection}\PYG{o}{.}\PYG{n}{destructiveSortedWritablePartitionedIterator}\PYG{o}{(}\PYG{n}{comparator}\PYG{o}{)}
+    \PYG{c+c1}{//进行迭代并将数据写到磁盘}
+    \PYG{k}{while} \PYG{o}{(}\PYG{n}{it}\PYG{o}{.}\PYG{n}{hasNext}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{k}{val} \PYG{n}{writer} \PYG{k}{=} \PYG{n}{blockManager}\PYG{o}{.}\PYG{n}{getDiskWriter}\PYG{o}{(}\PYG{n}{blockId}\PYG{o}{,} \PYG{n}{outputFile}\PYG{o}{,} \PYG{n}{serInstance}\PYG{o}{,} \PYG{n}{fileBufferSize}\PYG{o}{,}\PYG{n}{context}\PYG{o}{.}\PYG{n}{taskMetrics}\PYG{o}{.}\PYG{n}{shuffleWriteMetrics}\PYG{o}{.}\PYG{n}{get}\PYG{o}{)}
+      \PYG{k}{val} \PYG{n}{partitionId} \PYG{k}{=} \PYG{n}{it}\PYG{o}{.}\PYG{n}{nextPartition}\PYG{o}{()}
+      \PYG{k}{while} \PYG{o}{(}\PYG{n}{it}\PYG{o}{.}\PYG{n}{hasNext} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{it}\PYG{o}{.}\PYG{n}{nextPartition}\PYG{o}{()} \PYG{o}{==} \PYG{n}{partitionId}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{c+c1}{//把同一个分区的记录写到一块 并返回该blockId中该partitionId的长度}
+        \PYG{n}{it}\PYG{o}{.}\PYG{n}{writeNext}\PYG{o}{(}\PYG{n}{writer}\PYG{o}{)}
+      \PYG{o}{\PYGZcb{}}
+      \PYG{n}{writer}\PYG{o}{.}\PYG{n}{commitAndClose}\PYG{o}{()}
+      \PYG{k}{val} \PYG{n}{segment} \PYG{k}{=} \PYG{n}{writer}\PYG{o}{.}\PYG{n}{fileSegment}\PYG{o}{()}
+      \PYG{c+c1}{//最后返回的是每个partition写入数据的长度}
+      \PYG{n}{lengths}\PYG{o}{(}\PYG{n}{partitionId}\PYG{o}{)} \PYG{k}{=} \PYG{n}{segment}\PYG{o}{.}\PYG{n}{length}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{//需要持久化到硬盘中的情况，在调用partitionedIterator方法后，会对应的partition中的已经combine过的数据}
+    \PYG{k}{for} \PYG{o}{((}\PYG{n}{id}\PYG{o}{,} \PYG{n}{elements}\PYG{o}{)} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{k}{this}\PYG{o}{.}\PYG{n}{partitionedIterator}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{k}{if} \PYG{o}{(}\PYG{n}{elements}\PYG{o}{.}\PYG{n}{hasNext}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{val} \PYG{n}{writer} \PYG{k}{=} \PYG{n}{blockManager}\PYG{o}{.}\PYG{n}{getDiskWriter}\PYG{o}{(}\PYG{n}{blockId}\PYG{o}{,} \PYG{n}{outputFile}\PYG{o}{,} \PYG{n}{serInstance}\PYG{o}{,} \PYG{n}{fileBufferSize}\PYG{o}{,}
+        \PYG{n}{context}\PYG{o}{.}\PYG{n}{taskMetrics}\PYG{o}{.}\PYG{n}{shuffleWriteMetrics}\PYG{o}{.}\PYG{n}{get}\PYG{o}{)}
+        \PYG{c+c1}{//将partition中的数据写入data文件}
+        \PYG{k}{for} \PYG{o}{(}\PYG{n}{elem} \PYG{k}{\PYGZlt{}\PYGZhy{}} \PYG{n}{elements}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+          \PYG{n}{writer}\PYG{o}{.}\PYG{n}{write}\PYG{o}{(}\PYG{n}{elem}\PYG{o}{.}\PYG{n}{\PYGZus{}1}\PYG{o}{,} \PYG{n}{elem}\PYG{o}{.}\PYG{n}{\PYGZus{}2}\PYG{o}{)}
+        \PYG{o}{\PYGZcb{}}
+        \PYG{n}{writer}\PYG{o}{.}\PYG{n}{commitAndClose}\PYG{o}{()}
+        \PYG{k}{val} \PYG{n}{segment} \PYG{k}{=} \PYG{n}{writer}\PYG{o}{.}\PYG{n}{fileSegment}\PYG{o}{()}
+        \PYG{c+c1}{//最后返回的是每个partition写入数据的长度}
+        \PYG{n}{lengths}\PYG{o}{(}\PYG{n}{id}\PYG{o}{)} \PYG{k}{=} \PYG{n}{segment}\PYG{o}{.}\PYG{n}{length}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}}
+\PYG{c+c1}{//更改task测量系统中的参数值}
+\PYG{o}{......}
+\PYG{n}{lengths}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

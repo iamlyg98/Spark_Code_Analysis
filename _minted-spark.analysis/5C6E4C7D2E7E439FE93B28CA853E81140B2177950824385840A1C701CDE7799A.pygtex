@@ -1,0 +1,50 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private} \PYG{k}{def} \PYG{n}{getStatuses}\PYG{o}{(}\PYG{n}{shuffleId}\PYG{k}{:} \PYG{k+kt}{Int}\PYG{o}{)}\PYG{k}{:} \PYG{k+kt}{Array}\PYG{o}{[}\PYG{k+kt}{MapStatus}\PYG{o}{]} \PYG{k}{=} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{// 根据shuffleId获得MapStatus组成的数组：Array[MapStatus]}
+  \PYG{k}{val} \PYG{n}{statuses} \PYG{k}{=} \PYG{n}{mapStatuses}\PYG{o}{.}\PYG{n}{get}\PYG{o}{(}\PYG{n}{shuffleId}\PYG{o}{).}\PYG{n}{orNull}
+  \PYG{k}{if} \PYG{o}{(}\PYG{n}{statuses} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{//如果没有获取就进行fetch操作}
+    \PYG{k}{val} \PYG{n}{startTime} \PYG{k}{=} \PYG{n+nc}{System}\PYG{o}{.}\PYG{n}{currentTimeMillis}
+    \PYG{c+c1}{// 用来保存fetch来的MapStatus}
+    \PYG{k}{var} \PYG{n}{fetchedStatuses}\PYG{k}{:} \PYG{k+kt}{Array}\PYG{o}{[}\PYG{k+kt}{MapStatus}\PYG{o}{]} \PYG{k}{=} \PYG{k+kc}{null}
+    \PYG{n}{fetching}\PYG{o}{.}\PYG{n}{synchronized} \PYG{o}{\PYGZob{}}
+      \PYG{c+c1}{//其他线程正在请求该shuffleId对应的信息，等待其他线程完成}
+      \PYG{k}{while} \PYG{o}{(}\PYG{n}{fetching}\PYG{o}{.}\PYG{n}{contains}\PYG{o}{(}\PYG{n}{shuffleId}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+        \PYG{k}{try} \PYG{o}{\PYGZob{}}
+          \PYG{n}{fetching}\PYG{o}{.}\PYG{n}{wait}\PYG{o}{()}
+        \PYG{o}{\PYGZcb{}} \PYG{k}{catch} \PYG{o}{\PYGZob{}}
+          \PYG{k}{case} \PYG{n}{e}\PYG{k}{:} \PYG{k+kt}{InterruptedException} \PYG{o}{=\PYGZgt{}}
+        \PYG{o}{\PYGZcb{}}
+      \PYG{o}{\PYGZcb{}}
+      \PYG{n}{fetchedStatuses} \PYG{k}{=} \PYG{n}{mapStatuses}\PYG{o}{.}\PYG{n}{get}\PYG{o}{(}\PYG{n}{shuffleId}\PYG{o}{).}\PYG{n}{orNull}
+      \PYG{k}{if} \PYG{o}{(}\PYG{n}{fetchedStatuses} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{n}{fetching} \PYG{o}{+=} \PYG{n}{shuffleId}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{fetchedStatuses} \PYG{o}{==} \PYG{k+kc}{null}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{c+c1}{// 如果得到了fetch的权利就进行抓取}
+      \PYG{k}{try} \PYG{o}{\PYGZob{}}
+        \PYG{c+c1}{// 调用askTracker方法发送消息，消息的格式为GetMapOutputStatuses(shuffleId)}
+        \PYG{k}{val} \PYG{n}{fetchedBytes} \PYG{k}{=} \PYG{n}{askTracker}\PYG{o}{[}\PYG{k+kt}{Array}\PYG{o}{[}\PYG{k+kt}{Byte}\PYG{o}{]](}\PYG{n+nc}{GetMapOutputStatuses}\PYG{o}{(}\PYG{n}{shuffleId}\PYG{o}{))}
+        \PYG{c+c1}{//MapOutputTrackerMaster返回元数据信息并逆序列化}
+        \PYG{n}{fetchedStatuses} \PYG{k}{=} \PYG{n+nc}{MapOutputTracker}\PYG{o}{.}\PYG{n}{deserializeMapStatuses}\PYG{o}{(}\PYG{n}{fetchedBytes}\PYG{o}{)}
+        \PYG{c+c1}{// 保存到本地的mapStatuses中}
+        \PYG{n}{mapStatuses}\PYG{o}{.}\PYG{n}{put}\PYG{o}{(}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{fetchedStatuses}\PYG{o}{)}
+      \PYG{o}{\PYGZcb{}} \PYG{k}{finally} \PYG{o}{\PYGZob{}}
+        \PYG{n}{fetching}\PYG{o}{.}\PYG{n}{synchronized} \PYG{o}{\PYGZob{}}
+        \PYG{n}{fetching} \PYG{o}{\PYGZhy{}=} \PYG{n}{shuffleId}
+        \PYG{n}{fetching}\PYG{o}{.}\PYG{n}{notifyAll}\PYG{o}{()}
+        \PYG{o}{\PYGZcb{}}
+      \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{fetchedStatuses} \PYG{o}{!=} \PYG{k+kc}{null}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+      \PYG{c+c1}{// 最后将抓取到的元数据信息返回}
+      \PYG{k}{return} \PYG{n}{fetchedStatuses}
+    \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{o}{\PYGZcb{}}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{// 如果获取到了Array[MapStatus]就直接返回}
+    \PYG{k}{return} \PYG{n}{statuses}
+  \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

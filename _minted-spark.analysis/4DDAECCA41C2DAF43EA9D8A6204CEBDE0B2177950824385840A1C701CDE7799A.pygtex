@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{spark}\PYG{o}{]} \PYG{k}{val} \PYG{n}{shuffleClient} \PYG{k}{=} \PYG{k}{if} \PYG{o}{(}\PYG{n}{externalShuffleServiceEnabled}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+  \PYG{k}{val} \PYG{n}{transConf} \PYG{k}{=} \PYG{n+nc}{SparkTransportConf}\PYG{o}{.}\PYG{n}{fromSparkConf}\PYG{o}{(}\PYG{n}{conf}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}shuffle\PYGZdq{}}\PYG{o}{,} \PYG{n}{numUsableCores}\PYG{o}{)}
+  \PYG{k}{new} \PYG{n+nc}{ExternalShuffleClient}\PYG{o}{(}\PYG{n}{transConf}\PYG{o}{,} \PYG{n}{securityManager}\PYG{o}{,} \PYG{n}{securityManager}\PYG{o}{.}\PYG{n}{isAuthenticationEnabled}\PYG{o}{(),}
+  \PYG{n}{securityManager}\PYG{o}{.}\PYG{n}{isSaslEncryptionEnabled}\PYG{o}{())}
+\PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+  \PYG{n}{blockTransferService}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

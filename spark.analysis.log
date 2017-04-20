@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99996 (MiKTeX 2.9.6210 64-bit) (preloaded format=xelatex 2017.1.15)  15 APR 2017 20:22
+This is XeTeX, Version 3.14159265-2.6-0.99996 (MiKTeX 2.9.6210 64-bit) (preloaded format=xelatex 2017.1.15)  18 APR 2017 16:57
 entering extended mode
 **./spark.analysis.tex
 (spark.analysis.tex
@@ -3532,50 +3532,124 @@ File: figures/sortshuffle.pdf Graphic file (type QTm)
 \openout8 = `spark.analysis.listing'.
 
 
-(_minted-spark.analysis/81856BCCAC6323E7C9FA6DEC4D71F95D0B2177950824385840A1C70
+(_minted-spark.analysis/2F02FCFD7E933DA85854091E98FDA2E10B2177950824385840A1C70
+1CDE7799A.pygtex) [65] [66]
+File: figures/ReduceByKey.pdf Graphic file (type QTm)
+ <use  "figures/ReduceByKey.pdf" >
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/9950773DF99D0A93CCA4FDB702D964CF0B2177950824385840A1C70
+1CDE7799A.pygtex) [67] [68]
+File: figures/collection.pdf Graphic file (type QTm)
+ <use  "figures/collection.pdf" >
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/E19035A4F6321630694871EE05CD5B330B2177950824385840A1C70
+1CDE7799A.pygtex) [69] [70]
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/DF281DCFD9FE8DF231F48D71345BD7920B2177950824385840A1C70
+1CDE7799A.pygtex) [71]
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/AD1EFA8137BDAAB953E18593B3847EA60B2177950824385840A1C70
+1CDE7799A.pygtex
+Overfull \hbox (33.8965pt too wide) in paragraph at lines 11--11
+[]\T1/fvm/m/n/12.045 collection[][].[][]destructiveSortedWritablePartitionedIte
+rator[][]([][]comparator[][])[]|  
+ []
+
+) [72] [73]
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/1293469FE5FF26CECC9009C2A7AE63660B2177950824385840A1C70
+1CDE7799A.pygtex)
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/221D869359D05FBC05E4943C11AA83900B2177950824385840A1C70
+1CDE7799A.pygtex
+Overfull \hbox (51.29916pt too wide) in paragraph at lines 6--6
+[]\T1/fvm/m/n/12.045 keyComparator[][].[][]map[][]([][]partitionKeyComparator[]
+[]).[][]getOrElse[][]([][]partitionComparator[][])[]|  
+ []
+
+) [74]
+File: figures/sortShuffleWriter.pdf Graphic file (type QTm)
+ <use  "figures/sortShuffleWriter.pdf" > [75] [76]
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/40364ABE9859310850B1EEE65AE4AF270B2177950824385840A1C70
 1CDE7799A.pygtex
 Overfull \hbox (4.98854pt too wide) in paragraph at lines 4--4
 | | | |[]\T1/fvm/m/n/12.045 blockManager[][],[][]mapOutputTracker[][].[][]getMa
 pSizesByExecutorId[][]([][]handle[][].[][]shuffleId[][],[] 
  []
 
-) [65] [66]
+) [77] [78]
 \openout8 = `spark.analysis.listing'.
 
 
-(_minted-spark.analysis/81C1F7A471E91F8C06DD86E4C5D92F4F0B2177950824385840A1C70
-1CDE7799A.pygtex) [67] [68]
+(_minted-spark.analysis/4DDAECCA41C2DAF43EA9D8A6204CEBDE0B2177950824385840A1C70
+1CDE7799A.pygtex)
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/635E9BA4DE0B40811EDAF5539CB9BC730B2177950824385840A1C70
+1CDE7799A.pygtex) [79]
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/5C6E4C7D2E7E439FE93B28CA853E81140B2177950824385840A1C70
+1CDE7799A.pygtex) [80] [81]
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/BA05FFC7F457D1B16FE15070C270D5210B2177950824385840A1C70
+1CDE7799A.pygtex) [82]
+\openout8 = `spark.analysis.listing'.
+
+
+(_minted-spark.analysis/9AE6C4C4E5AD4734BC3E72DBA84300870B2177950824385840A1C70
+1CDE7799A.pygtex) [83] [84]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/5FD7965864AF14EF2790797E11F538850B2177950824385840A1C70
-1CDE7799A.pygtex) [69]
+1CDE7799A.pygtex)
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/D0BDBC47AA82EBFE9ABE987117086E900B2177950824385840A1C70
-1CDE7799A.pygtex)
+1CDE7799A.pygtex) [85]
 \openout8 = `spark.analysis.listing'.
 
 
-(_minted-spark.analysis/0AECF11E6FFF35315BA02314A54160790B2177950824385840A1C70
+(_minted-spark.analysis/01B30FBDF8A1EC84EE1560F53D0071EA0B2177950824385840A1C70
 1CDE7799A.pygtex)
-Underfull \hbox (badness 10000) in paragraph at lines 212--226
+Underfull \hbox (badness 10000) in paragraph at lines 586--613
 []\T1/ntxtlf/m/n/12.045 splitLocalRemoteBlocks \EU1/SimSun(0)/m/n/12.045 返 回 值 
 为 远 程 数 据 块，| \T1/ntxtlf/m/n/12.045 Shuf-fle-Block-FetcherIt-er-a-
  []
 
-[70]
+[86]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/93C3F2051BACEC7F5E7D52C0ACCF2BF10B2177950824385840A1C70
-1CDE7799A.pygtex)
-File: figures/shuffleRead.pdf Graphic file (type QTm)
- <use  "figures/shuffleRead.pdf" >) [71] [72]
+1CDE7799A.pygtex) [87]
+File: figures/sortShuffleReadDia.pdf Graphic file (type QTm)
+ <use  "figures/sortShuffleReadDia.pdf" >) [88] [89]
 \openout2 = `data/chap09.aux'.
 
- (data/chap09.tex
+
+(data/chap09.tex
 第7章
 \openout8 = `spark.analysis.listing'.
 
@@ -3595,7 +3669,7 @@ Underfull \hbox (badness 3930) in paragraph at lines 3--23
 imSun(0)/m/n/12.045 ，|  之 后 再 创 建
  []
 
-[73
+[90
 
 
 
@@ -3603,7 +3677,7 @@ imSun(0)/m/n/12.045 ，|  之 后 再 创 建
 File: figures/storage.pdf Graphic file (type QTm)
  <use  "figures/storage.pdf" >
 File: figures/BlockStore.pdf Graphic file (type QTm)
- <use  "figures/BlockStore.pdf" > [74]
+ <use  "figures/BlockStore.pdf" > [91]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3614,7 +3688,7 @@ Overfull \hbox (16.49384pt too wide) in paragraph at lines 15--15
 tBootstrap[][].[][]toSeq[][].[][]asJava[][])[]|  
  []
 
-) [75]
+) [92]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3633,12 +3707,12 @@ Overfull \hbox (86.10449pt too wide) in paragraph at lines 9--9
 
  []
 
-) [76]
+) [93]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/E5BC903878CA1EA746E9DB7EBB6A3638A35A2B709A86CBF4556EC8C
-1BD42B0B9.pygtex) [77]
+1BD42B0B9.pygtex) [94]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3649,7 +3723,7 @@ Overfull \hbox (10.69295pt too wide) in paragraph at lines 8--8
 heckNotNull[][]([][]clientBootstraps[][]));[]|  
  []
 
-) [78]
+) [95]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3661,12 +3735,12 @@ huf-fle \EU1/SimSun(0)/m/n/12.045 文 件 时 调 用 的 是 \T1/ntxtlf/m/n/12.
 
  []
 
-[79]
+[96]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/5A7B978CDA8A2C3DF2210039CF1547D60B2177950824385840A1C70
-1CDE7799A.pygtex) [80] [81]
+1CDE7799A.pygtex) [97] [98]
 \openout8 = `spark.analysis.listing'.
 
 
@@ -3676,14 +3750,14 @@ huf-fle \EU1/SimSun(0)/m/n/12.045 文 件 时 调 用 的 是 \T1/ntxtlf/m/n/12.
 
 
 (_minted-spark.analysis/BAEB7361AADA51E3FA7EDC69BB5488DB0B2177950824385840A1C70
-1CDE7799A.pygtex) [82]
+1CDE7799A.pygtex) [99]
 \openout8 = `spark.analysis.listing'.
 
 
 (_minted-spark.analysis/C1D1F0B3251CCF325D92E5DBCD756E5C0B2177950824385840A1C70
-1CDE7799A.pygtex) [83]
+1CDE7799A.pygtex) [100]
 File: figures/memoryStore.pdf Graphic file (type QTm)
- <use  "figures/memoryStore.pdf" > [84]) [85]
+ <use  "figures/memoryStore.pdf" > [101]) [102]
 \tf@thm=\write12
 \openout12 = `spark.analysis.thm'.
 
@@ -3703,12 +3777,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 54757 strings out of 428408
- 1091067 string characters out of 3163951
- 1244492 words of memory out of 3000000
- 57111 multiletter control sequences out of 15000+200000
+ 54872 strings out of 428408
+ 1096937 string characters out of 3163951
+ 1249129 words of memory out of 3000000
+ 57190 multiletter control sequences out of 15000+200000
  91499 words of font info for 137 fonts, out of 3000000 for 9000
  1329 hyphenation exceptions out of 8191
  69i,14n,96p,10449b,1918s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on spark.analysis.pdf (89 pages).
+Output written on spark.analysis.pdf (106 pages).

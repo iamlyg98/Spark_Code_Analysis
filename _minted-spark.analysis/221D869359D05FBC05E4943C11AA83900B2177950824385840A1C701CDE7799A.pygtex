@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n}{partitionedDestructiveSortedIterator}\PYG{o}{(}\PYG{n}{keyComparator}\PYG{k}{:} \PYG{k+kt}{Option}\PYG{o}{[}\PYG{k+kt}{Comparator}\PYG{o}{[}\PYG{k+kt}{K}\PYG{o}{]])}
+\PYG{k}{:} \PYG{k+kt}{Iterator}\PYG{o}{[((}\PYG{k+kt}{Int}, \PYG{k+kt}{K}\PYG{o}{)}, \PYG{k+kt}{V}\PYG{o}{)]} \PYG{k}{=} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//先它这里会构造一个按partition和key进行比较的比较器，这个比较器先按partition来排序，}
+  \PYG{c+c1}{//然后再用key的hashcode进行排序，记住这里spark系统是进行key排序了的，而不是没有排序，只是它这里是按照key的hashcode进行的排序。}
+  \PYG{k}{val} \PYG{n}{comparator} \PYG{k}{=} \PYG{n}{keyComparator}\PYG{o}{.}\PYG{n}{map}\PYG{o}{(}\PYG{n}{partitionKeyComparator}\PYG{o}{).}\PYG{n}{getOrElse}\PYG{o}{(}\PYG{n}{partitionComparator}\PYG{o}{)}
+  \PYG{c+c1}{//后通过这个比较器再对这个map进行排序}
+  \PYG{n}{destructiveSortedIterator}\PYG{o}{(}\PYG{n}{comparator}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

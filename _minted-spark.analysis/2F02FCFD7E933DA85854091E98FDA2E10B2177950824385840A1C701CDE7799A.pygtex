@@ -1,0 +1,27 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{override} \PYG{k}{def} \PYG{n}{write}\PYG{o}{(}\PYG{n}{records}\PYG{k}{:} \PYG{k+kt}{Iterator}\PYG{o}{[}\PYG{k+kt}{Product2}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}\PYG{o}{]])}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{//如果数据需要在map端combine，则需要传入dep.aggregator，下面的这个dep.keyOrdering是空值，}
+  \PYG{c+c1}{// 因为在spark的sortedshuffle中，数据是不排序的。这里的这个partitioner是用来为后续RDD构造partitions的}
+  \PYG{n}{sorter} \PYG{k}{=} \PYG{k}{if} \PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{mapSideCombine}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{n}{require}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{aggregator}\PYG{o}{.}\PYG{n}{isDefined}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}Map\PYGZhy{}side combine without Aggregator specified!\PYGZdq{}}\PYG{o}{)}
+    \PYG{k}{new} \PYG{n+nc}{ExternalSorter}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}, \PYG{k+kt}{C}\PYG{o}{](}
+    \PYG{n}{context}\PYG{o}{,} \PYG{n}{dep}\PYG{o}{.}\PYG{n}{aggregator}\PYG{o}{,} \PYG{n+nc}{Some}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{partitioner}\PYG{o}{),} \PYG{n}{dep}\PYG{o}{.}\PYG{n}{keyOrdering}\PYG{o}{,} \PYG{n}{dep}\PYG{o}{.}\PYG{n}{serializer}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+    \PYG{c+c1}{//如果数据不需要在map端combine，则aggregator传None就行}
+    \PYG{k}{new} \PYG{n+nc}{ExternalSorter}\PYG{o}{[}\PYG{k+kt}{K}, \PYG{k+kt}{V}, \PYG{k+kt}{V}\PYG{o}{](}\PYG{n}{context}\PYG{o}{,} \PYG{n}{aggregator} \PYG{k}{=} \PYG{n+nc}{None}\PYG{o}{,} \PYG{n+nc}{Some}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{partitioner}\PYG{o}{),} \PYG{n}{ordering} \PYG{k}{=} \PYG{n+nc}{None}\PYG{o}{,}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{serializer}\PYG{o}{)}
+  \PYG{o}{\PYGZcb{}}
+  \PYG{c+c1}{//将数据先放入缓存中，如果缓存不够用spill到磁盘，在这一步也会对相同key值的数据进行combine操作}
+  \PYG{n}{sorter}\PYG{o}{.}\PYG{n}{insertAll}\PYG{o}{(}\PYG{n}{records}\PYG{o}{)}
+  \PYG{c+c1}{//打开一个文件}
+  \PYG{k}{val} \PYG{n}{output} \PYG{k}{=} \PYG{n}{shuffleBlockResolver}\PYG{o}{.}\PYG{n}{getDataFile}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{mapId}\PYG{o}{)}
+  \PYG{k}{val} \PYG{n}{tmp} \PYG{k}{=} \PYG{n+nc}{Utils}\PYG{o}{.}\PYG{n}{tempFileWith}\PYG{o}{(}\PYG{n}{output}\PYG{o}{)}
+  \PYG{c+c1}{//构造blockId}
+  \PYG{k}{val} \PYG{n}{blockId} \PYG{k}{=} \PYG{n+nc}{ShuffleBlockId}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{mapId}\PYG{o}{,} \PYG{n+nc}{IndexShuffleBlockResolver}\PYG{o}{.}\PYG{n+nc}{NOOP\PYGZus{}REDUCE\PYGZus{}ID}\PYG{o}{)}
+  \PYG{c+c1}{//将数据写入data文件}
+  \PYG{k}{val} \PYG{n}{partitionLengths} \PYG{k}{=} \PYG{n}{sorter}\PYG{o}{.}\PYG{n}{writePartitionedFile}\PYG{o}{(}\PYG{n}{blockId}\PYG{o}{,} \PYG{n}{tmp}\PYG{o}{)}
+  \PYG{c+c1}{//将数据写入index文件}
+  \PYG{n}{shuffleBlockResolver}\PYG{o}{.}\PYG{n}{writeIndexFileAndCommit}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{mapId}\PYG{o}{,} \PYG{n}{partitionLengths}\PYG{o}{,} \PYG{n}{tmp}\PYG{o}{)}
+  \PYG{c+c1}{//进行shuffle read时的一些参考信息}
+  \PYG{n}{mapStatus} \PYG{k}{=} \PYG{n+nc}{MapStatus}\PYG{o}{(}\PYG{n}{blockManager}\PYG{o}{.}\PYG{n}{shuffleServerId}\PYG{o}{,} \PYG{n}{partitionLengths}\PYG{o}{)}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

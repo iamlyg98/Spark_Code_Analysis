@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{private}\PYG{o}{[}\PYG{k+kt}{this}\PYG{o}{]} \PYG{k}{def} \PYG{n}{initialize}\PYG{o}{()}\PYG{k}{:} \PYG{k+kt}{Unit} \PYG{o}{=} \PYG{o}{\PYGZob{}}
+  \PYG{c+c1}{// 不管最后task是success还是failure，都要进行cleanup操作}
+  \PYG{n}{context}\PYG{o}{.}\PYG{n}{addTaskCompletionListener}\PYG{o}{(}\PYG{k}{\PYGZus{}} \PYG{k}{=\PYGZgt{}} \PYG{n}{cleanup}\PYG{o}{())}
+  \PYG{c+c1}{//这里会将本地的数据封装到本地请求块ArrayBuffer[BlockId]，返回的为需要远程请求的块，数据结构为ArrayBuffer[FetchRequest]}
+  \PYG{k}{val} \PYG{n}{remoteRequests} \PYG{k}{=} \PYG{n}{splitLocalRemoteBlocks}\PYG{o}{()}
+  \PYG{c+c1}{// 这里的fetchRequests是一个队列，我们将远程的请求以随机的顺序加入到该队列，然后使用下面的}
+  \PYG{c+c1}{// fetchUpToMaxBytes方法取出队列中的远程请求，同时对大小进行限制}
+  \PYG{n}{fetchRequests} \PYG{o}{++=} \PYG{n+nc}{Utils}\PYG{o}{.}\PYG{n}{randomize}\PYG{o}{(}\PYG{n}{remoteRequests}\PYG{o}{)}
+  \PYG{c+c1}{// 从fetchRequests取出远程请求，并使用sendRequest方法发送请求}
+  \PYG{n}{fetchUpToMaxBytes}\PYG{o}{()}
+  \PYG{k}{val} \PYG{n}{numFetches} \PYG{k}{=} \PYG{n}{remoteRequests}\PYG{o}{.}\PYG{n}{size} \PYG{o}{\PYGZhy{}} \PYG{n}{fetchRequests}\PYG{o}{.}\PYG{n}{size}
+  \PYG{c+c1}{// 获取本地的Blocks}
+  \PYG{n}{fetchLocalBlocks}\PYG{o}{()}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

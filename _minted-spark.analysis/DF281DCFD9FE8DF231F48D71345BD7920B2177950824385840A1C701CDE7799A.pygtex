@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{//打开一个文件}
+\PYG{k}{val} \PYG{n}{output} \PYG{k}{=} \PYG{n}{shuffleBlockResolver}\PYG{o}{.}\PYG{n}{getDataFile}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{mapId}\PYG{o}{)}
+\PYG{k}{val} \PYG{n}{tmp} \PYG{k}{=} \PYG{n+nc}{Utils}\PYG{o}{.}\PYG{n}{tempFileWith}\PYG{o}{(}\PYG{n}{output}\PYG{o}{)}
+\PYG{c+c1}{//构造blockId}
+\PYG{k}{val} \PYG{n}{blockId} \PYG{k}{=} \PYG{n+nc}{ShuffleBlockId}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{mapId}\PYG{o}{,} \PYG{n+nc}{IndexShuffleBlockResolver}\PYG{o}{.}\PYG{n+nc}{NOOP\PYGZus{}REDUCE\PYGZus{}ID}\PYG{o}{)}
+\PYG{c+c1}{//将数据写入data文件}
+\PYG{k}{val} \PYG{n}{partitionLengths} \PYG{k}{=} \PYG{n}{sorter}\PYG{o}{.}\PYG{n}{writePartitionedFile}\PYG{o}{(}\PYG{n}{blockId}\PYG{o}{,} \PYG{n}{tmp}\PYG{o}{)}
+\PYG{c+c1}{//将数据写入index文件}
+\PYG{n}{shuffleBlockResolver}\PYG{o}{.}\PYG{n}{writeIndexFileAndCommit}\PYG{o}{(}\PYG{n}{dep}\PYG{o}{.}\PYG{n}{shuffleId}\PYG{o}{,} \PYG{n}{mapId}\PYG{o}{,} \PYG{n}{partitionLengths}\PYG{o}{,} \PYG{n}{tmp}\PYG{o}{)}
+\PYG{c+c1}{//进行shuffle read时的一些参考信息}
+\PYG{n}{mapStatus} \PYG{k}{=} \PYG{n+nc}{MapStatus}\PYG{o}{(}\PYG{n}{blockManager}\PYG{o}{.}\PYG{n}{shuffleServerId}\PYG{o}{,} \PYG{n}{partitionLengths}\PYG{o}{)}
+\end{Verbatim}
